@@ -13,6 +13,7 @@ final class TrackersCollectionView: UICollectionView {
         
         configureCollectionView()
         setupBindings()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -23,7 +24,7 @@ final class TrackersCollectionView: UICollectionView {
     private func configureCollectionView() {
         delegate = self
         dataSource = self
-        register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerСell")
+        register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCell")
     }
     
     private func setupBindings() {
