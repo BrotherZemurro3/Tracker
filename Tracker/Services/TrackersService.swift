@@ -49,24 +49,12 @@ final class TrackersService: TrackersServiceProtocol {
     
     func addTracker(_ tracker: Tracker, to categoryTitle: String) {
         if let index = categories.firstIndex(where: { $0.title == categoryTitle }) {
-            // Добавляем трекер в существующую категорию
-            var updatedTrackers = categories[index].trackers
-            updatedTrackers.append(tracker)
-            
-            let updatedCategory = TrackerCategory(
-                title: categoryTitle,
-                trackers: updatedTrackers
-            )
-            
-            categories[index] = updatedCategory
+            categories[index].trackers.append(tracker)
         } else {
-            // Создаем новую категорию с трекером
-            let newCategory = TrackerCategory(
-                title: categoryTitle,
-                trackers: [tracker]
-            )
-            categories.append(newCategory)
+            categories.append(TrackerCategory(title: categoryTitle, trackers: [tracker]))
         }
+        
+        print("Сервис обновлён, категорий: \(categories.count), трекеров в первой: \(categories.first?.trackers.count ?? 0)")
     }
     
     func completeTracker(id: UUID, date: Date) {

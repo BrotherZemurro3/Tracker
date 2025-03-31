@@ -23,8 +23,14 @@ final class TrackersViewModel {
     }
     
     func addTracker(_ tracker: Tracker, to categoryTitle: String) {
-        trackersService.addTracker(tracker, to: categoryTitle)
-        loadTrackers(for: Date()) // Перезагружаем данные после добавления
+        if let index = trackers.firstIndex(where: { $0.title == categoryTitle }) {
+            trackers[index].trackers.append(tracker)
+        } else {
+            trackers.append(TrackerCategory(title: categoryTitle, trackers: [tracker]))
+        }
+        
+        print("Добавлен трекер: \(tracker.title), всего категорий: \(trackers.count)")
+        onDataUpdated?()
     }
     
     func completeTracker(id: UUID, date: Date) {

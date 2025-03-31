@@ -7,8 +7,9 @@ class TrackersViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    private let collectionView = TrackersCollectionView()
+    private var collectionView = TrackersCollectionView()
     private let trackersService: TrackersServiceProtocol
+    private let viewModel: TrackersViewModel
     let appearance = UINavigationBarAppearance()
     let searchTrackersBar = UISearchBar()
     let trackersLabel = UILabel()
@@ -18,9 +19,12 @@ class TrackersViewController: UIViewController {
 
     init(trackersService: TrackersServiceProtocol = TrackersService()) {
         self.trackersService = trackersService
-        self.imageView = UIImageView(image: imageForEmptyStatisticList) // Инициализируем в init
+        self.viewModel = TrackersViewModel(trackersService: trackersService)
+        self.collectionView = TrackersCollectionView(viewModel: viewModel) // Передаём ViewModel в коллекцию
+        self.imageView = UIImageView(image: imageForEmptyStatisticList)
         super.init(nibName: nil, bundle: nil)
     }
+
     
     
     
@@ -126,14 +130,17 @@ class TrackersViewController: UIViewController {
     func setupCollectionView() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
+        
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: searchTrackersBar.bottomAnchor, constant: 24),
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     private func updateEmptyStateVisibility() {
         let isEmpty = trackersService.categories.isEmpty
+        print("Проверка пустоты: \(isEmpty ? "пусто" : "есть данные")")
         imageView.isHidden = !isEmpty
         whatGoingToTrackLabel.isHidden = !isEmpty
     }
@@ -141,8 +148,6 @@ class TrackersViewController: UIViewController {
 
 extension TrackersViewController: CreateTrackerDelegate {
     func didCreateTracker(_ tracker: Tracker, in categoryTitle: String) {
-        trackersService.addTracker(tracker, to: categoryTitle)
-        collectionView.reloadData()
-        updateEmptyStateVisibility()
+        viewModel.addTracker(tracker, to: categoryTitle) // Используем ViewModel
     }
 }

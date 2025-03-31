@@ -29,9 +29,11 @@ final class TrackersCollectionView: UICollectionView {
     
     private func setupBindings() {
         viewModel?.onDataUpdated = { [weak self] in
-            self?.trackers = self?.viewModel?.trackers ?? []
+            guard let self = self else { return }
+            self.trackers = self.viewModel?.trackers ?? []
+            print("Данные обновлены, количество категорий: \(self.trackers.count)")
             DispatchQueue.main.async {
-                self?.reloadData()
+                self.reloadData()
             }
         }
     }
