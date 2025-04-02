@@ -25,17 +25,19 @@ class CreateTrackerViewController: UIViewController {
         collectionViewLayout: UICollectionViewLayout()
     )
     
-    private let emojis = ["😀", "😍", "🤪", "😎", "🥶", "🤯", "👻", "👾", "🤖", "🎃", "💩", "🙈"]
+    private let emojis = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦","🏓","🥇","🎸","🏝️","😪"]
     private let colors: [UIColor] = [
-        .red, .orange, .blue, .purple, .green,
-        .systemPink, .cyan, .brown, .magenta, .yellow,
-        .systemTeal, .systemIndigo
+        .red, .orange, .blue, .darkViolet, .darkerGreen,
+        .fuchsia, .lightPink, .cyan, .lightGreen, .darkBlue,
+        .corralOne, .pink, .beige, .lilac, .darkViolet, .darkFuchsia, .lightViolet, .green
     ]
     
     private var selectedEmoji: String?
     private var selectedColor: UIColor?
     private var selectedCategory: String?
     private var selectedDays: [Weekday] = []
+    private let scheduleButton = UIButton(type: .system)
+    private let scheduleLabel = UILabel()
     
     private func updateCreateButtonState() {
         createButton.isEnabled = textField.text?.isEmpty == false &&
