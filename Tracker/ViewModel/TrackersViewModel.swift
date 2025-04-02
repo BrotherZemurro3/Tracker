@@ -1,48 +1,56 @@
 import Foundation
 
-// Данный класс работает с TrackersService и получает данные и подготавливает их для отображения.
-// Так же он реагирует на пользовательские действия (например, фильтрация, отметка выполнения)
-
 final class TrackersViewModel {
-    // MARK: - Properties
     private let trackersService: TrackersServiceProtocol
-    private(set) var trackers: [TrackerCategory] = []
+     private(set) var trackers: [TrackerCategory] = []
+     var onDataUpdated: (() -> Void)?
+     private var currentDate = Date() 
     
-    var onDataUpdated: (() -> Void)? // Колбэк для обновления UI
-    
-    // MARK: - Init
     init(trackersService: TrackersServiceProtocol) {
         self.trackersService = trackersService
     }
     
-    // MARK: - Public Methods
-    
     func loadTrackers(for date: Date, searchText: String? = nil) {
-        trackers = trackersService.getTrackers(for: date, searchText: searchText)
-        onDataUpdated?() // Сообщаем UI, что данные обновились
+        currentDate = date
+        let loadedTrackers = trackersService.getTrackers(for: date, searchText: searchText)
+        self.trackers = loadedTrackers
+        print("Загружено \(trackers.count) категорий для \(date)")
+        onDataUpdated?()
+    }
+    func addTracker(_ tracker: Tracker, to categoryTitle: String) {
+        print("Добавляем трекер:", tracker)
+        trackersService.addTracker(tracker, to: categoryTitle)
+        loadTrackers(for: currentDate)
     }
     
-    func addTracker(_ tracker: Tracker, to categoryTitle: String) {
-        if let index = trackers.firstIndex(where: { $0.title == categoryTitle }) {
-            trackers[index].trackers.append(tracker)
-        } else {
-            trackers.append(TrackerCategory(title: categoryTitle, trackers: [tracker]))
-        }
-        
-        print("Добавлен трекер: \(tracker.title), всего категорий: \(trackers.count)")
-        onDataUpdated?()
+    func getCompletedDaysCount(for trackerId: UUID) -> Int {
+        return trackersService.completedTrackers.filter { $0.id == trackerId }.count
     }
     
     func completeTracker(id: UUID, date: Date) {
-        trackersService.completeTracker(id: id, date: date)
-        loadTrackers(for: date) // Перезагружаем данные
-    }
-    
-    func uncompleteTracker(id: UUID, date: Date) {
-        trackersService.uncompleteTracker(id: id, date: date)
-        loadTrackers(for: date) // Перезагружаем данные
-    }
+          let today = Calendar.current.startOfDay(for: date)
+          
+          // Проверяем, не выполнен ли уже трекер сегодня
+          let alreadyCompleted = trackersService.completedTrackers.contains {
+              $0.id == id && Calendar.current.isDate($0.date, inSameDayAs: today)
+          }
+          
+          guard !alreadyCompleted else { return }
+          
+          trackersService.completeTracker(id: id, date: today)
+          loadTrackers(for: currentDate)
+      }
+      
+      func uncompleteTracker(id: UUID, date: Date) {
+          let today = Calendar.current.startOfDay(for: date)
+          trackersService.uncompleteTracker(id: id, date: today)
+          loadTrackers(for: currentDate)
+      }
+      
+      func isTrackerCompletedToday(_ trackerId: UUID) -> Bool {
+          let today = Calendar.current.startOfDay(for: currentDate)
+          return trackersService.completedTrackers.contains {
+              $0.id == trackerId && Calendar.current.isDate($0.date, inSameDayAs: today)
+          }
+      }
 }
-
-
-

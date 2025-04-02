@@ -31,17 +31,17 @@ class CreateTrackerViewController: UIViewController {
         .systemPink, .cyan, .brown, .magenta, .yellow,
         .systemTeal, .systemIndigo
     ]
-
+    
     private var selectedEmoji: String?
     private var selectedColor: UIColor?
     private var selectedCategory: String?
     private var selectedDays: [Weekday] = []
-
+    
     private func updateCreateButtonState() {
         createButton.isEnabled = textField.text?.isEmpty == false &&
-                                selectedEmoji != nil &&
-                                selectedColor != nil &&
-                                selectedCategory != nil
+        selectedEmoji != nil &&
+        selectedColor != nil &&
+        selectedCategory != nil
         createButton.backgroundColor = createButton.isEnabled ? .systemBlue : .gray
     }
     
@@ -56,13 +56,13 @@ class CreateTrackerViewController: UIViewController {
         title = "Новый трекер"
         
         // ScrollView для прокрутки контента
-       
+        
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
         
         
         // Контейнер для содержимого
-       
+        
         contentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentView)
         
@@ -75,7 +75,7 @@ class CreateTrackerViewController: UIViewController {
         
         
         // Выбор категории
-       
+        
         categoryButton.setTitle("Категории", for: .normal)
         categoryButton.contentHorizontalAlignment = .left
         categoryButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
@@ -92,17 +92,17 @@ class CreateTrackerViewController: UIViewController {
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(emojiLabel)
         
-       
+        
         emojiCollectionView.collectionViewLayout = createEmojiLayout()
-          emojiCollectionView.register(EmojiCell.self, forCellWithReuseIdentifier: "EmojiCell")
-          emojiCollectionView.dataSource = self
-          emojiCollectionView.delegate = self
-          emojiCollectionView.isScrollEnabled = false
-          emojiCollectionView.translatesAutoresizingMaskIntoConstraints = false
-          contentView.addSubview(emojiCollectionView)
+        emojiCollectionView.register(EmojiCell.self, forCellWithReuseIdentifier: "EmojiCell")
+        emojiCollectionView.dataSource = self
+        emojiCollectionView.delegate = self
+        emojiCollectionView.isScrollEnabled = false
+        emojiCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(emojiCollectionView)
         
         // Выбор цвета
-       
+        
         colorLabel.text = "Цвет"
         colorLabel.font = .boldSystemFont(ofSize: 19)
         colorLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -110,12 +110,12 @@ class CreateTrackerViewController: UIViewController {
         
         
         colorCollectionView.collectionViewLayout = createColorLayout()
-          colorCollectionView.register(ColorCell.self, forCellWithReuseIdentifier: "ColorCell")
-          colorCollectionView.dataSource = self
-          colorCollectionView.delegate = self
-          colorCollectionView.isScrollEnabled = false
-          colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
-          contentView.addSubview(colorCollectionView)
+        colorCollectionView.register(ColorCell.self, forCellWithReuseIdentifier: "ColorCell")
+        colorCollectionView.dataSource = self
+        colorCollectionView.delegate = self
+        colorCollectionView.isScrollEnabled = false
+        colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(colorCollectionView)
         
         // Кнопка отмены
         
@@ -285,7 +285,8 @@ class CreateTrackerViewController: UIViewController {
             title: title,
             color: selectedColor,
             emoji: selectedEmoji,
-            schedule: selectedDays
+            schedule: [.monday, .wednesday, .friday], // Явно указываем дни
+            isCompleted: false
         )
         
         delegate?.didCreateTracker(newTracker, in: selectedCategory)
@@ -314,36 +315,36 @@ extension CreateTrackerViewController: UICollectionViewDataSource, UICollectionV
         }
     }
     
-                func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-                    if collectionView == emojiCollectionView {
-                        selectedEmoji = emojis[indexPath.row]
-                        // Подсветим выбранную ячейку
-                        if let cell = collectionView.cellForItem(at: indexPath) {
-                            cell.contentView.backgroundColor = .lightGray.withAlphaComponent(0.3)
-                            cell.contentView.layer.cornerRadius = 8
-                        }
-                    } else {
-                        selectedColor = colors[indexPath.row]
-                        // Подсветим выбранную ячейку
-                        if let cell = collectionView.cellForItem(at: indexPath) as? ColorCell {
-                            cell.contentView.layer.borderWidth = 3
-                            cell.contentView.layer.borderColor = UIColor.black.cgColor
-                            cell.contentView.layer.cornerRadius = 8
-                        }
-                    }
-                    updateCreateButtonState()
-                }
-
-                // Добавьте метод для сброса выделения
-                func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-                    if collectionView == emojiCollectionView {
-                        if let cell = collectionView.cellForItem(at: indexPath) {
-                            cell.contentView.backgroundColor = .clear
-                        }
-                    } else {
-                        if let cell = collectionView.cellForItem(at: indexPath) as? ColorCell {
-                            cell.contentView.layer.borderWidth = 0
-                        }
-                    }
-                }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == emojiCollectionView {
+            selectedEmoji = emojis[indexPath.row]
+            // Подсветим выбранную ячейку
+            if let cell = collectionView.cellForItem(at: indexPath) {
+                cell.contentView.backgroundColor = .lightGray.withAlphaComponent(0.3)
+                cell.contentView.layer.cornerRadius = 8
+            }
+        } else {
+            selectedColor = colors[indexPath.row]
+            // Подсветим выбранную ячейку
+            if let cell = collectionView.cellForItem(at: indexPath) as? ColorCell {
+                cell.contentView.layer.borderWidth = 3
+                cell.contentView.layer.borderColor = UIColor.black.cgColor
+                cell.contentView.layer.cornerRadius = 8
+            }
+        }
+        updateCreateButtonState()
+    }
+    
+    // Добавьте метод для сброса выделения
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if collectionView == emojiCollectionView {
+            if let cell = collectionView.cellForItem(at: indexPath) {
+                cell.contentView.backgroundColor = .clear
+            }
+        } else {
+            if let cell = collectionView.cellForItem(at: indexPath) as? ColorCell {
+                cell.contentView.layer.borderWidth = 0
+            }
+        }
+    }
 }

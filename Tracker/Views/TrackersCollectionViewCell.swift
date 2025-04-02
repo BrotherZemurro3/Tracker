@@ -3,11 +3,16 @@ import UIKit
 class TrackersCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "TrackerCell"
     
+    var onActionButtonTapped: ((UUID, Bool) -> Void)?
+    
     private let titleLabel = UILabel()
     private let emojiLabel = UILabel()
     private let actionButton = UIButton(type: .system)
     private let daysCountLabel = UILabel()
     private let padding: CGFloat = 12
+    private var trackerId: UUID?
+    private var isCompletedToday: Bool = false
+    private var completedDays: Int = 0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -61,18 +66,56 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func configure(with tracker: Tracker) {
+    func configure(with tracker: Tracker, completedDays: Int, isCompletedToday: Bool) {
+        trackerId = tracker.id
+        self.completedDays = completedDays
+        self.isCompletedToday = isCompletedToday
+        
         titleLabel.text = tracker.title
         emojiLabel.text = tracker.emoji
-        daysCountLabel.text = "\(tracker.schedule?.count ?? 0) days"
+        updateDaysCountText()
+        updateButtonAppearance()
+    }
+    
+    private func updateDaysCountText() {
+        let dayString = formatDaysCount(completedDays)
+        daysCountLabel.text = "\(completedDays) \(dayString)"
+    }
+    
+    private func formatDaysCount(_ count: Int) -> String {
+        let remainder10 = count % 10
+        let remainder100 = count % 100
         
-        let isCompleted = tracker.isCompleted
-        actionButton.backgroundColor = isCompleted ? .green : .red
-        actionButton.setTitle(isCompleted ? "✓" : "✗", for: .normal)
+        if remainder10 == 1 && remainder100 != 11 {
+            return "день"
+        } else if remainder10 >= 2 && remainder10 <= 4 && (remainder100 < 10 || remainder100 >= 20) {
+            return "дня"
+        } else {
+            return "дней"
+        }
+    }
+    
+    private func updateButtonAppearance() {
+        actionButton.backgroundColor = isCompletedToday ?
+            UIColor.systemGreen.withAlphaComponent(0.3) :
+            UIColor.systemRed.withAlphaComponent(0.3)
+        
+        actionButton.setTitle(isCompletedToday ? "✓" : "+", for: .normal)
+        actionButton.isEnabled = !isCompletedToday
     }
     
     @objc private func actionButtonTapped() {
-        print("Кнопка нажата!")
-        // Здесь можно вызвать делегат или замыкание для обновления состояния трекера
+        guard let trackerId = trackerId, !isCompletedToday else { return }
+        
+        // Обновляем счетчик
+        completedDays += 1
+        updateDaysCountText()
+        
+        // Меняем состояние кнопки
+        isCompletedToday = true
+        updateButtonAppearance()
+        
+        // Уведомляем о нажатии
+        onActionButtonTapped?(trackerId, true)
     }
 }

@@ -3,41 +3,48 @@ import UIKit
 
 
 class TrackersViewController: UIViewController {
+    // Объявляем свойства без инициализации
+    private let trackersService: TrackersServiceProtocol
+    private let viewModel: TrackersViewModel
+    private let collectionView: TrackersCollectionView
+    private let appearance = UINavigationBarAppearance()
+    private let searchTrackersBar = UISearchBar()
+    private let trackersLabel = UILabel()
+    private let imageForEmptyStatisticList = UIImage(named: "EmptyStatistic")
+    private let whatGoingToTrackLabel = UILabel()
+    private let imageView: UIImageView
+    private var currentDate = Date()
+
+    init(trackersService: TrackersServiceProtocol = TrackersService()) {
+        // Инициализируем свойства в правильном порядке
+        self.trackersService = trackersService
+        self.viewModel = TrackersViewModel(trackersService: trackersService)
+        self.collectionView = TrackersCollectionView(viewModel: self.viewModel)
+        self.imageView = UIImageView(image: imageForEmptyStatisticList)
+        
+        super.init(nibName: nil, bundle: nil)
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    private var collectionView = TrackersCollectionView()
-    private let trackersService: TrackersServiceProtocol
-    private let viewModel: TrackersViewModel
-    let appearance = UINavigationBarAppearance()
-    let searchTrackersBar = UISearchBar()
-    let trackersLabel = UILabel()
-    let imageForEmptyStatisticList = UIImage(named: "EmptyStatistic")
-    let whatGoingToTrackLabel = UILabel()
-    let imageView: UIImageView // Убираем инициализацию здесь
-
-    init(trackersService: TrackersServiceProtocol = TrackersService()) {
-        self.trackersService = trackersService
-        self.viewModel = TrackersViewModel(trackersService: trackersService)
-        self.collectionView = TrackersCollectionView(viewModel: viewModel) // Передаём ViewModel в коллекцию
-        self.imageView = UIImageView(image: imageForEmptyStatisticList)
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    
-    
-    
-    private var currentDate = Date()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupUI()
-        // updateUI()
         navigationTabBarAppearance()
         setupCollectionView()
+        setupViewModelBindings() 
+        viewModel.loadTrackers(for: currentDate) // Добавьте эту строку
         updateEmptyStateVisibility()
+    }
+
+    private func updateEmptyStateVisibility() {
+        let isEmpty = viewModel.trackers.isEmpty // Используем viewModel.trackers вместо trackersService.categories
+        imageView.isHidden = !isEmpty
+        whatGoingToTrackLabel.isHidden = !isEmpty
+        collectionView.isHidden = isEmpty // Добавляем скрытие коллекции при пустом состоянии
     }
     
     private func setupUI() {
@@ -122,7 +129,10 @@ class TrackersViewController: UIViewController {
         present(navController, animated: true)
     }
     @objc func dateChanged(_ sender: UIDatePicker) {
-        print("Выбрана дата: \(sender.date)")
+        currentDate = sender.date
+        let weekday = Calendar.current.component(.weekday, from: currentDate)
+        print("Выбрана дата: \(currentDate), день недели: \(weekday)")
+        viewModel.loadTrackers(for: currentDate)
     }
     
 // MARK: - CollectionViewUISetUp
@@ -138,16 +148,20 @@ class TrackersViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    private func updateEmptyStateVisibility() {
-        let isEmpty = trackersService.categories.isEmpty
-        print("Проверка пустоты: \(isEmpty ? "пусто" : "есть данные")")
-        imageView.isHidden = !isEmpty
-        whatGoingToTrackLabel.isHidden = !isEmpty
+    private func setupViewModelBindings() {
+        viewModel.onDataUpdated = { [weak self] in
+            DispatchQueue.main.async {
+                print("Обновление UI. Категорий: \(self?.viewModel.trackers.count ?? 0)")
+                self?.collectionView.reloadData()
+                self?.updateEmptyStateVisibility()
+            }
+        }
     }
 }
 
 extension TrackersViewController: CreateTrackerDelegate {
     func didCreateTracker(_ tracker: Tracker, in categoryTitle: String) {
-        viewModel.addTracker(tracker, to: categoryTitle) // Используем ViewModel
+        viewModel.addTracker(tracker, to: categoryTitle)
+        updateEmptyStateVisibility()
     }
 }

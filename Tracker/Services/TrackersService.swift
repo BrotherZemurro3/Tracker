@@ -7,12 +7,34 @@ struct Tracker {
     let color: UIColor
     let emoji: String
     let schedule: [Weekday]?
-    var isCompleted: Bool = false
+    
+    let isCompleted: Bool
+    
+    func withCompletedState(_ isCompleted: Bool) -> Tracker {
+        return Tracker(
+            id: id,
+            title: title,
+            color: color,
+            emoji: emoji,
+            schedule: schedule,
+            isCompleted: isCompleted
+        )
+    }
 }
 
 struct TrackerCategory {
     let title: String
-    var trackers: [Tracker]
+    let trackers: [Tracker]
+    
+    func withTrackers(_ trackers: [Tracker]) -> TrackerCategory {
+        return TrackerCategory(title: title, trackers: trackers)
+    }
+    
+    func withAddedTracker(_ tracker: Tracker) -> TrackerCategory {
+        var newTrackers = trackers
+        newTrackers.append(tracker)
+        return TrackerCategory(title: title, trackers: newTrackers)
+    }
 }
 
 struct TrackerRecord {
@@ -24,7 +46,6 @@ enum Weekday: Int, CaseIterable {
     case sunday = 1, monday, tuesday, wednesday, thursday, friday, saturday
 }
 
-// Протокол для сервиса
 // MARK: - Trackers Service Protocol
 protocol TrackersServiceProtocol {
     var categories: [TrackerCategory] { get }
@@ -34,6 +55,7 @@ protocol TrackersServiceProtocol {
     func completeTracker(id: UUID, date: Date)
     func uncompleteTracker(id: UUID, date: Date)
     func getTrackers(for date: Date, searchText: String?) -> [TrackerCategory]
+    
 }
 
 // MARK: - Trackers Service Implementation
@@ -49,42 +71,37 @@ final class TrackersService: TrackersServiceProtocol {
     
     func addTracker(_ tracker: Tracker, to categoryTitle: String) {
         if let index = categories.firstIndex(where: { $0.title == categoryTitle }) {
-            categories[index].trackers.append(tracker)
+            var updatedTrackers = categories[index].trackers
+            updatedTrackers.append(tracker)
+            categories[index] = TrackerCategory(title: categoryTitle, trackers: updatedTrackers)
         } else {
             categories.append(TrackerCategory(title: categoryTitle, trackers: [tracker]))
         }
-        
-        print("Сервис обновлён, категорий: \(categories.count), трекеров в первой: \(categories.first?.trackers.count ?? 0)")
+        print("Трекер добавлен. Всего категорий: \(categories.count)")
     }
     
     func completeTracker(id: UUID, date: Date) {
-        // Находим трекер по ID и отмечаем как выполненный
-        for (categoryIndex, category) in categories.enumerated() {
-            if let trackerIndex = category.trackers.firstIndex(where: { $0.id == id }) {
-                var updatedTracker = category.trackers[trackerIndex]
-                updatedTracker.isCompleted = true
-                
-                var updatedTrackers = category.trackers
-                updatedTrackers[trackerIndex] = updatedTracker
-                
-                categories[categoryIndex].trackers = updatedTrackers
-                completedTrackers.append(TrackerRecord(id: id, date: date))
-                break
-            }
+        // Проверяем, не выполнен ли уже трекер в эту дату
+        let alreadyCompleted = completedTrackers.contains {
+            $0.id == id && Calendar.current.isDate($0.date, inSameDayAs: date)
         }
+        
+        guard !alreadyCompleted else { return }
+        
+        completedTrackers.append(TrackerRecord(id: id, date: date))
+        print("Трекер \(id) выполнен \(date)")
     }
     
     func uncompleteTracker(id: UUID, date: Date) {
-        // Находим трекер по ID и отмечаем как невыполненный
         for (categoryIndex, category) in categories.enumerated() {
             if let trackerIndex = category.trackers.firstIndex(where: { $0.id == id }) {
-                var updatedTracker = category.trackers[trackerIndex]
-                updatedTracker.isCompleted = false
+                let tracker = category.trackers[trackerIndex]
+                let updatedTracker = tracker.withCompletedState(false)
                 
                 var updatedTrackers = category.trackers
                 updatedTrackers[trackerIndex] = updatedTracker
                 
-                categories[categoryIndex].trackers = updatedTrackers
+                categories[categoryIndex] = category.withTrackers(updatedTrackers)
                 completedTrackers.removeAll { $0.id == id && Calendar.current.isDate($0.date, inSameDayAs: date) }
                 break
             }
@@ -93,31 +110,21 @@ final class TrackersService: TrackersServiceProtocol {
     
     func getTrackers(for date: Date, searchText: String? = nil) -> [TrackerCategory] {
         let weekday = Calendar.current.component(.weekday, from: date)
-        let currentWeekday = Weekday(rawValue: weekday)!
+        guard let currentWeekday = Weekday(rawValue: weekday) else { return [] }
         
-        return categories.compactMap { category in
-            let filteredTrackers = category.trackers.filter { tracker in
-                // Фильтрация по поисковому запросу
-                let matchesSearch = searchText == nil ||
-                                 tracker.title.lowercased().contains(searchText!.lowercased())
-                
-                // Фильтрация по расписанию
-                let matchesSchedule: Bool
-                if let schedule = tracker.schedule {
-                    matchesSchedule = schedule.contains(currentWeekday)
-                } else {
-                    // Нерегулярные события показываются всегда
-                    matchesSchedule = true
-                }
-                
+        print("Фильтрация для дня: \(currentWeekday). Все категории:", categories.map { "\($0.title): \($0.trackers.count)" })
+        
+        let filtered = categories.compactMap { category in
+            let trackers = category.trackers.filter { tracker in
+                let matchesSearch = searchText == nil || tracker.title.lowercased().contains(searchText!.lowercased())
+                let matchesSchedule = tracker.schedule?.contains(currentWeekday) ?? true // Важное изменение!
+                print("Трекер '\(tracker.title)': schedule=\(tracker.schedule?.map { $0.rawValue } ?? []), matches=\(matchesSchedule)")
                 return matchesSearch && matchesSchedule
             }
-            
-            // Возвращаем только категории с отфильтрованными трекерами
-            return filteredTrackers.isEmpty ? nil : TrackerCategory(
-                title: category.title,
-                trackers: filteredTrackers
-            )
+            return trackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: trackers)
         }
+        
+        print("После фильтрации: \(filtered.count) категорий")
+        return filtered
     }
 }
