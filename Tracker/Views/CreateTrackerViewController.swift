@@ -87,6 +87,16 @@ class CreateTrackerViewController: UIViewController {
         categoryButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(categoryButton)
         
+        // Schedule Button
+        scheduleButton.setTitle("Расписание", for: .normal)
+        scheduleButton.contentHorizontalAlignment = .left
+        scheduleButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        scheduleButton.backgroundColor = .systemGray6
+        scheduleButton.layer.cornerRadius = 16
+        scheduleButton.addTarget(self, action: #selector(selectSchedule), for: .touchUpInside)
+        scheduleButton.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(scheduleButton)
+        
         // Выбор эмодзи
         
         emojiLabel.text = "Emoji"
@@ -164,8 +174,12 @@ class CreateTrackerViewController: UIViewController {
             categoryButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             categoryButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             categoryButton.heightAnchor.constraint(equalToConstant: 75),
+            scheduleButton.topAnchor.constraint(equalTo: categoryButton.bottomAnchor, constant: 8),
+            scheduleButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            scheduleButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            scheduleButton.heightAnchor.constraint(equalToConstant: 75),
             
-            emojiLabel.topAnchor.constraint(equalTo: categoryButton.bottomAnchor, constant: 32),
+            emojiLabel.topAnchor.constraint(equalTo: scheduleButton.bottomAnchor, constant: 32),
             emojiLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
             
             emojiCollectionView.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: 16),
@@ -269,6 +283,19 @@ class CreateTrackerViewController: UIViewController {
         
         present(alert, animated: true)
     }
+    @objc private func selectSchedule() {
+        let scheduleVC = ScheduleViewController()
+        scheduleVC.selectedDays = selectedDays
+        scheduleVC.onDaysSelected = { [weak self] days in
+            self?.selectedDays = days
+            let daysText = days.isEmpty ? "Расписание" : days.map { $0.shortName }.joined(separator: ", ")
+            self?.scheduleButton.setTitle(daysText, for: .normal)
+            self?.updateCreateButtonState()
+        }
+        let navController = UINavigationController(rootViewController: scheduleVC)
+        present(navController, animated: true)
+    }
+
     
     @objc private func cancelCreation() {
         dismiss(animated: true)

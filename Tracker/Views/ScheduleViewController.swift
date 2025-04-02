@@ -1,51 +1,99 @@
 import UIKit
 
+
 class ScheduleViewController: UIViewController {
+    
+    // 1. Добавляем необходимые свойства
+    var selectedDays: [Weekday] = []
+    var onDaysSelected: (([Weekday]) -> Void)?
+    
     private let tableView = UITableView()
-    private let daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
-    private var switchStates: [Bool] {
-        get {
-            return UserDefaults.standard.array(forKey: "switchStates") as? [Bool] ?? Array(repeating: false, count: 7)
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: "switchStates")
-        }
-    }
+    private let saveButton = UIButton(type: .system)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Расписание"
         view.backgroundColor = .white
-        
-        tableView.dataSource = self
+        title = "Расписание"
+        setupUI()
+    }
+    
+    private func setupUI() {
+        // Настройка таблицы
         tableView.delegate = self
+        tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.frame = view.bounds
+        tableView.separatorStyle = .none
+        tableView.layer.cornerRadius = 16
+        tableView.isScrollEnabled = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
+        
+        // Настройка кнопки сохранения
+        saveButton.setTitle("Готово", for: .normal)
+        saveButton.backgroundColor = .black
+        saveButton.setTitleColor(.white, for: .normal)
+        saveButton.layer.cornerRadius = 16
+        saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
+        saveButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(saveButton)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            tableView.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -16),
+            
+            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            saveButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
+    }
+    
+    @objc private func saveTapped() {
+        onDaysSelected?(selectedDays)
+        dismiss(animated: true)
     }
 }
 
-extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
+// MARK: - UITableViewDataSource
+extension ScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return daysOfWeek.count
+        return Weekday.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = daysOfWeek[indexPath.row]
+        let day = Weekday.allCases[indexPath.row]
         
-        let toggleSwitch = UISwitch()
-        toggleSwitch.isOn = switchStates[indexPath.row]
-        toggleSwitch.tag = indexPath.row
-        toggleSwitch.addTarget(self, action: #selector(switchChanged(_:)), for: .valueChanged)
+        cell.textLabel?.text = day.fullName
+        cell.selectionStyle = .none
         
-        cell.accessoryView = toggleSwitch
+        let switchView = UISwitch()
+        switchView.isOn = selectedDays.contains(day)
+        switchView.tag = indexPath.row
+        switchView.addTarget(self, action: #selector(switchChanged(_:)), for: .valueChanged)
+        cell.accessoryView = switchView
+        
         return cell
     }
     
     @objc private func switchChanged(_ sender: UISwitch) {
-        var states = switchStates
-        states[sender.tag] = sender.isOn
-        switchStates = states
+        let day = Weekday.allCases[sender.tag]
+        
+        if sender.isOn {
+            if !selectedDays.contains(day) {
+                selectedDays.append(day)
+            }
+        } else {
+            selectedDays.removeAll { $0 == day }
+        }
+    }
+}
+
+// MARK: - UITableViewDelegate
+extension ScheduleViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 75
     }
 }

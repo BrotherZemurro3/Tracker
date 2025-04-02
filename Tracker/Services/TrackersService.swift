@@ -42,9 +42,7 @@ struct TrackerRecord {
     let date: Date
 }
 
-enum Weekday: Int, CaseIterable {
-    case sunday = 1, monday, tuesday, wednesday, thursday, friday, saturday
-}
+
 
 // MARK: - Trackers Service Protocol
 protocol TrackersServiceProtocol {
