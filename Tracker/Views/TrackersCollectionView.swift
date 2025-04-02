@@ -21,6 +21,9 @@ final class TrackersCollectionView: UICollectionView {
         delegate = self
         dataSource = self
         register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCell")
+        register(TrackersSupplementaryView.self,
+                        forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                        withReuseIdentifier: "Header")
     }
     private func setupBindings() {
         viewModel.onDataUpdated = { [weak self] in
@@ -92,5 +95,26 @@ extension TrackersCollectionView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 16
+    }
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 40)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionHeader else {
+            return UICollectionReusableView()
+        }
+        
+        let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: "Header",
+            for: indexPath) as! TrackersSupplementaryView
+        
+        header.titleLabel.text = viewModel.trackers[indexPath.section].title
+        return header
     }
 }
