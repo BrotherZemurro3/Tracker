@@ -5,6 +5,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
     
     var onActionButtonTapped: ((UUID, Bool) -> Void)?
     
+    private let coloredBackgroundView = UIView()
     private let titleLabel = UILabel()
     private let emojiLabel = UILabel()
     private let actionButton = UIButton(type: .system)
@@ -24,6 +25,13 @@ class TrackersCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupUI() {
+        // Настройка цветного фона для верхней части
+        coloredBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(coloredBackgroundView)
+        coloredBackgroundView.layer.cornerRadius = 10
+        coloredBackgroundView.layer.masksToBounds = true
+        
+        // Настройка белого фона для нижней части (дни + кнопка)
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 10
         contentView.layer.masksToBounds = true
@@ -38,23 +46,30 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         titleLabel.textAlignment = .center
         titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
         titleLabel.numberOfLines = 2
+        titleLabel.textColor = .white
         
         daysCountLabel.font = .systemFont(ofSize: 14)
-        daysCountLabel.textColor = .darkGray
+        daysCountLabel.textColor = .black
         
         actionButton.layer.cornerRadius = 17
         actionButton.setTitleColor(.white, for: .normal)
+        actionButton.backgroundColor = .systemRed
         actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            emojiLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding),
-            emojiLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            coloredBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            coloredBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            coloredBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            coloredBackgroundView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.6),
+            
+            emojiLabel.topAnchor.constraint(equalTo: coloredBackgroundView.topAnchor, constant: padding),
+            emojiLabel.leadingAnchor.constraint(equalTo: coloredBackgroundView.leadingAnchor, constant: padding),
             emojiLabel.widthAnchor.constraint(equalToConstant: 24),
             emojiLabel.heightAnchor.constraint(equalToConstant: 24),
             
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding * 2),
+            titleLabel.leadingAnchor.constraint(equalTo: coloredBackgroundView.leadingAnchor, constant: padding),
+            titleLabel.trailingAnchor.constraint(equalTo: coloredBackgroundView.trailingAnchor, constant: -padding),
+            titleLabel.bottomAnchor.constraint(equalTo: coloredBackgroundView.bottomAnchor, constant: -padding),
             
             actionButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             actionButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding),
@@ -71,8 +86,11 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         self.completedDays = completedDays
         self.isCompletedToday = isCompletedToday
         
+        // Устанавливаем цвет только для верхней части
+        coloredBackgroundView.backgroundColor = tracker.color
         titleLabel.text = tracker.title
         emojiLabel.text = tracker.emoji
+        
         updateDaysCountText()
         updateButtonAppearance()
     }
@@ -97,8 +115,8 @@ class TrackersCollectionViewCell: UICollectionViewCell {
     
     private func updateButtonAppearance() {
         actionButton.backgroundColor = isCompletedToday ?
-            UIColor.systemGreen.withAlphaComponent(0.3) :
-            UIColor.systemRed.withAlphaComponent(0.3)
+            UIColor.systemGreen :
+            UIColor.systemRed
         
         actionButton.setTitle(isCompletedToday ? "✓" : "+", for: .normal)
         actionButton.isEnabled = !isCompletedToday
