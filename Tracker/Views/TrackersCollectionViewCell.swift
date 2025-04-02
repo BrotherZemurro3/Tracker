@@ -52,8 +52,9 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         daysCountLabel.textColor = .black
         
         actionButton.layer.cornerRadius = 17
-        actionButton.setTitleColor(.white, for: .normal)
-        actionButton.backgroundColor = .systemRed
+            actionButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+            actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
+
         actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
@@ -113,27 +114,54 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    private func updateButtonAppearance() {
-        actionButton.backgroundColor = isCompletedToday ?
-            UIColor.systemGreen :
-            UIColor.systemRed
+    private func updateButtonAppearance(animated: Bool = true) {
+        guard let trackerColor = coloredBackgroundView.backgroundColor else { return }
         
-        actionButton.setTitle(isCompletedToday ? "✓" : "+", for: .normal)
+        let duration = animated ? 0.3 : 0.0
+        
+        UIView.animate(withDuration: duration) {
+            if self.isCompletedToday {
+                // Состояние "выполнено"
+                self.actionButton.backgroundColor = trackerColor.withAlphaComponent(0.3)
+                self.actionButton.setTitleColor(trackerColor, for: .normal)
+                self.actionButton.setTitle("✓", for: .normal)
+            } else {
+                // Состояние "не выполнено"
+                self.actionButton.backgroundColor = trackerColor
+                self.actionButton.setTitleColor(.white, for: .normal)
+                self.actionButton.setTitle("+", for: .normal)
+            }
+            self.actionButton.transform = .identity
+        }
+        
         actionButton.isEnabled = !isCompletedToday
     }
     
     @objc private func actionButtonTapped() {
-        guard let trackerId = trackerId, !isCompletedToday else { return }
+        guard let trackerId = trackerId else { return }
         
-        // Обновляем счетчик
-        completedDays += 1
-        updateDaysCountText()
-        
-        // Меняем состояние кнопки
-        isCompletedToday = true
-        updateButtonAppearance()
-        
-        // Уведомляем о нажатии
-        onActionButtonTapped?(trackerId, true)
+        // Анимация нажатия
+        UIView.animate(withDuration: 0.2, animations: {
+            self.actionButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        }) { _ in
+            UIView.animate(withDuration: 0.2) {
+                self.actionButton.transform = .identity
+                
+                if self.isCompletedToday {
+                    // Если уже выполнено - отменяем
+                    self.completedDays = max(0, self.completedDays - 1)
+                    self.isCompletedToday = false
+                    self.onActionButtonTapped?(trackerId, false)
+                } else {
+                    // Если не выполнено - отмечаем
+                    self.completedDays += 1
+                    self.isCompletedToday = true
+                    self.onActionButtonTapped?(trackerId, true)
+                }
+                
+                self.updateDaysCountText()
+                self.updateButtonAppearance()
+            }
+        }
     }
 }
