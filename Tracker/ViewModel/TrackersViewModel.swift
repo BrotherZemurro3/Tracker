@@ -13,8 +13,19 @@ final class TrackersViewModel {
     func loadTrackers(for date: Date, searchText: String? = nil) {
         currentDate = date
         let loadedTrackers = trackersService.getTrackers(for: date, searchText: searchText)
-        self.trackers = loadedTrackers
-        print("Загружено \(trackers.count) категорий для \(date)")
+        
+        // Обновляем статус выполнения трекеров
+        trackers = loadedTrackers.map { category in
+            let updatedTrackers = category.trackers.map { tracker in
+                let isCompleted = trackersService.completedTrackers.contains {
+                    $0.id == tracker.id && Calendar.current.isDate($0.date, inSameDayAs: date)
+                }
+                return tracker.withCompletedState(isCompleted)
+            }
+            return TrackerCategory(title: category.title, trackers: updatedTrackers)
+        }
+        
+        print("Загружено \(trackers.count) категорий на \(date)")
         onDataUpdated?()
     }
     func addTracker(_ tracker: Tracker, to categoryTitle: String) {
@@ -46,6 +57,7 @@ final class TrackersViewModel {
           trackersService.uncompleteTracker(id: id, date: today)
           loadTrackers(for: currentDate)
       }
+    
       
       func isTrackerCompletedToday(_ trackerId: UUID) -> Bool {
           let today = Calendar.current.startOfDay(for: currentDate)

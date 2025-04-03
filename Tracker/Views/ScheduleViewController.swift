@@ -59,19 +59,19 @@ class ScheduleViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension ScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Weekday.allCases.count
+        return Weekday.displayOrderedCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        let day = Weekday.allCases[indexPath.row]
+        let day = Weekday.displayOrderedCases[indexPath.row]
         
         cell.textLabel?.text = day.fullName
         cell.selectionStyle = .none
         
         let switchView = UISwitch()
         switchView.isOn = selectedDays.contains(day)
-        switchView.tag = indexPath.row
+        switchView.tag = day.rawValue // Используем rawValue вместо индекса
         switchView.addTarget(self, action: #selector(switchChanged(_:)), for: .valueChanged)
         cell.accessoryView = switchView
         
@@ -79,7 +79,7 @@ extension ScheduleViewController: UITableViewDataSource {
     }
     
     @objc private func switchChanged(_ sender: UISwitch) {
-        let day = Weekday.allCases[sender.tag]
+        guard let day = Weekday(rawValue: sender.tag) else { return }
         
         if sender.isOn {
             if !selectedDays.contains(day) {
@@ -90,7 +90,6 @@ extension ScheduleViewController: UITableViewDataSource {
         }
     }
 }
-
 // MARK: - UITableViewDelegate
 extension ScheduleViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

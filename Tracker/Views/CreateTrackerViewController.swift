@@ -187,9 +187,7 @@ class CreateTrackerViewController: UIViewController {
             emojiCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             emojiCollectionView.heightAnchor.constraint(equalToConstant: 200),
             
-            
-            
-            
+    
             colorLabel.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 32),
             colorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
             
@@ -314,7 +312,7 @@ class CreateTrackerViewController: UIViewController {
             title: title,
             color: selectedColor,
             emoji: selectedEmoji,
-            schedule: [.monday, .wednesday, .friday], // Явно указываем дни
+            schedule: selectedDays, // Явно указываем дни
             isCompleted: false
         )
         

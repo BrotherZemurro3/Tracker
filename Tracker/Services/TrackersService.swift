@@ -90,6 +90,7 @@ final class TrackersService: TrackersServiceProtocol {
         print("Трекер \(id) выполнен \(date)")
     }
     
+    
     func uncompleteTracker(id: UUID, date: Date) {
         for (categoryIndex, category) in categories.enumerated() {
             if let trackerIndex = category.trackers.firstIndex(where: { $0.id == id }) {

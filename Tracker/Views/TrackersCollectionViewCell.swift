@@ -36,11 +36,13 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 10
         contentView.layer.masksToBounds = true
         
+        // Отключение автоматики
         [titleLabel, emojiLabel, actionButton, daysCountLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
         
+        //Размеры
         emojiLabel.font = .systemFont(ofSize: 24)
         
         titleLabel.textAlignment = .center
@@ -58,25 +60,26 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
+            // Цветной овал
             coloredBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor),
             coloredBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             coloredBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             coloredBackgroundView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.6),
-            
+            // Смайлик
             emojiLabel.topAnchor.constraint(equalTo: coloredBackgroundView.topAnchor, constant: padding),
             emojiLabel.leadingAnchor.constraint(equalTo: coloredBackgroundView.leadingAnchor, constant: padding),
             emojiLabel.widthAnchor.constraint(equalToConstant: 24),
             emojiLabel.heightAnchor.constraint(equalToConstant: 24),
-            
+            // Привычка
             titleLabel.leadingAnchor.constraint(equalTo: coloredBackgroundView.leadingAnchor, constant: padding),
             titleLabel.trailingAnchor.constraint(equalTo: coloredBackgroundView.trailingAnchor, constant: -padding),
             titleLabel.bottomAnchor.constraint(equalTo: coloredBackgroundView.bottomAnchor, constant: -padding),
-            
+            // Кнопка выполнения
             actionButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             actionButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding),
             actionButton.widthAnchor.constraint(equalToConstant: 34),
             actionButton.heightAnchor.constraint(equalToConstant: 34),
-            
+            // Лейбл Дни
             daysCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             daysCountLabel.centerYAnchor.constraint(equalTo: actionButton.centerYAnchor)
         ])
