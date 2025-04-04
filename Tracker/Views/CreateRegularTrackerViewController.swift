@@ -1,13 +1,12 @@
 import UIKit
 
 
-protocol CreateTrackerDelegate: AnyObject {
-    func didCreateTracker(_ tracker: Tracker, in categoryTitle: String)
-}
 
 
-class CreateTrackerViewController: UIViewController {
-    weak var delegate: CreateTrackerDelegate?
+
+class CreateRegularTrackerViewController: UIViewController {
+    weak var delegate: TrackerCreationDelegate?
+    
     let scrollView = UIScrollView()
     let contentView = UIView()
     let textField = UITextField()
@@ -313,7 +312,9 @@ class CreateTrackerViewController: UIViewController {
             color: selectedColor,
             emoji: selectedEmoji,
             schedule: selectedDays, // Явно указываем дни
-            isCompleted: false
+            isCompleted: false,
+            isRegular: true
+            
         )
         
         delegate?.didCreateTracker(newTracker, in: selectedCategory)
@@ -321,7 +322,7 @@ class CreateTrackerViewController: UIViewController {
     }
 }
 
-extension CreateTrackerViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension CreateRegularTrackerViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == emojiCollectionView {
             return emojis.count
@@ -375,3 +376,4 @@ extension CreateTrackerViewController: UICollectionViewDataSource, UICollectionV
         }
     }
 }
+

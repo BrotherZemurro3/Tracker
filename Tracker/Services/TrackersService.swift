@@ -7,8 +7,8 @@ struct Tracker {
     let color: UIColor
     let emoji: String
     let schedule: [Weekday]?
-    
     let isCompleted: Bool
+    let isRegular: Bool
     
     func withCompletedState(_ isCompleted: Bool) -> Tracker {
         return Tracker(
@@ -17,7 +17,8 @@ struct Tracker {
             color: color,
             emoji: emoji,
             schedule: schedule,
-            isCompleted: isCompleted
+            isCompleted: isCompleted,
+            isRegular: isRegular
         )
     }
 }

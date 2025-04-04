@@ -122,9 +122,9 @@ class TrackersViewController: UIViewController {
     }
     // MARK: - Обработчики событий
     @objc func buttonTappedPlus() {
-        let createTrackerVC = CreateTrackerViewController()
-        createTrackerVC.delegate = self
-        let navController = UINavigationController(rootViewController: createTrackerVC)
+        let selectionVC = SelectionStateOfTrackerViewController()
+        selectionVC.delegate = self 
+        let navController = UINavigationController(rootViewController: selectionVC)
         present(navController, animated: true)
     }
     @objc func dateChanged(_ sender: UIDatePicker) {
@@ -159,9 +159,10 @@ class TrackersViewController: UIViewController {
     }
 }
 // MARK: - Делегат создания трекера
-extension TrackersViewController: CreateTrackerDelegate {
+extension TrackersViewController: TrackerCreationDelegate {
     func didCreateTracker(_ tracker: Tracker, in categoryTitle: String) {
         viewModel.addTracker(tracker, to: categoryTitle)
         updateEmptyStateVisibility()
+        dismiss(animated: true)
     }
 }
