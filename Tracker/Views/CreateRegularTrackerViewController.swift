@@ -50,6 +50,7 @@ class CreateRegularTrackerViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupUI()
+        setupHideKeyboardOnTap()
     }
     
     private func setupUI() {

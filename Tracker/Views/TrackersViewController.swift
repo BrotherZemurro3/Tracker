@@ -20,7 +20,6 @@ class TrackersViewController: UIViewController {
         self.viewModel = TrackersViewModel(trackersService: trackersService)
         self.collectionView = TrackersCollectionView(viewModel: self.viewModel)
         self.imageView = UIImageView(image: imageForEmptyStatisticList)
-        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -35,8 +34,9 @@ class TrackersViewController: UIViewController {
         navigationTabBarAppearance()
         setupCollectionView()
         setupViewModelBindings() 
-        viewModel.loadTrackers(for: currentDate) // Добавьте эту строку
+        viewModel.loadTrackers(for: currentDate)
         updateEmptyStateVisibility()
+        setupHideKeyboardOnTap()
     }
     // MARK: - Обновление состояния пустого списка
     private func updateEmptyStateVisibility() {
@@ -45,6 +45,7 @@ class TrackersViewController: UIViewController {
         whatGoingToTrackLabel.isHidden = !isEmpty
         collectionView.isHidden = isEmpty // Добавляем скрытие коллекции при пустом состоянии
     }
+ 
     // MARK: - Настройка UI
     private func setupUI() {
         // Лейб Трекеры
@@ -58,15 +59,15 @@ class TrackersViewController: UIViewController {
             trackersLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 1)
         ])
         // Строка поиска трекеров
+        searchTrackersBar.delegate = self
         searchTrackersBar.translatesAutoresizingMaskIntoConstraints = false
         searchTrackersBar.searchBarStyle = .minimal
         view.addSubview(searchTrackersBar)
         NSLayoutConstraint.activate([
             searchTrackersBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             searchTrackersBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            searchTrackersBar.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 7)
-            
-        ])
+            searchTrackersBar.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 7),
+                    ])
         // Картинка по центу "Что будем отслеживать"
       
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -164,5 +165,28 @@ extension TrackersViewController: TrackerCreationDelegate {
         viewModel.addTracker(tracker, to: categoryTitle)
         updateEmptyStateVisibility()
         dismiss(animated: true)
+    }
+}
+// MARK: - UISearchBarDelegate
+extension TrackersViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        // Скрываю клавиатуру при нажатии на кнопку "Search" или "Готово"
+        searchBar.resignFirstResponder()
+        
+    }
+    // Скрываю клавиатуру при начале скролла Test
+     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+         searchTrackersBar.resignFirstResponder()
+     }
+ }
+extension UIViewController {
+    func setupHideKeyboardOnTap() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true) // Скрывает все текстовые поля и клавиатуру
     }
 }
