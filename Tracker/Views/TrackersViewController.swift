@@ -3,7 +3,7 @@ import UIKit
 
 
 class TrackersViewController: UIViewController {
-    // Объявляем свойства без инициализации
+    // MARK: - Свойства
     private let trackersService: TrackersServiceProtocol
     private let viewModel: TrackersViewModel
     private let collectionView: TrackersCollectionView
@@ -14,9 +14,8 @@ class TrackersViewController: UIViewController {
     private let whatGoingToTrackLabel = UILabel()
     private let imageView: UIImageView
     private var currentDate = Date()
-
+    // MARK: - Инициализация
     init(trackersService: TrackersServiceProtocol = TrackersService()) {
-        // Инициализируем свойства в правильном порядке
         self.trackersService = trackersService
         self.viewModel = TrackersViewModel(trackersService: trackersService)
         self.collectionView = TrackersCollectionView(viewModel: self.viewModel)
@@ -28,7 +27,7 @@ class TrackersViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    // MARK: - Жизненный цикл
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -39,14 +38,14 @@ class TrackersViewController: UIViewController {
         viewModel.loadTrackers(for: currentDate) // Добавьте эту строку
         updateEmptyStateVisibility()
     }
-
+    // MARK: - Обновление состояния пустого списка
     private func updateEmptyStateVisibility() {
         let isEmpty = viewModel.trackers.isEmpty // Используем viewModel.trackers вместо trackersService.categories
         imageView.isHidden = !isEmpty
         whatGoingToTrackLabel.isHidden = !isEmpty
         collectionView.isHidden = isEmpty // Добавляем скрытие коллекции при пустом состоянии
     }
-    
+    // MARK: - Настройка UI
     private func setupUI() {
         // Лейб Трекеры
         trackersLabel.text = "Трекеры"
@@ -121,7 +120,7 @@ class TrackersViewController: UIViewController {
         let dateBarButton = UIBarButtonItem(customView: datePicker)
         navigationItem.rightBarButtonItem = dateBarButton
     }
-    
+    // MARK: - Обработчики событий
     @objc func buttonTappedPlus() {
         let createTrackerVC = CreateTrackerViewController()
         createTrackerVC.delegate = self
@@ -135,8 +134,8 @@ class TrackersViewController: UIViewController {
         viewModel.loadTrackers(for: currentDate)
     }
     
-// MARK: - CollectionViewUISetUp
     
+      // MARK: - Настройка CollectionView
     func setupCollectionView() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
@@ -148,6 +147,7 @@ class TrackersViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
+    // MARK: - Связывание ViewModel
     private func setupViewModelBindings() {
         viewModel.onDataUpdated = { [weak self] in
             DispatchQueue.main.async {
@@ -158,7 +158,7 @@ class TrackersViewController: UIViewController {
         }
     }
 }
-
+// MARK: - Делегат создания трекера
 extension TrackersViewController: CreateTrackerDelegate {
     func didCreateTracker(_ tracker: Tracker, in categoryTitle: String) {
         viewModel.addTracker(tracker, to: categoryTitle)

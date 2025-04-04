@@ -262,10 +262,10 @@ class CreateTrackerViewController: UIViewController {
     
     // MARK: - Actions
     @objc private func selectCategory() {
-        // Создаем временную заглушку для выбора категории
+       
         let alert = UIAlertController(title: "Выберите категорию", message: nil, preferredStyle: .actionSheet)
         
-        // Пример категорий - замените на вашу реальную логику
+        // Временные категории 
         let categories = ["Важная", "Работа", "Личная", "Спорт"]
         
         for category in categories {
@@ -341,7 +341,7 @@ extension CreateTrackerViewController: UICollectionViewDataSource, UICollectionV
             return cell
         }
     }
-    
+// Выбор ячейки
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == emojiCollectionView {
             selectedEmoji = emojis[indexPath.row]
@@ -362,7 +362,7 @@ extension CreateTrackerViewController: UICollectionViewDataSource, UICollectionV
         updateCreateButtonState()
     }
     
-    // Добавьте метод для сброса выделения
+    // Метод для сброса выделения
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if collectionView == emojiCollectionView {
             if let cell = collectionView.cellForItem(at: indexPath) {

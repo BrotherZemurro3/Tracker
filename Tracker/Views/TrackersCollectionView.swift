@@ -16,7 +16,7 @@ final class TrackersCollectionView: UICollectionView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    // MARK: - Кофигурация ячейки
     private func configureCollectionView() {
         delegate = self
         dataSource = self
@@ -32,12 +32,13 @@ final class TrackersCollectionView: UICollectionView {
             }
         }
     }
-    
+    // MARK: - Обновление даты
     func update(date: Date) {
         currentDate = date
         viewModel.loadTrackers(for: date)
     }
 }
+// MARK: - UICollectionViewDataSource
 
 extension TrackersCollectionView: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -79,6 +80,7 @@ extension TrackersCollectionView: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
 extension TrackersCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (collectionView.bounds.width - 16 * 3) / 2
