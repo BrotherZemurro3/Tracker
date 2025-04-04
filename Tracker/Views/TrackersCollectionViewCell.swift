@@ -57,7 +57,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
             actionButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
             actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
 
-        actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
+
         
         NSLayoutConstraint.activate([
             // Цветной овал

@@ -222,7 +222,7 @@ class CreateIrregularTrackerViewController: UIViewController {
         
         return UICollectionViewCompositionalLayout(section: section)
     }
-
+    
     
     // MARK: - Actions
     @objc private func selectCategory() {
@@ -247,7 +247,7 @@ class CreateIrregularTrackerViewController: UIViewController {
     @objc private func cancelCreation() {
         dismiss(animated: true)
     }
-    
+    // Колхозная реализация трекера на один день
     @objc private func createTracker() {
         guard let title = textField.text, !title.isEmpty,
               let selectedEmoji = selectedEmoji,
@@ -256,17 +256,35 @@ class CreateIrregularTrackerViewController: UIViewController {
             return
         }
         
-        // Для нерегулярного события устанавливаем все дни недели
-        let allWeekdays: [Weekday] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
+        // Текущий день недели
+        let calendar = Calendar.current
+        let today = calendar.component(.weekday, from: Date())
+        let todayWeekday: Weekday
+        
+        // Конвертация номера дня недели в enum Weekday
+        switch today {
+        case 1: todayWeekday = .sunday
+        case 2: todayWeekday = .monday
+        case 3: todayWeekday = .tuesday
+        case 4: todayWeekday = .wednesday
+        case 5: todayWeekday = .thursday
+        case 6: todayWeekday = .friday
+        case 7: todayWeekday = .saturday
+        default: todayWeekday = .monday // fallback
+        }
+        
+        // Устанавливаю только текущий день недели
+        let schedule: [Weekday] = [todayWeekday]
         
         let newTracker = Tracker(
             id: UUID(),
             title: title,
             color: selectedColor,
             emoji: selectedEmoji,
-            schedule: allWeekdays,
+            schedule: schedule,
             isCompleted: false,
-            isRegular: false
+            isRegular: false,
+            shouldRemoveAfterCompletion: true
         )
         
         delegate?.didCreateTracker(newTracker, in: selectedCategory)

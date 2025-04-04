@@ -313,7 +313,8 @@ class CreateRegularTrackerViewController: UIViewController {
             emoji: selectedEmoji,
             schedule: selectedDays, // Явно указываем дни
             isCompleted: false,
-            isRegular: true
+            isRegular: true,
+            shouldRemoveAfterCompletion: false
             
         )
         

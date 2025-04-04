@@ -39,6 +39,7 @@ enum Weekday: Int, CaseIterable {
         return Weekday(rawValue: weekdayNumber) ?? .monday
     }
     
+    
     // Добавляем вычисляемое свойство для порядка отображения
     var displayOrder: Int {
         switch self {

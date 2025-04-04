@@ -9,6 +9,7 @@ struct Tracker {
     let schedule: [Weekday]?
     let isCompleted: Bool
     let isRegular: Bool
+    let shouldRemoveAfterCompletion: Bool
     
     func withCompletedState(_ isCompleted: Bool) -> Tracker {
         return Tracker(
@@ -18,7 +19,8 @@ struct Tracker {
             emoji: emoji,
             schedule: schedule,
             isCompleted: isCompleted,
-            isRegular: isRegular
+            isRegular: isRegular,
+            shouldRemoveAfterCompletion: shouldRemoveAfterCompletion
         )
     }
 }
@@ -127,4 +129,5 @@ final class TrackersService: TrackersServiceProtocol {
         print("После фильтрации: \(filtered.count) категорий")
         return filtered
     }
+    
 }
