@@ -4,7 +4,7 @@ final class TrackersViewModel {
     private let trackersService: TrackersServiceProtocol
      private(set) var trackers: [TrackerCategory] = []
      var onDataUpdated: (() -> Void)?
-     private var currentDate = Date() 
+     var currentDate = Date() 
     
     init(trackersService: TrackersServiceProtocol) {
         self.trackersService = trackersService
@@ -35,28 +35,35 @@ final class TrackersViewModel {
     }
     
     func getCompletedDaysCount(for trackerId: UUID) -> Int {
-        return trackersService.completedTrackers.filter { $0.id == trackerId }.count
+        let completed = trackersService.completedTrackers.filter { $0.id == trackerId }
+        print("Трекер \(trackerId): выполнен \(completed.count) раз(а), все даты: \(completed.map { $0.date })")
+        return completed.count
     }
     
     func completeTracker(id: UUID, date: Date) {
-          let today = Calendar.current.startOfDay(for: date)
-          
-          // Проверяем, не выполнен ли уже трекер сегодня
-          let alreadyCompleted = trackersService.completedTrackers.contains {
-              $0.id == id && Calendar.current.isDate($0.date, inSameDayAs: today)
-          }
-          
-          guard !alreadyCompleted else { return }
-          
-          trackersService.completeTracker(id: id, date: today)
-          loadTrackers(for: currentDate)
-      }
-      
-      func uncompleteTracker(id: UUID, date: Date) {
-          let today = Calendar.current.startOfDay(for: date)
-          trackersService.uncompleteTracker(id: id, date: today)
-          loadTrackers(for: currentDate)
-      }
+        let today = Calendar.current.startOfDay(for: date)
+        
+        let alreadyCompleted = trackersService.completedTrackers.contains {
+            $0.id == id && Calendar.current.isDate($0.date, inSameDayAs: today)
+        }
+        
+        guard !alreadyCompleted else {
+            print("Трекер уже выполнен сегодня, пропускаем \(id)")
+            return
+        }
+
+        trackersService.completeTracker(id: id, date: today)
+        print("Трекер \(id) выполнен на дату \(today)")
+        loadTrackers(for: currentDate)
+    }
+
+    func uncompleteTracker(id: UUID, date: Date) {
+        let today = Calendar.current.startOfDay(for: date)
+        print("Отменяем выполнение трекера \(id) на дату \(today)")
+        
+        trackersService.uncompleteTracker(id: id, date: today)
+        loadTrackers(for: currentDate)
+    }
     
       
       func isTrackerCompletedToday(_ trackerId: UUID) -> Bool {

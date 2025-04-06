@@ -85,10 +85,14 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func configure(with tracker: Tracker, completedDays: Int, isCompletedToday: Bool) {
+    func configure(with tracker: Tracker, completedDays: Int, isCompletedToday: Bool, currentDate: Date) {
         trackerId = tracker.id
         self.completedDays = completedDays
         self.isCompletedToday = isCompletedToday
+        
+        // Проверка, является ли выбранная дата сегодняшним днём
+        let today = Calendar.current.startOfDay(for: Date())
+        let isToday = Calendar.current.isDate(currentDate, inSameDayAs: today)
         
         // Устанавливаем цвет только для верхней части
         coloredBackgroundView.backgroundColor = tracker.color
@@ -97,8 +101,10 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         
         updateDaysCountText()
         updateButtonAppearance()
+        
+        // Блокируем кнопку, если выбран не сегодняшний день
+        actionButton.isEnabled = isToday && !isCompletedToday
     }
-    
     private func updateDaysCountText() {
         let dayString = formatDaysCount(completedDays)
         daysCountLabel.text = "\(completedDays) \(dayString)"

@@ -60,6 +60,7 @@ class TrackersViewController: UIViewController {
         ])
         // Строка поиска трекеров
         searchTrackersBar.delegate = self
+        searchTrackersBar.placeholder = "Поиск"
         searchTrackersBar.translatesAutoresizingMaskIntoConstraints = false
         searchTrackersBar.searchBarStyle = .minimal
         view.addSubview(searchTrackersBar)

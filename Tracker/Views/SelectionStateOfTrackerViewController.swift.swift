@@ -4,13 +4,22 @@ class SelectionStateOfTrackerViewController: UIViewController {
     weak var delegate: TrackerCreationDelegate?
     let habitButton = UIButton()
     let irregularHabitButton = UIButton()
+    let createTrackerLabel = UILabel()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setupButtonsUI()
+        setupUI()
     }
     
-    private func setupButtonsUI() {
+    private func setupUI() {
+        // Создание трекеров
+        createTrackerLabel.text = "Создание трекера"
+        createTrackerLabel.tintColor = .black
+        createTrackerLabel.font = UIFont(name: "YS Display-Medium", size: 16)
+        createTrackerLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(createTrackerLabel)
+        
+        
            // Кнопка привычки
            habitButton.setTitle("Привычка", for: .normal)
            habitButton.backgroundColor = .black
@@ -30,7 +39,11 @@ class SelectionStateOfTrackerViewController: UIViewController {
            view.addSubview(irregularHabitButton)
            
            NSLayoutConstraint.activate([
-               // Привычка
+            // Верхний лейбл
+            createTrackerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            createTrackerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -28),
+            
+            // Привычка
                habitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                habitButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -40),
                habitButton.widthAnchor.constraint(equalToConstant: 335),

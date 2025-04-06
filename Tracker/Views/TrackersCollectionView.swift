@@ -56,7 +56,12 @@ extension TrackersCollectionView: UICollectionViewDataSource {
         let completedDays = viewModel.getCompletedDaysCount(for: tracker.id)
         let isCompletedToday = viewModel.isTrackerCompletedToday(tracker.id)
         
-        cell.configure(with: tracker, completedDays: completedDays, isCompletedToday: isCompletedToday)
+        cell.configure(
+            with: tracker,
+            completedDays: viewModel.getCompletedDaysCount(for: tracker.id),
+            isCompletedToday: viewModel.isTrackerCompletedToday(tracker.id),
+            currentDate: viewModel.currentDate
+        )
         
         cell.onActionButtonTapped = { [weak self] trackerId, isCompleted in
             if isCompleted {
