@@ -1,9 +1,9 @@
 import UIKit
 
-
 class ScheduleViewController: UIViewController {
-     var selectedDays: [Weekday] = []
-     var onDaysSelected: (([Weekday]) -> Void)?
+    var selectedDays: [Weekday] = []
+    var onDaysSelected: (([Weekday]) -> Void)?
+    
     private let tableView = UITableView()
     private let saveButton = UIButton(type: .system)
     
@@ -15,17 +15,25 @@ class ScheduleViewController: UIViewController {
     }
     
     private func setupUI() {
-        // Настройка таблицы
+        setupTableView()
+        setupSaveButton()
+        setupConstraints()
+    }
+    // Настройка таблицы
+    private func setupTableView() {
+        tableView.register(ScheduleTableViewCell.self, forCellReuseIdentifier: ScheduleTableViewCell.reuseIdentifier)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.layer.cornerRadius = 16
+        tableView.clipsToBounds = true
         tableView.isScrollEnabled = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
-        
-        // Настройка кнопки сохранения
+    }
+    // Настройка кнопки сохранения
+    private func setupSaveButton() {
         saveButton.setTitle("Готово", for: .normal)
         saveButton.backgroundColor = .black
         saveButton.setTitleColor(.white, for: .normal)
@@ -33,7 +41,9 @@ class ScheduleViewController: UIViewController {
         saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(saveButton)
-        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -46,7 +56,7 @@ class ScheduleViewController: UIViewController {
             saveButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
-    // Действие кнопки
+    
     @objc private func saveTapped() {
         onDaysSelected?(selectedDays)
         dismiss(animated: true)
@@ -55,43 +65,62 @@ class ScheduleViewController: UIViewController {
 
 // MARK: - UITableViewDataSource
 extension ScheduleViewController: UITableViewDataSource {
-    // Количество ячеек (Дни недели)
+    // Количество ячеек
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Weekday.displayOrderedCases.count
     }
     // Создание и настройка ячейки
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: ScheduleTableViewCell.reuseIdentifier,
+            for: indexPath
+        ) as? ScheduleTableViewCell else {
+            return UITableViewCell()
+        }
+        
         let day = Weekday.displayOrderedCases[indexPath.row]
+        cell.configure(with: day, isOn: selectedDays.contains(day))
         
-        cell.textLabel?.text = day.fullName
-        cell.selectionStyle = .none
-        
-        let switchView = UISwitch()
-        switchView.isOn = selectedDays.contains(day)
-        switchView.tag = day.rawValue // Используем rawValue вместо индекса
-        switchView.addTarget(self, action: #selector(switchChanged(_:)), for: .valueChanged)
-        cell.accessoryView = switchView
+        cell.onSwitchChanged = { [weak self] isOn in
+            guard let self = self else { return }
+            if isOn {
+                if !self.selectedDays.contains(day) {
+                    self.selectedDays.append(day)
+                }
+            } else {
+                self.selectedDays.removeAll { $0 == day }
+            }
+        }
         
         return cell
     }
-    // Переключатель в ячейке
-    @objc private func switchChanged(_ sender: UISwitch) {
-        guard let day = Weekday(rawValue: sender.tag) else { return }
-        
-        if sender.isOn {
-            if !selectedDays.contains(day) {
-                selectedDays.append(day)
-            }
-        } else {
-            selectedDays.removeAll { $0 == day }
-        }
-    }
 }
+
 // MARK: - UITableViewDelegate
 extension ScheduleViewController: UITableViewDelegate {
     // Высота ячейки
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
+    }
+    // Разделитель
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cornerRadius: CGFloat = 16
+        let isLastCell = indexPath.row == Weekday.displayOrderedCases.count - 1
+        // Настройка закругления
+        if isLastCell {
+            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            cell.layer.cornerRadius = cornerRadius
+            cell.layer.masksToBounds = true
+        } else {
+            cell.layer.cornerRadius = 0
+        }
+        
+        if indexPath.row == 0 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+        } else if isLastCell {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+        } else {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        }
     }
 }
