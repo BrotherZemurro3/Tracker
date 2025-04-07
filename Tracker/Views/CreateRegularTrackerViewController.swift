@@ -32,14 +32,14 @@ class CreateRegularTrackerViewController: UIViewController {
         setupHideKeyboardOnTap()
         navigationItem.hidesBackButton = true
     }
-    
+    // Установка навигационного бара
     private func setupNavigationBar() {
         title = "Новая привычка"
         navigationController?.navigationBar.titleTextAttributes = [
             .font: UIFont.boldSystemFont(ofSize: 16)
         ]
     }
-    
+    // Установка UI
     private func setupUI() {
           view.backgroundColor = .white
           
@@ -110,7 +110,7 @@ class CreateRegularTrackerViewController: UIViewController {
         colorCollectionView.isScrollEnabled = false
         contentView.addSubview(colorCollectionView)
     }
-    
+    // Кнопки отменить и создать
     private func setupButtons() {
         
         cancelButton.setTitle("Отменить", for: .normal)
@@ -144,7 +144,7 @@ class CreateRegularTrackerViewController: UIViewController {
             buttonsContainer.heightAnchor.constraint(equalToConstant: 60),
         ])
     }
-
+    // Констрейнты
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -179,7 +179,7 @@ class CreateRegularTrackerViewController: UIViewController {
             colorCollectionView.heightAnchor.constraint(equalToConstant: 204),
         ])
     }
-    
+    // Организация ячейки с эмоджи
     private func createEmojiLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(52), heightDimension: .absolute(52))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -192,7 +192,7 @@ class CreateRegularTrackerViewController: UIViewController {
         section.interGroupSpacing = 0
         return UICollectionViewCompositionalLayout(section: section)
     }
-    
+    // Организация ячейки с цветом
     private func createColorLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(52), heightDimension: .absolute(52))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -205,19 +205,25 @@ class CreateRegularTrackerViewController: UIViewController {
         section.interGroupSpacing = 0
         return UICollectionViewCompositionalLayout(section: section)
     }
-    
+    // Кнопка создать не активна, пока не выбрано всё
     private func updateCreateButtonState() {
-        createButton.isEnabled = textField.text?.isEmpty == false &&
-        selectedEmoji != nil &&
-        selectedColor != nil &&
-        selectedCategory != nil
-        createButton.backgroundColor = createButton.isEnabled ? .systemBlue : .gray
+        guard let text = textField.text, !text.isEmpty,
+              selectedEmoji != nil,
+              selectedColor != nil,
+              selectedCategory != nil,
+              !selectedDays.isEmpty else {
+            createButton.isEnabled = false
+            createButton.backgroundColor = .gray
+            return
+        }
+        createButton.isEnabled = true
+        createButton.backgroundColor = .systemBlue
     }
-    
+    // Поле создания названия трекера, вызывается после изменения текста в UITextField
     @objc private func textFieldDidChange() {
         updateCreateButtonState()
     }
-    
+    // Категории
     @objc private func selectCategory() {
         let alert = UIAlertController(title: "Выберите категорию", message: nil, preferredStyle: .actionSheet)
         let categories = ["Важное", "Работа", "Личное", "Спорт"]
@@ -234,7 +240,7 @@ class CreateRegularTrackerViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
         present(alert, animated: true)
     }
-    
+        // Выбор дня
     @objc private func selectSchedule() {
         let scheduleVC = ScheduleViewController()
         scheduleVC.selectedDays = selectedDays
@@ -246,11 +252,11 @@ class CreateRegularTrackerViewController: UIViewController {
         let navController = UINavigationController(rootViewController: scheduleVC)
         present(navController, animated: true)
     }
-    
+    // Отмена создания трекера 
     @objc private func cancelCreation() {
         dismiss(animated: true)
     }
-    
+    // Создание трекера
     @objc private func createTracker() {
         guard let title = textField.text, !title.isEmpty,
               let selectedEmoji = selectedEmoji,

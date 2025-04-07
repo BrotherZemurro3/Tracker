@@ -1,7 +1,7 @@
 import UIKit
 
 
-class ColorCell: UICollectionViewCell {
+final class ColorCell: UICollectionViewCell {
     let colorView = UIView()
     
     override init(frame: CGRect) {

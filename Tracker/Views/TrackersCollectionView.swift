@@ -22,8 +22,8 @@ final class TrackersCollectionView: UICollectionView {
         dataSource = self
         register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCell")
         register(TrackersSupplementaryView.self,
-                        forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                        withReuseIdentifier: "Header")
+                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                 withReuseIdentifier: "Header")
     }
     private func setupBindings() {
         viewModel.onDataUpdated = { [weak self] in
@@ -33,7 +33,7 @@ final class TrackersCollectionView: UICollectionView {
         }
     }
     // MARK: - Обновление даты
-    func update(date: Date) {
+    private func update(date: Date) {
         currentDate = date
         viewModel.loadTrackers(for: date)
     }
@@ -95,14 +95,15 @@ extension TrackersCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     }
-    
+    // Расстояние между строками ячеек по вертикали
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
+        return 46
     }
-    
+    // Расстояние между строками ячеек по горизонтали
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
+        return 7
     }
+    // Размер заголовка секции
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {

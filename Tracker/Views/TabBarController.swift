@@ -29,7 +29,7 @@ final class TabBarController: UITabBarController {
     }
     
     private let unselectedTitleColor: UIColor = .gray
-    private let selectedTitleColor: UIColor = .blue
+    private let selectedTitleColor: UIColor = .ypBlue
     
     override func viewDidLoad() {
         super.viewDidLoad()

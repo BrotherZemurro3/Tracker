@@ -2,11 +2,8 @@ import UIKit
 
 
 class ScheduleViewController: UIViewController {
-    
-    // 1. Добавляем необходимые свойства
-    var selectedDays: [Weekday] = []
-    var onDaysSelected: (([Weekday]) -> Void)?
-    
+     var selectedDays: [Weekday] = []
+     var onDaysSelected: (([Weekday]) -> Void)?
     private let tableView = UITableView()
     private let saveButton = UIButton(type: .system)
     
@@ -49,7 +46,7 @@ class ScheduleViewController: UIViewController {
             saveButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
-    
+    // Действие кнопки
     @objc private func saveTapped() {
         onDaysSelected?(selectedDays)
         dismiss(animated: true)
@@ -58,10 +55,11 @@ class ScheduleViewController: UIViewController {
 
 // MARK: - UITableViewDataSource
 extension ScheduleViewController: UITableViewDataSource {
+    // Количество ячеек (Дни недели)
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Weekday.displayOrderedCases.count
     }
-    
+    // Создание и настройка ячейки
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let day = Weekday.displayOrderedCases[indexPath.row]
@@ -77,7 +75,7 @@ extension ScheduleViewController: UITableViewDataSource {
         
         return cell
     }
-    
+    // Переключатель в ячейке
     @objc private func switchChanged(_ sender: UISwitch) {
         guard let day = Weekday(rawValue: sender.tag) else { return }
         
@@ -92,6 +90,7 @@ extension ScheduleViewController: UITableViewDataSource {
 }
 // MARK: - UITableViewDelegate
 extension ScheduleViewController: UITableViewDelegate {
+    // Высота ячейки
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }

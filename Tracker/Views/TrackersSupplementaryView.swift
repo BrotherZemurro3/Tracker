@@ -2,7 +2,7 @@ import UIKit
 
 
 
-class TrackersSupplementaryView: UICollectionReusableView {
+final class TrackersSupplementaryView: UICollectionReusableView {
     let titleLabel = UILabel()
     
     override init(frame: CGRect) {
@@ -15,9 +15,9 @@ class TrackersSupplementaryView: UICollectionReusableView {
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 28),
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }

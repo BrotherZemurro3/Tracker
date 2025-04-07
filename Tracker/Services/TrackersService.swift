@@ -21,6 +21,7 @@ struct Tracker {
             isCompleted: isCompleted,
             isRegular: isRegular,
             shouldRemoveAfterCompletion: shouldRemoveAfterCompletion
+            // добавил shouldRemoveAfterCompletion на будущее, что бы реализовать
         )
     }
 }
@@ -64,12 +65,10 @@ final class TrackersService: TrackersServiceProtocol {
     private(set) var categories: [TrackerCategory] = []
     private(set) var completedTrackers: [TrackerRecord] = []
     
-    init() {
-        // Инициализация без тестовых данных
-    }
+    init() {}
     
     // MARK: - Public Methods
-    
+    // Поиск трекера и добавление в категорию
     func addTracker(_ tracker: Tracker, to categoryTitle: String) {
         if let index = categories.firstIndex(where: { $0.title == categoryTitle }) {
             var updatedTrackers = categories[index].trackers
@@ -80,7 +79,7 @@ final class TrackersService: TrackersServiceProtocol {
         }
         print("Трекер добавлен. Всего категорий: \(categories.count)")
     }
-    
+    // Проверка выполнения трекера
     func completeTracker(id: UUID, date: Date) {
         // Проверяем, не выполнен ли уже трекер в эту дату
         let alreadyCompleted = completedTrackers.contains {
@@ -93,7 +92,7 @@ final class TrackersService: TrackersServiceProtocol {
         print("Трекер \(id) выполнен \(date)")
     }
     
-    
+    // Обновление состояние трекера на "не выполнено" в нужный день
     func uncompleteTracker(id: UUID, date: Date) {
         for (categoryIndex, category) in categories.enumerated() {
             if let trackerIndex = category.trackers.firstIndex(where: { $0.id == id }) {
@@ -109,7 +108,7 @@ final class TrackersService: TrackersServiceProtocol {
             }
         }
     }
-    
+    // Определение дня недели для указанной даты и фильтрация трекеров
     func getTrackers(for date: Date, searchText: String? = nil) -> [TrackerCategory] {
         let weekday = Calendar.current.component(.weekday, from: date)
         guard let currentWeekday = Weekday(rawValue: weekday) else { return [] }

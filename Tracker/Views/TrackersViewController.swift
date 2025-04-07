@@ -1,7 +1,5 @@
 import UIKit
 
-
-
 class TrackersViewController: UIViewController {
     // MARK: - Свойства
     private let trackersService: TrackersServiceProtocol
@@ -33,7 +31,7 @@ class TrackersViewController: UIViewController {
         setupUI()
         navigationTabBarAppearance()
         setupCollectionView()
-        setupViewModelBindings() 
+        setupViewModelBindings()
         viewModel.loadTrackers(for: currentDate)
         updateEmptyStateVisibility()
         setupHideKeyboardOnTap()
@@ -45,7 +43,7 @@ class TrackersViewController: UIViewController {
         whatGoingToTrackLabel.isHidden = !isEmpty
         collectionView.isHidden = isEmpty // Добавляем скрытие коллекции при пустом состоянии
     }
- 
+    
     // MARK: - Настройка UI
     private func setupUI() {
         // Лейб Трекеры
@@ -65,12 +63,11 @@ class TrackersViewController: UIViewController {
         searchTrackersBar.searchBarStyle = .minimal
         view.addSubview(searchTrackersBar)
         NSLayoutConstraint.activate([
-            searchTrackersBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            searchTrackersBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            searchTrackersBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
+            searchTrackersBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8),
             searchTrackersBar.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 7),
-                    ])
+        ])
         // Картинка по центу "Что будем отслеживать"
-      
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)
         NSLayoutConstraint.activate([
@@ -94,8 +91,8 @@ class TrackersViewController: UIViewController {
             whatGoingToTrackLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
     }
-// MARK: - NavigationTabBar
-    func navigationTabBarAppearance() {
+    // MARK: - NavigationTabBar
+    private func navigationTabBarAppearance() {
         // Внешний вид навигационного бара
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .clear // Убираем фон
@@ -123,13 +120,13 @@ class TrackersViewController: UIViewController {
         navigationItem.rightBarButtonItem = dateBarButton
     }
     // MARK: - Обработчики событий
-    @objc func buttonTappedPlus() {
+    @objc private func buttonTappedPlus() {
         let selectionVC = SelectionStateOfTrackerViewController()
-        selectionVC.delegate = self 
+        selectionVC.delegate = self
         let navController = UINavigationController(rootViewController: selectionVC)
         present(navController, animated: true)
     }
-    @objc func dateChanged(_ sender: UIDatePicker) {
+    @objc private func dateChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
         let weekday = Calendar.current.component(.weekday, from: currentDate)
         print("Выбрана дата: \(currentDate), день недели: \(weekday)")
@@ -137,15 +134,15 @@ class TrackersViewController: UIViewController {
     }
     
     
-      // MARK: - Настройка CollectionView
-    func setupCollectionView() {
+    // MARK: - Настройка CollectionView
+    private func setupCollectionView() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: searchTrackersBar.bottomAnchor, constant: 24),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            collectionView.topAnchor.constraint(equalTo: searchTrackersBar.bottomAnchor, constant: 8),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
@@ -176,10 +173,10 @@ extension TrackersViewController: UISearchBarDelegate {
         
     }
     // Скрываю клавиатуру при начале скролла Test
-     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-         searchTrackersBar.resignFirstResponder()
-     }
- }
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        searchTrackersBar.resignFirstResponder()
+    }
+}
 extension UIViewController {
     func setupHideKeyboardOnTap() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -191,3 +188,35 @@ extension UIViewController {
         view.endEditing(true) // Скрывает все текстовые поля и клавиатуру
     }
 }
+/*
+ // Превью
+ #if DEBUG
+ import SwiftUI
+ 
+ struct TrackersViewController_Preview: PreviewProvider {
+ static var previews: some View {
+ let viewController = TrackersViewController()
+ return UINavigationController(rootViewController: viewController)
+ .toPreview()
+ .edgesIgnoringSafeArea(.all)
+ }
+ }
+ extension UIViewController {
+ func toPreview() -> some View {
+ Preview(viewController: self)
+ }
+ 
+ private struct Preview: UIViewControllerRepresentable {
+ let viewController: UIViewController
+ 
+ func makeUIViewController(context: Context) -> some UIViewController {
+ viewController
+ }
+ 
+ func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+ // Nothing to update
+ }
+ }
+ }
+ #endif
+ */

@@ -30,8 +30,6 @@ class CreateIrregularTrackerViewController: UIViewController {
     private var selectedColor: UIColor?
     private var selectedCategory: String?
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
@@ -39,11 +37,12 @@ class CreateIrregularTrackerViewController: UIViewController {
         setupHideKeyboardOnTap()
         navigationItem.hidesBackButton = true
     }
-    
+    // Установка навигационного бара
     private func setupNavigationBar() {
         title = "Новое нерегулярное событие"
         navigationController?.navigationBar.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 16)]
     }
+    // Установка UI
     private func setupUI() {
         view.backgroundColor = .white
         
@@ -116,7 +115,7 @@ class CreateIrregularTrackerViewController: UIViewController {
     }
     // Кнопки отменить и создать
     private func setupButtons() {
-        
+        // Кнопка отменить
         cancelButton.setTitle("Отменить", for: .normal)
         cancelButton.setTitleColor(.red, for: .normal)
         cancelButton.backgroundColor = .white
@@ -125,7 +124,7 @@ class CreateIrregularTrackerViewController: UIViewController {
         cancelButton.layer.cornerRadius = 16
         cancelButton.addTarget(self, action: #selector(cancelCreation), for: .touchUpInside)
         
-        
+        // Кнопка создать
         createButton.setTitle("Создать", for: .normal)
         createButton.setTitleColor(.white, for: .normal)
         createButton.backgroundColor = .gray
@@ -148,6 +147,7 @@ class CreateIrregularTrackerViewController: UIViewController {
             buttonsContainer.heightAnchor.constraint(equalToConstant: 60),
         ])
     }
+    // Констрейнты
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -209,14 +209,20 @@ class CreateIrregularTrackerViewController: UIViewController {
         return UICollectionViewCompositionalLayout(section: section)
     }
     // Состояние выбранной ячейки (Эмоджи и Цвет)
+    // Кнопка создать не активна, пока не выбрано всё
     private func updateCreateButtonState() {
-        createButton.isEnabled = textField.text?.isEmpty == false &&
-        selectedEmoji != nil &&
-        selectedColor != nil &&
-        selectedCategory != nil
-        createButton.backgroundColor = createButton.isEnabled ? .systemBlue : .gray
+        guard let text = textField.text, !text.isEmpty,
+              selectedEmoji != nil,
+              selectedColor != nil,
+              selectedCategory != nil else {
+            createButton.isEnabled = false
+            createButton.backgroundColor = .gray
+            return
+        }
+        createButton.isEnabled = true
+        createButton.backgroundColor = .systemBlue
     }
-    
+    // Поле создания названия трекера, вызывается после изменения текста в UITextField
     @objc private func textFieldDidChange() {
         updateCreateButtonState()
     }
@@ -241,6 +247,7 @@ class CreateIrregularTrackerViewController: UIViewController {
     @objc private func cancelCreation() {
         dismiss(animated: true)
     }
+    // Создание трекера 
     @objc private func createTracker() {
         guard let title = textField.text, !title.isEmpty,
               let selectedEmoji = selectedEmoji,
@@ -347,7 +354,8 @@ extension CreateIrregularTrackerViewController: UICollectionViewDataSource, UICo
             }
         }
         updateCreateButtonState()
-    }    // Снятие выбора ячейки (эмоджи и цвет)
+    }
+    // Снятие выбора ячейки (эмоджи и цвет)
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if collectionView == emojiCollectionView {
             if let cell = collectionView.cellForItem(at: indexPath) {
