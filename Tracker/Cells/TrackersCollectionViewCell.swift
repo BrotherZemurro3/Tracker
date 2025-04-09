@@ -120,7 +120,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         updateButtonAppearance()
         
         // Блокирую кнопку, если выбран не сегодняшний день
-        actionButton.isEnabled = isToday && !isCompletedToday
+        actionButton.isEnabled = isToday 
     }
     private func updateDaysCountText() {
         let dayString = formatDaysCount(completedDays)
@@ -160,12 +160,12 @@ class TrackersCollectionViewCell: UICollectionViewCell {
             self.actionButton.transform = .identity
         }
         
-        actionButton.isEnabled = !isCompletedToday
+         actionButton.isEnabled = !isCompletedToday
+        
     }
     
     @objc private func actionButtonTapped() {
         guard let trackerId = trackerId else { return }
-        
         // Анимация нажатия
         UIView.animate(withDuration: 0.2, animations: {
             self.actionButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)

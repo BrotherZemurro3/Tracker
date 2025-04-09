@@ -81,7 +81,7 @@ class TrackersViewController: UIViewController {
         // "Что будем отслеживать"
         whatGoingToTrackLabel.text = "Что будем отслеживать?"
         whatGoingToTrackLabel.tintColor = .black
-        whatGoingToTrackLabel.font = UIFont(name: "YS Display-Medium", size: 16)
+        whatGoingToTrackLabel.font = UIFont(name: "YS Display-Medium", size: 12)
         whatGoingToTrackLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(whatGoingToTrackLabel)
         NSLayoutConstraint.activate([
