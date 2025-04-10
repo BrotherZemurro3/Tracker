@@ -58,9 +58,10 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
         titleLabel.numberOfLines = 2
         titleLabel.textColor = .white
-        
+        titleLabel.font = .systemFont(ofSize: 12)
         daysCountLabel.font = .systemFont(ofSize: 14)
         daysCountLabel.textColor = .black
+        daysCountLabel.font = .systemFont(ofSize: 12)
         
         actionButton.layer.cornerRadius = 17
         actionButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
