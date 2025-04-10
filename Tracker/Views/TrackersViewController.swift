@@ -65,7 +65,7 @@ class TrackersViewController: UIViewController {
         NSLayoutConstraint.activate([
             searchTrackersBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
             searchTrackersBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8),
-            searchTrackersBar.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 7),
+            searchTrackersBar.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: -1),
         ])
         // Картинка по центу "Что будем отслеживать"
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -81,7 +81,7 @@ class TrackersViewController: UIViewController {
         // "Что будем отслеживать"
         whatGoingToTrackLabel.text = "Что будем отслеживать?"
         whatGoingToTrackLabel.tintColor = .black
-        whatGoingToTrackLabel.font = UIFont(name: "YS Display-Medium", size: 12)
+        whatGoingToTrackLabel.font = .systemFont(ofSize: 12)
         whatGoingToTrackLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(whatGoingToTrackLabel)
         NSLayoutConstraint.activate([
@@ -102,9 +102,9 @@ class TrackersViewController: UIViewController {
         
         // Кнопка с иконкой "плюс"
         let addButton = UIButton(type: .custom)
-        addButton.setImage(UIImage(systemName: "plus")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)), for: .normal)
+        addButton.setImage(UIImage(systemName: "plus")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)), for: .normal)
         addButton.tintColor = .black
-        addButton.frame = CGRect(x: 0, y: 0, width: 10, height: 10)
+        addButton.frame = CGRect(x: 12, y: 12, width: 19, height: 19)
         addButton.addTarget(self, action: #selector(buttonTappedPlus), for: .touchUpInside)
         let addBarButton = UIBarButtonItem(customView: addButton)
         navigationItem.leftBarButtonItem = addBarButton

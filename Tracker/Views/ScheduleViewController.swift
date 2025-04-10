@@ -28,6 +28,7 @@ class ScheduleViewController: UIViewController {
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.layer.cornerRadius = 16
         tableView.clipsToBounds = true
+        tableView.tableHeaderView = UIView(frame: .zero)
         tableView.isScrollEnabled = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -104,23 +105,58 @@ extension ScheduleViewController: UITableViewDelegate {
     }
     // Разделитель
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let cornerRadius: CGFloat = 16
-        let isLastCell = indexPath.row == Weekday.displayOrderedCases.count - 1
-        // Настройка закругления
-        if isLastCell {
-            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-            cell.layer.cornerRadius = cornerRadius
-            cell.layer.masksToBounds = true
-        } else {
-            cell.layer.cornerRadius = 0
+            let cornerRadius: CGFloat = 16
+            let isLastCell = indexPath.row == Weekday.displayOrderedCases.count - 1
+            
+            // Настройка закругления
+            if isLastCell {
+                cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+                cell.layer.cornerRadius = cornerRadius
+                cell.layer.masksToBounds = true
+            } else {
+                cell.layer.cornerRadius = 0
+            }
+            
+            // Настройка разделителей
+            if isLastCell {
+                // Для последней ячейки скрываем разделитель
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+            } else {
+                // Для всех остальных ячеек (включая первую) устанавливаем стандартные отступы
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            }
         }
-        
-        if indexPath.row == 0 {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-        } else if isLastCell {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-        } else {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        }
-    }
+
 }
+/*
+// Превью
+#if DEBUG
+import SwiftUI
+
+struct ScheduleViewController_Preview: PreviewProvider {
+static var previews: some View {
+let viewController = ScheduleViewController()
+return UINavigationController(rootViewController: viewController)
+.toPreview()
+.edgesIgnoringSafeArea(.all)
+}
+}
+extension UIViewController {
+func toPreview() -> some View {
+Preview(viewController: self)
+}
+
+private struct Preview: UIViewControllerRepresentable {
+let viewController: UIViewController
+
+func makeUIViewController(context: Context) -> some UIViewController {
+viewController
+}
+
+func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+// Nothing to update
+}
+}
+}
+#endif
+*/

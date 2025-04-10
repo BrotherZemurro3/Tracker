@@ -112,21 +112,27 @@ final class TrackersService: TrackersServiceProtocol {
     func getTrackers(for date: Date, searchText: String? = nil) -> [TrackerCategory] {
         let weekday = Calendar.current.component(.weekday, from: date)
         guard let currentWeekday = Weekday(rawValue: weekday) else { return [] }
-        
         print("Фильтрация для дня: \(currentWeekday). Все категории:", categories.map { "\($0.title): \($0.trackers.count)" })
+        let isToday = Calendar.current.isDateInToday(date)
         
         let filtered = categories.compactMap { category in
             let trackers = category.trackers.filter { tracker in
                 let matchesSearch = searchText == nil || tracker.title.lowercased().contains(searchText!.lowercased())
-                let matchesSchedule = tracker.schedule?.contains(currentWeekday) ?? true // Важное изменение!
+                
+                // Для нерегулярных трекеров показываем только если это сегодня
+                if !tracker.isRegular {
+                    return isToday && matchesSearch
+                }
+                
+                // Для регулярных - по расписанию
+                let matchesSchedule = tracker.schedule?.contains(currentWeekday) ?? true
                 print("Трекер '\(tracker.title)': schedule=\(tracker.schedule?.map { $0.rawValue } ?? []), matches=\(matchesSchedule)")
                 return matchesSearch && matchesSchedule
             }
             return trackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: trackers)
         }
-        
         print("После фильтрации: \(filtered.count) категорий")
         return filtered
+        
     }
-    
 }

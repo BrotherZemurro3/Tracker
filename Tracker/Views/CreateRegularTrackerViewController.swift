@@ -115,6 +115,7 @@ class CreateRegularTrackerViewController: UIViewController {
         
         cancelButton.setTitle("Отменить", for: .normal)
         cancelButton.setTitleColor(.red, for: .normal)
+        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         cancelButton.backgroundColor = .white
         cancelButton.layer.borderWidth = 1
         cancelButton.layer.borderColor = UIColor.red.cgColor
@@ -124,6 +125,7 @@ class CreateRegularTrackerViewController: UIViewController {
         
         createButton.setTitle("Создать", for: .normal)
         createButton.setTitleColor(.white, for: .normal)
+        createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         createButton.backgroundColor = .gray
         createButton.layer.cornerRadius = 16
         createButton.addTarget(self, action: #selector(createTracker), for: .touchUpInside)
@@ -217,7 +219,7 @@ class CreateRegularTrackerViewController: UIViewController {
             return
         }
         createButton.isEnabled = true
-        createButton.backgroundColor = .systemBlue
+        createButton.backgroundColor = .blackDay
     }
     // Поле создания названия трекера, вызывается после изменения текста в UITextField
     @objc private func textFieldDidChange() {
@@ -288,22 +290,41 @@ extension CreateRegularTrackerViewController: UITableViewDataSource, UITableView
     }
     // Создание и настройка ячейки
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        // Используем стиль .subtitle для отображения двух строк
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        
         cell.backgroundColor = .systemGray6
+        cell.accessoryType = .disclosureIndicator
         cell.textLabel?.textColor = .black
+        cell.detailTextLabel?.textColor = .gray
         
         if indexPath.row == 0 {
-            cell.textLabel?.text = selectedCategory ?? "Категории"
-            cell.accessoryType = .disclosureIndicator
+            // Ячейка категории
+            cell.textLabel?.text = "Категории"
+            cell.textLabel?.textColor = .black
+            cell.textLabel?.font = .systemFont(ofSize: 17)
+            cell.detailTextLabel?.text = selectedCategory
+            cell.detailTextLabel?.font = .systemFont(ofSize: 17)
+            cell.detailTextLabel?.textColor = .gray
         } else {
-            let daysText = selectedDays.isEmpty ? "Расписание" : selectedDays.map { $0.shortName }.joined(separator: ", ")
-            cell.textLabel?.text = daysText
-            cell.accessoryType = .disclosureIndicator
+            // Ячейка расписания
+            if selectedDays.isEmpty {
+                cell.textLabel?.text = "Расписание"
+                cell.textLabel?.textAlignment = .center
+                cell.detailTextLabel?.text = nil
+            } else {
+                cell.textLabel?.text = "Расписание"
+                cell.textLabel?.textAlignment = .natural
+                cell.detailTextLabel?.text = selectedDays.map { $0.shortName }.joined(separator: ", ")
+                cell.detailTextLabel?.font = .systemFont(ofSize: 17)
+            }
         }
         
         return cell
     }
-    // Высота ячейки
+            
+            
+            // Высота ячейки
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }

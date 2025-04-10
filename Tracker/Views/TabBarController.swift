@@ -41,6 +41,21 @@ final class TabBarController: UITabBarController {
     private func setupTabBar() {
         var controllers: [UIViewController] = []
         
+        tabBar.shadowImage = UIImage() // Убираем стандартную тень (если есть)
+           tabBar.backgroundImage = UIImage() // Убираем фоновое изображение (если нужно)
+           
+           // Создаем изображение для разделителя (1px высотой)
+           let separator = UIView(frame: CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 0.5))
+           separator.backgroundColor = UIColor.lightGray // Цвет разделителя
+           separator.isUserInteractionEnabled = false
+           
+           // Добавляем разделитель
+           tabBar.addSubview(separator)
+           
+           // Обновляем цвета элементов
+           updateTabBarItemColors(selectedIndex: selectedIndex)
+        
+        
         for item in [TabBarItem.trackers, TabBarItem.statistic] {
             let controller = createController(for: item)
             controllers.append(controller)

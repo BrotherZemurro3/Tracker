@@ -115,18 +115,20 @@ class CreateIrregularTrackerViewController: UIViewController {
     }
     // Кнопки отменить и создать
     private func setupButtons() {
-        // Кнопка отменить
+        
         cancelButton.setTitle("Отменить", for: .normal)
         cancelButton.setTitleColor(.red, for: .normal)
+        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         cancelButton.backgroundColor = .white
         cancelButton.layer.borderWidth = 1
         cancelButton.layer.borderColor = UIColor.red.cgColor
         cancelButton.layer.cornerRadius = 16
         cancelButton.addTarget(self, action: #selector(cancelCreation), for: .touchUpInside)
         
-        // Кнопка создать
+        
         createButton.setTitle("Создать", for: .normal)
         createButton.setTitleColor(.white, for: .normal)
+        createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         createButton.backgroundColor = .gray
         createButton.layer.cornerRadius = 16
         createButton.addTarget(self, action: #selector(createTracker), for: .touchUpInside)
@@ -220,7 +222,7 @@ class CreateIrregularTrackerViewController: UIViewController {
             return
         }
         createButton.isEnabled = true
-        createButton.backgroundColor = .systemBlue
+        createButton.backgroundColor = .blackDay
     }
     // Поле создания названия трекера, вызывается после изменения текста в UITextField
     @objc private func textFieldDidChange() {
@@ -247,7 +249,7 @@ class CreateIrregularTrackerViewController: UIViewController {
     @objc private func cancelCreation() {
         dismiss(animated: true)
     }
-    // Создание трекера 
+    // Создание трекера
     @objc private func createTracker() {
         guard let title = textField.text, !title.isEmpty,
               let selectedEmoji = selectedEmoji,
@@ -278,7 +280,7 @@ class CreateIrregularTrackerViewController: UIViewController {
             title: title,
             color: selectedColor,
             emoji: selectedEmoji,
-            schedule: schedule,
+            schedule: nil,
             isCompleted: false,
             isRegular: false,
             shouldRemoveAfterCompletion: true
@@ -296,12 +298,33 @@ extension CreateIrregularTrackerViewController: UITableViewDataSource, UITableVi
     }
     // Создание и настройка ячейки (Категории)
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        // Ячейка
         cell.backgroundColor = .systemGray6
-        cell.textLabel?.textColor = .black
-        cell.textLabel?.text = selectedCategory ?? "Категории"
         cell.accessoryType = .disclosureIndicator
         cell.layer.cornerRadius = 16
+        cell.layer.masksToBounds = true
+        
+        // Основной текст
+        cell.textLabel?.text = "Категории"
+        cell.textLabel?.textColor = .black
+        cell.textLabel?.font = .systemFont(ofSize: 17)
+        
+        // Подзаголовок (выбранная категория)
+        cell.detailTextLabel?.text = selectedCategory
+        cell.detailTextLabel?.font = .systemFont(ofSize: 17)
+        cell.detailTextLabel?.textColor = .gray
+    
+        
+        // Если категория не выбрана - центровочка основного текста
+        if selectedCategory == nil {
+            cell.textLabel?.textAlignment = .center
+            cell.textLabel?.frame = cell.contentView.bounds
+        } else {
+            cell.textLabel?.textAlignment = .natural // или .left
+            cell.textLabel?.frame = CGRect(x: 0, y: 0, width: cell.contentView.bounds.width, height: 20) 
+        }
+        
         return cell
     }
     // Высота ячейки (Категории)
