@@ -65,15 +65,14 @@ extension TrackersCollectionView: UICollectionViewDataSource {
         
         cell.onActionButtonTapped = { [weak self] trackerId, isCompleted in
             if isCompleted {
-                self?.viewModel.completeTracker(id: trackerId, date: Date())
+                self?.viewModel.completeTracker(id: trackerId, date: self?.viewModel.currentDate ?? Date())
             } else {
-                self?.viewModel.uncompleteTracker(id: trackerId, date: Date())
+                self?.viewModel.uncompleteTracker(id: trackerId, date: self?.viewModel.currentDate ?? Date())
             }
         }
         
         return cell
     }
-    
     
     private func findIndexPath(for trackerId: UUID) -> IndexPath? {
         for (section, category) in viewModel.trackers.enumerated() {

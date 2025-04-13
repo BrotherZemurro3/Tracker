@@ -13,7 +13,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
     private var trackerId: UUID?
     private var isCompletedToday: Bool = false
     private var completedDays: Int = 0
-    
+    var currentDate = Date()
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -107,10 +107,12 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         trackerId = tracker.id
         self.completedDays = completedDays
         self.isCompletedToday = isCompletedToday
+        self.currentDate = currentDate
         
-        // Проверка, является ли выбранная дата сегодняшним днём
+        // Проверяем, является ли выбранная дата будущей
         let today = Calendar.current.startOfDay(for: Date())
-        let isToday = Calendar.current.isDate(currentDate, inSameDayAs: today)
+        let selectedDate = Calendar.current.startOfDay(for: currentDate)
+        let isFutureDate = selectedDate > today
         
         // Устанавливаю цвет только для верхней части
         coloredBackgroundView.backgroundColor = tracker.color
@@ -120,8 +122,10 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         updateDaysCountText()
         updateButtonAppearance()
         
-        // Блокирую кнопку, если выбран не сегодняшний день
-        actionButton.isEnabled = isToday 
+        // Блокирую кнопку только если:
+        // 1. Дата в будущем ИЛИ
+        // 2. Трекер уже выполнен на эту дату
+        actionButton.isEnabled = !isFutureDate 
     }
     private func updateDaysCountText() {
         let dayString = formatDaysCount(completedDays)
@@ -167,6 +171,16 @@ class TrackersCollectionViewCell: UICollectionViewCell {
     
     @objc private func actionButtonTapped() {
         guard let trackerId = trackerId else { return }
+        
+        let today = Calendar.current.startOfDay(for: Date())
+          let selectedDate = Calendar.current.startOfDay(for: currentDate)
+          let isFutureDate = selectedDate > today
+          
+          guard !isFutureDate else {
+              print("Нельзя отмечать трекеры на будущие даты")
+              return
+          }
+        
         // Анимация нажатия
         UIView.animate(withDuration: 0.2, animations: {
             self.actionButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
