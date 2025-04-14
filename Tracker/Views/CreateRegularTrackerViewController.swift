@@ -6,6 +6,7 @@ class CreateRegularTrackerViewController: UIViewController {
     private let contentView = UIView()
     private let tableView = UITableView()
     private let textField = UITextField()
+    private let errorLabel = UILabel()
     private let emojiLabel = UILabel()
     private let colorLabel = UILabel()
     private let emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
@@ -44,7 +45,7 @@ class CreateRegularTrackerViewController: UIViewController {
           view.backgroundColor = .white
           
           // Отключаем translatesAutoresizingMaskIntoConstraints для всех вью
-          [contentView, tableView, textField, emojiLabel, colorLabel, emojiCollectionView, colorCollectionView, cancelButton, createButton].forEach {
+        [contentView, tableView, textField, errorLabel, emojiLabel, colorLabel, emojiCollectionView, colorCollectionView, cancelButton, createButton].forEach {
               $0.translatesAutoresizingMaskIntoConstraints = false
           }
           
@@ -64,13 +65,20 @@ class CreateRegularTrackerViewController: UIViewController {
         textField.layer.cornerRadius = 16
         textField.clipsToBounds = true
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        
+        textField.delegate = self
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftView = paddingView
         textField.leftViewMode = .always
         textField.rightView = paddingView
         textField.rightViewMode = .always
         
+        errorLabel.text = "Ограничение 38 символов"
+        errorLabel.font = .systemFont(ofSize: 17)
+        errorLabel.textColor = .red
+        errorLabel.isHidden = true
+        errorLabel.textAlignment = .center
+        
+        contentView.addSubview(errorLabel)
         contentView.addSubview(textField)
     }
     // Таблица Категории и расписание
@@ -159,7 +167,12 @@ class CreateRegularTrackerViewController: UIViewController {
             textField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             textField.heightAnchor.constraint(equalToConstant: 75),
             
-            tableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 18),
+            errorLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 4),
+                   errorLabel.leadingAnchor.constraint(equalTo: textField.leadingAnchor, constant: 16),
+                   errorLabel.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -16),
+                   errorLabel.heightAnchor.constraint(equalToConstant: 16),
+            
+            tableView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 18),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             tableView.heightAnchor.constraint(equalToConstant: 150),
@@ -223,6 +236,10 @@ class CreateRegularTrackerViewController: UIViewController {
     }
     // Поле создания названия трекера, вызывается после изменения текста в UITextField
     @objc private func textFieldDidChange() {
+        // Скрываем сообщение об ошибке, если текст в пределах лимита
+           if let text = textField.text, text.count <= 38 {
+               errorLabel.isHidden = true
+           }
         updateCreateButtonState()
     }
     // Категории
@@ -401,7 +418,17 @@ extension CreateRegularTrackerViewController: UICollectionViewDataSource, UIColl
         }
     }
 }
-
+extension CreateRegularTrackerViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+        
+        errorLabel.isHidden = updatedText.count <= 38
+        
+        return updatedText.count <= 38
+    }
+}
 /*
  // Превью для отслеживания
 #if DEBUG
