@@ -41,7 +41,7 @@ class CreateIrregularTrackerViewController: UIViewController {
     // Установка навигационного бара
     private func setupNavigationBar() {
         title = "Новое нерегулярное событие"
-        navigationController?.navigationBar.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 16)]
+        navigationController?.navigationBar.titleTextAttributes = [.font: UIFont.systemFont(ofSize: 16)]
     }
     // Установка UI
     private func setupUI() {
@@ -63,7 +63,7 @@ class CreateIrregularTrackerViewController: UIViewController {
     // Строка ввода названия
     private func setupTextField() {
         textField.placeholder = "Введите название трекера"
-        textField.backgroundColor = .systemGray6
+        textField.backgroundColor = UIColor(named: "lightGray")
         textField.layer.cornerRadius = 16
         textField.clipsToBounds = true
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -310,6 +310,7 @@ extension CreateIrregularTrackerViewController: UITableViewDataSource, UITableVi
         // Основной текст
         cell.textLabel?.text = "Категории"
         cell.textLabel?.textColor = .black
+        cell.backgroundColor = UIColor(named: "lightGray")
         cell.textLabel?.font = .systemFont(ofSize: 17)
         
         // Подзаголовок (выбранная категория)

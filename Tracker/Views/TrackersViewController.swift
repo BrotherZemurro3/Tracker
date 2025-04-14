@@ -49,7 +49,7 @@ class TrackersViewController: UIViewController {
         // Лейб Трекеры
         trackersLabel.text = "Трекеры"
         trackersLabel.tintColor = .black
-        trackersLabel.font = .systemFont(ofSize: 32, weight: .bold)
+        trackersLabel.font = .systemFont(ofSize: 34, weight: .bold)
         trackersLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(trackersLabel)
         NSLayoutConstraint.activate([
@@ -102,9 +102,7 @@ class TrackersViewController: UIViewController {
         
         // Кнопка с иконкой "плюс"
         let addButton = UIButton(type: .custom)
-        addButton.setImage(UIImage(systemName: "plus")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)), for: .normal)
-        addButton.tintColor = .black
-        addButton.frame = CGRect(x: 12, y: 12, width: 19, height: 19)
+        addButton.setImage(UIImage(named: "addTracker")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)), for: .normal)
         addButton.addTarget(self, action: #selector(buttonTappedPlus), for: .touchUpInside)
         let addBarButton = UIBarButtonItem(customView: addButton)
         navigationItem.leftBarButtonItem = addBarButton
@@ -141,8 +139,8 @@ class TrackersViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: searchTrackersBar.bottomAnchor, constant: 8),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: -4),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 4),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }

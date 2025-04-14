@@ -22,6 +22,7 @@ class SelectionStateOfTrackerViewController: UIViewController {
         
         // Кнопка привычки
         habitButton.setTitle("Привычка", for: .normal)
+        habitButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         habitButton.backgroundColor = .black
         habitButton.setTitleColor(.white, for: .normal)
         habitButton.layer.cornerRadius = 16
@@ -31,6 +32,7 @@ class SelectionStateOfTrackerViewController: UIViewController {
         
         // Кнопка нерегулярного события
         irregularHabitButton.setTitle("Нерегулярное событие", for: .normal)
+        irregularHabitButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         irregularHabitButton.backgroundColor = .black
         irregularHabitButton.setTitleColor(.white, for: .normal)
         irregularHabitButton.layer.cornerRadius = 16

@@ -27,7 +27,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         // Настройка цветного фона для верхней части
         coloredBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(coloredBackgroundView)
-        coloredBackgroundView.layer.cornerRadius = 10
+        coloredBackgroundView.layer.cornerRadius = 16
         coloredBackgroundView.layer.masksToBounds = true
         
         // Настройка белого фона для нижней части (дни + кнопка)

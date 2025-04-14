@@ -25,6 +25,7 @@ class ScheduleViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .singleLine
+        tableView.backgroundColor = UIColor(named: "lightGray")
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.layer.cornerRadius = 16
         tableView.clipsToBounds = true

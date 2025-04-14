@@ -40,7 +40,7 @@ class CreateRegularTrackerViewController: UIViewController {
     private func setupNavigationBar() {
         title = "Новая привычка"
         navigationController?.navigationBar.titleTextAttributes = [
-            .font: UIFont.boldSystemFont(ofSize: 16)
+            .font: UIFont.systemFont(ofSize: 16)
         ]
     }
     
@@ -71,7 +71,7 @@ class CreateRegularTrackerViewController: UIViewController {
     
     private func setupTextField() {
         textField.placeholder = "Введите название трекера"
-        textField.backgroundColor = .systemGray6
+        textField.backgroundColor = UIColor(named: "lightGray")
         textField.layer.cornerRadius = 16
         textField.clipsToBounds = true
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -179,7 +179,7 @@ class CreateRegularTrackerViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
             // Остальные элементы
-            textField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            textField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 18),
             textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             textField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             textField.heightAnchor.constraint(equalToConstant: 75),
@@ -189,7 +189,7 @@ class CreateRegularTrackerViewController: UIViewController {
             errorLabel.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -16),
             errorLabel.heightAnchor.constraint(equalToConstant: 16),
             
-            tableView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 24),
+            tableView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 5),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             tableView.heightAnchor.constraint(equalToConstant: 150),
@@ -328,7 +328,7 @@ extension CreateRegularTrackerViewController: UITableViewDataSource, UITableView
         // Используем стиль .subtitle для отображения двух строк
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         
-        cell.backgroundColor = .systemGray6
+        cell.backgroundColor = UIColor(named: "lightGray")
         cell.accessoryType = .disclosureIndicator
         cell.textLabel?.textColor = .black
         cell.detailTextLabel?.textColor = .gray
@@ -341,6 +341,7 @@ extension CreateRegularTrackerViewController: UITableViewDataSource, UITableView
             cell.detailTextLabel?.text = selectedCategory
             cell.detailTextLabel?.font = .systemFont(ofSize: 17)
             cell.detailTextLabel?.textColor = .gray
+            cell.backgroundColor = UIColor(named: "lightGray")
         } else {
             // Ячейка расписания
             if selectedDays.isEmpty {
@@ -359,7 +360,7 @@ extension CreateRegularTrackerViewController: UITableViewDataSource, UITableView
     }
             
             
-            // Высота ячейки
+    // Высота ячейки
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
@@ -447,7 +448,7 @@ extension CreateRegularTrackerViewController: UITextFieldDelegate {
         return updatedText.count <= 38
     }
 }
-
+/*
  // Превью для отслеживания
 #if DEBUG
 import SwiftUI
@@ -479,5 +480,5 @@ extension UIViewController {
 }
 #endif
 
-
+*/
 

@@ -87,8 +87,8 @@ extension TrackersCollectionView: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegateFlowLayout
 extension TrackersCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.bounds.width - 16 * 3) / 2
-        return CGSize(width: width, height: 148)
+        let width = (collectionView.bounds.width - 16 * 2 - 9) / 2
+        return CGSize(width: width, height: 158)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -96,11 +96,11 @@ extension TrackersCollectionView: UICollectionViewDelegateFlowLayout {
     }
     // Расстояние между строками ячеек по вертикали
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 46
+        return 1
     }
     // Расстояние между строками ячеек по горизонтали
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 7
+        return 9
     }
     // Размер заголовка секции
     func collectionView(_ collectionView: UICollectionView,
