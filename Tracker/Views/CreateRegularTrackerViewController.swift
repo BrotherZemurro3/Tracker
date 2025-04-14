@@ -1,8 +1,11 @@
 import UIKit
 
+import UIKit
+
 class CreateRegularTrackerViewController: UIViewController {
     weak var delegate: TrackerCreationDelegate?
     
+    private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let tableView = UITableView()
     private let textField = UITextField()
@@ -33,32 +36,39 @@ class CreateRegularTrackerViewController: UIViewController {
         setupHideKeyboardOnTap()
         navigationItem.hidesBackButton = true
     }
-    // Установка навигационного бара
+    
     private func setupNavigationBar() {
         title = "Новая привычка"
         navigationController?.navigationBar.titleTextAttributes = [
             .font: UIFont.boldSystemFont(ofSize: 16)
         ]
     }
-    // Установка UI
+    
     private func setupUI() {
-          view.backgroundColor = .white
-          
-          // Отключаем translatesAutoresizingMaskIntoConstraints для всех вью
-        [contentView, tableView, textField, errorLabel, emojiLabel, colorLabel, emojiCollectionView, colorCollectionView, cancelButton, createButton].forEach {
-              $0.translatesAutoresizingMaskIntoConstraints = false
-          }
-          
-          view.addSubview(contentView)
-          
-          setupTextField()
-          setupTableView()
-          setupEmojiSection()
-          setupColorSection()
-          setupButtons()
-          setupConstraints()
-      }
-    // Строка ввода названия
+        view.backgroundColor = .white
+        
+        // Настройка скроллвью
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsVerticalScrollIndicator = true
+        view.addSubview(scrollView)
+        
+        // Контент вью внутри скроллвью
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+        
+        // Отключаем translatesAutoresizingMaskIntoConstraints для всех вью
+        [tableView, textField, errorLabel, emojiLabel, colorLabel, emojiCollectionView, colorCollectionView, cancelButton, createButton].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        setupTextField()
+        setupTableView()
+        setupEmojiSection()
+        setupColorSection()
+        setupButtons()
+        setupConstraints()
+    }
+    
     private func setupTextField() {
         textField.placeholder = "Введите название трекера"
         textField.backgroundColor = .systemGray6
@@ -81,7 +91,7 @@ class CreateRegularTrackerViewController: UIViewController {
         contentView.addSubview(errorLabel)
         contentView.addSubview(textField)
     }
-    // Таблица Категории и расписание
+    
     private func setupTableView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.dataSource = self
@@ -91,7 +101,7 @@ class CreateRegularTrackerViewController: UIViewController {
         tableView.clipsToBounds = true
         contentView.addSubview(tableView)
     }
-    // Лейбл Емоджи и таблица с ними
+    
     private func setupEmojiSection() {
         emojiLabel.text = "Emoji"
         emojiLabel.font = .boldSystemFont(ofSize: 19)
@@ -104,7 +114,7 @@ class CreateRegularTrackerViewController: UIViewController {
         emojiCollectionView.isScrollEnabled = false
         contentView.addSubview(emojiCollectionView)
     }
-    // Лейбл Цвет и таблица цветов
+    
     private func setupColorSection() {
         colorLabel.text = "Цвет"
         colorLabel.font = .boldSystemFont(ofSize: 19)
@@ -118,9 +128,8 @@ class CreateRegularTrackerViewController: UIViewController {
         colorCollectionView.isScrollEnabled = false
         contentView.addSubview(colorCollectionView)
     }
-    // Кнопки отменить и создать
+    
     private func setupButtons() {
-        
         cancelButton.setTitle("Отменить", for: .normal)
         cancelButton.setTitleColor(.red, for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -130,7 +139,6 @@ class CreateRegularTrackerViewController: UIViewController {
         cancelButton.layer.cornerRadius = 16
         cancelButton.addTarget(self, action: #selector(cancelCreation), for: .touchUpInside)
         
-        
         createButton.setTitle("Создать", for: .normal)
         createButton.setTitleColor(.white, for: .normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -138,7 +146,7 @@ class CreateRegularTrackerViewController: UIViewController {
         createButton.layer.cornerRadius = 16
         createButton.addTarget(self, action: #selector(createTracker), for: .touchUpInside)
         createButton.isEnabled = false
-                
+        
         let buttonsContainer = UIStackView(arrangedSubviews: [cancelButton, createButton])
         buttonsContainer.axis = .horizontal
         buttonsContainer.distribution = .fillEqually
@@ -154,44 +162,54 @@ class CreateRegularTrackerViewController: UIViewController {
             buttonsContainer.heightAnchor.constraint(equalToConstant: 60),
         ])
     }
-    // Констрейнты
+    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -80),
+            // Скроллвью
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -80),
             
-            textField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            // Контент вью
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            
+            // Остальные элементы
+            textField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
             textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             textField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             textField.heightAnchor.constraint(equalToConstant: 75),
             
             errorLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 4),
-                   errorLabel.leadingAnchor.constraint(equalTo: textField.leadingAnchor, constant: 16),
-                   errorLabel.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -16),
-                   errorLabel.heightAnchor.constraint(equalToConstant: 16),
+            errorLabel.leadingAnchor.constraint(equalTo: textField.leadingAnchor, constant: 16),
+            errorLabel.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -16),
+            errorLabel.heightAnchor.constraint(equalToConstant: 16),
             
-            tableView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 18),
+            tableView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 24),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             tableView.heightAnchor.constraint(equalToConstant: 150),
             
-            emojiLabel.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 8),
+            emojiLabel.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 32),
             emojiLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
             
-            emojiCollectionView.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: 8),
+            emojiCollectionView.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: 16),
             emojiCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             emojiCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             emojiCollectionView.heightAnchor.constraint(equalToConstant: 204),
             
-            colorLabel.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: -42),
+            colorLabel.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 16),
             colorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
             
-            colorCollectionView.topAnchor.constraint(equalTo: colorLabel.bottomAnchor, constant: 5),
+            colorCollectionView.topAnchor.constraint(equalTo: colorLabel.bottomAnchor, constant: 16),
             colorCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             colorCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             colorCollectionView.heightAnchor.constraint(equalToConstant: 204),
+            colorCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
         ])
     }
     // Организация ячейки с эмоджи
@@ -429,7 +447,7 @@ extension CreateRegularTrackerViewController: UITextFieldDelegate {
         return updatedText.count <= 38
     }
 }
-/*
+
  // Превью для отслеживания
 #if DEBUG
 import SwiftUI
@@ -460,6 +478,6 @@ extension UIViewController {
     }
 }
 #endif
-*/
+
 
 

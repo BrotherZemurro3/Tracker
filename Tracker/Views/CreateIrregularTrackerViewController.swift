@@ -166,7 +166,7 @@ class CreateIrregularTrackerViewController: UIViewController {
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -80),
             
-            textField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            textField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
             textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             textField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             textField.heightAnchor.constraint(equalToConstant: 75),
@@ -176,21 +176,21 @@ class CreateIrregularTrackerViewController: UIViewController {
                    errorLabel.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -16),
                    errorLabel.heightAnchor.constraint(equalToConstant: 16),
             
-            tableView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 18),
+            tableView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 8),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             tableView.heightAnchor.constraint(equalToConstant: 150),
             
             emojiLabel.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: -42),
-            emojiLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
+            emojiLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 27),
             
             emojiCollectionView.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: 8),
             emojiCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             emojiCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             emojiCollectionView.heightAnchor.constraint(equalToConstant: 204),
             
-            colorLabel.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: -16),
-            colorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
+            colorLabel.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: -26),
+            colorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 27),
             
             colorCollectionView.topAnchor.constraint(equalTo: colorLabel.bottomAnchor, constant: 15),
             colorCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -420,6 +420,7 @@ struct CreateIrregularTrackerViewController_Preview: PreviewProvider {
             .edgesIgnoringSafeArea(.all)
     }
 }
+
 extension UIViewController {
     func toPreview() -> some View {
         Preview(viewController: self)
@@ -438,5 +439,5 @@ extension UIViewController {
     }
 }
 #endif
-
 */
+
