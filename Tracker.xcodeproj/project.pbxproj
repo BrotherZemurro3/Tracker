@@ -39,6 +39,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				"Services/СoreDataManager.swift",
 			);
 			target = 3A7873532D9176E6001606FE /* Tracker */;
 		};
