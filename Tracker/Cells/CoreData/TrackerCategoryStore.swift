@@ -7,6 +7,10 @@
 import CoreData
 import Foundation
 
+protocol TrackerCategoryStoreProtocol {
+    func fetchCategories() -> [TrackerCategory]
+    func addCategory(_ category: TrackerCategory)
+}
 
 final class TrackerCategoryStore {
     private let context: NSManagedObjectContext

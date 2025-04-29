@@ -19,8 +19,7 @@ struct Tracker {
             emoji: emoji,
             schedule: schedule,
             isCompleted: isCompleted,
-            isRegular: isRegular,
-
+            isRegular: isRegular
         )
     }
 }

@@ -10,6 +10,11 @@ import Foundation
 import CoreData
 import UIKit
 
+protocol TrackerStoreProtocol {
+    func fetchTrackers() -> [Tracker]
+    func addTracker(_ tracker: Tracker, to category: TrackerCategory)
+}
+
 final class TrackerStore {
     private let context: NSManagedObjectContext
 
