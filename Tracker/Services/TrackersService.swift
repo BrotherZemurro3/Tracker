@@ -9,7 +9,7 @@ struct Tracker {
     let schedule: [Weekday]?
     let isCompleted: Bool
     let isRegular: Bool
-    let shouldRemoveAfterCompletion: Bool
+
     
     func withCompletedState(_ isCompleted: Bool) -> Tracker {
         return Tracker(
@@ -20,8 +20,7 @@ struct Tracker {
             schedule: schedule,
             isCompleted: isCompleted,
             isRegular: isRegular,
-            shouldRemoveAfterCompletion: shouldRemoveAfterCompletion
-            // добавил shouldRemoveAfterCompletion на будущее, что бы реализовать
+
         )
     }
 }

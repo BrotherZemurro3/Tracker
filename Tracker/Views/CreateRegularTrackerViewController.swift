@@ -309,8 +309,7 @@ class CreateRegularTrackerViewController: UIViewController {
             emoji: selectedEmoji,
             schedule: selectedDays,
             isCompleted: false,
-            isRegular: true,
-            shouldRemoveAfterCompletion: false
+            isRegular: true
         )
         
         delegate?.didCreateTracker(newTracker, in: selectedCategory)
