@@ -10,9 +10,10 @@ import Foundation
 import CoreData
 import UIKit
 
-protocol TrackerStoreProtocol {
-    func fetchTrackers() -> [Tracker]
-    func addTracker(_ tracker: Tracker, to category: TrackerCategory)
+
+protocol TrackerStorable {
+    func createTracker(from model: Tracker, category: TrackerCategoryCoreData) throws
+    func fetchAllTrackers() throws -> [TrackerCoreData]
 }
 
 final class TrackerStore {

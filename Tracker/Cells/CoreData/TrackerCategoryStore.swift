@@ -7,9 +7,10 @@
 import CoreData
 import Foundation
 
-protocol TrackerCategoryStoreProtocol {
-    func fetchCategories() -> [TrackerCategory]
-    func addCategory(_ category: TrackerCategory)
+protocol TrackerCategoryStorable {
+    func createCategory(title: String) throws -> TrackerCategoryCoreData
+    func fetchAllCategories() throws -> [TrackerCategoryCoreData]
+    func category(withTitle title: String) throws -> TrackerCategoryCoreData?
 }
 
 final class TrackerCategoryStore {

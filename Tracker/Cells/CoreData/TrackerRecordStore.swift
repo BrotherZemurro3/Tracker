@@ -7,12 +7,12 @@
 import CoreData
 import Foundation
 
-
-protocol TrackerRecordStoreProtocol {
-    func fetchRecords() -> [TrackerRecord]
-    func addRecord(_ record: TrackerRecord)
-    func removeRecord(with trackerID: UUID, on date: Date)
+protocol TrackerRecordStorable {
+    func addRecord(for trackedID: UUID, date: Date) throws
+    func deleteRecord(for trackerID: UUID, date: Date) throws
+    func fetchRecords() throws -> [TrackerRecordCoreData]
 }
+
 
 final class TrackerRecordStore {
     private let context: NSManagedObjectContext
@@ -44,3 +44,4 @@ final class TrackerRecordStore {
     }
     
 }
+
