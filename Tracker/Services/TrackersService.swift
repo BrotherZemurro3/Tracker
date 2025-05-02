@@ -9,6 +9,7 @@ struct Tracker {
     let schedule: [Weekday]?
     let isCompleted: Bool
     let isRegular: Bool
+    let creationDate: Date 
 
     
     func withCompletedState(_ isCompleted: Bool) -> Tracker {
@@ -19,7 +20,9 @@ struct Tracker {
             emoji: emoji,
             schedule: schedule,
             isCompleted: isCompleted,
-            isRegular: isRegular
+            isRegular: isRegular,
+            creationDate: creationDate
+            
         )
     }
 }
@@ -117,14 +120,16 @@ final class TrackersService: TrackersServiceProtocol {
     func getTrackers(for date: Date, searchText: String?) -> [TrackerCategory] {
         let weekday = Calendar.current.component(.weekday, from: date)
         guard let currentWeekday = Weekday(rawValue: weekday) else { return [] }
-        let isToday = Calendar.current.isDateInToday(date)
-
+        
         return categories.compactMap { category in
             let trackers = category.trackers.filter { tracker in
                 let matchesSearch = searchText == nil || tracker.title.lowercased().contains(searchText!.lowercased())
+                
                 if !tracker.isRegular {
-                    return isToday && matchesSearch
+                    // Обновил: Для нерегулярных трекеров теперь проверяем, что дата просмотра совпадает с датой создания
+                    return Calendar.current.isDate(date, inSameDayAs: tracker.creationDate) && matchesSearch
                 }
+                
                 let matchesSchedule = tracker.schedule?.contains(currentWeekday) ?? true
                 return matchesSearch && matchesSchedule
             }
@@ -160,7 +165,8 @@ final class TrackersService: TrackersServiceProtocol {
                             .compactMap { Int($0) }
                             .compactMap { Weekday(rawValue: $0) },
                         isCompleted: completedTrackers.contains { $0.id == trackerCoreData.id },
-                        isRegular: trackerCoreData.isRegular
+                        isRegular: trackerCoreData.isRegular,
+                        creationDate: trackerCoreData.creationDate ?? Date()
                     )
                 }
 

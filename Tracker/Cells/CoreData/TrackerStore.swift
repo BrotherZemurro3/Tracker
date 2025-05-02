@@ -31,6 +31,7 @@ final class TrackerStore {
         entity.emoji = model.emoji
         entity.schedule = model.schedule?.map { String($0.rawValue) }.joined(separator: ",")
         entity.isRegular = model.isRegular
+        entity.creationDate = model.creationDate
         entity.category = category
         try context.save()
     }

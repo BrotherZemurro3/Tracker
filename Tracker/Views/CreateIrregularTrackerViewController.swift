@@ -284,7 +284,8 @@ class CreateIrregularTrackerViewController: UIViewController {
             emoji: selectedEmoji,
             schedule: nil,
             isCompleted: false,
-            isRegular: false
+            isRegular: false,
+            creationDate: Date()
         )
         
         delegate?.didCreateTracker(newTracker, in: selectedCategory)
