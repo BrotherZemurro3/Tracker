@@ -16,11 +16,16 @@ protocol TrackerStorable {
     func fetchAllTrackers() throws -> [TrackerCoreData]
 }
 
-final class TrackerStore {
+final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate {
     private let context: NSManagedObjectContext
+    private var fetchedResultsController: NSFetchedResultsController<TrackerCoreData>?
+    
+    var onChange: (() -> Void)? // Коллбек для ViewModel
 
     init(context: NSManagedObjectContext = CoreDataManager.shared.context) {
         self.context = context
+        super.init()
+        setupFetchedResultsController()
     }
 
     func createTracker(from model: Tracker, category: TrackerCategoryCoreData) throws {
@@ -35,11 +40,32 @@ final class TrackerStore {
         entity.category = category
         try context.save()
     }
+    private func setupFetchedResultsController() {
+           let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+           request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
 
-    func fetchAllTrackers() throws -> [TrackerCoreData] {
-        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
-        return try context.fetch(request)
-    }
+           fetchedResultsController = NSFetchedResultsController(
+               fetchRequest: request,
+               managedObjectContext: context,
+               sectionNameKeyPath: nil,
+               cacheName: nil
+           )
+           fetchedResultsController?.delegate = self
 
-}
+           do {
+               try fetchedResultsController?.performFetch()
+           } catch {
+               print("Ошибка при выполнении fetch: \(error)")
+           }
+       }
+
+       func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+           onChange?()
+       }
+
+       func fetchAllTrackers() throws -> [TrackerCoreData] {
+           return fetchedResultsController?.fetchedObjects ?? []
+       }
+   }
+
 

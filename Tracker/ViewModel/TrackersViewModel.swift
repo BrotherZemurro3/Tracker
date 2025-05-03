@@ -11,6 +11,13 @@ final class TrackersViewModel {
     
     init(trackersService: TrackersServiceProtocol) {
         self.trackersService = trackersService
+
+        
+        if let service = trackersService as? TrackersService {
+            service.trackerStore.onChange = { [weak self] in
+                self?.loadTrackers(for: self?.currentDate ?? Date())
+            }
+        }
     }
     // Загружает трекеры для указанной даты с возможностью поиска (нереализовано)
     func loadTrackers(for date: Date, searchText: String? = nil) {

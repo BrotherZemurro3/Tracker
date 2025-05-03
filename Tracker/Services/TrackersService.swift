@@ -66,9 +66,9 @@ final class TrackersService: TrackersServiceProtocol {
     private(set) var categories: [TrackerCategory] = []
     private(set) var completedTrackers: [TrackerRecord] = []
 
-    private let trackerStore: TrackerStore
-    private let categoryStore: TrackerCategoryStore
-    private let recordStore: TrackerRecordStore
+ let trackerStore: TrackerStore
+    let categoryStore: TrackerCategoryStore
+    let recordStore: TrackerRecordStore
 
     init(
         trackerStore: TrackerStore = TrackerStore(),
@@ -78,6 +78,11 @@ final class TrackersService: TrackersServiceProtocol {
         self.trackerStore = trackerStore
         self.categoryStore = categoryStore
         self.recordStore = recordStore
+
+        trackerStore.onChange = { [weak self] in
+            self?.loadInitialData()
+        }
+
         loadInitialData()
     }
 
