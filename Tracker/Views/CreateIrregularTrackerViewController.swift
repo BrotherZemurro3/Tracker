@@ -172,9 +172,9 @@ class CreateIrregularTrackerViewController: UIViewController {
             textField.heightAnchor.constraint(equalToConstant: 75),
             
             errorLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 4),
-                   errorLabel.leadingAnchor.constraint(equalTo: textField.leadingAnchor, constant: 16),
-                   errorLabel.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -16),
-                   errorLabel.heightAnchor.constraint(equalToConstant: 16),
+            errorLabel.leadingAnchor.constraint(equalTo: textField.leadingAnchor, constant: 16),
+            errorLabel.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -16),
+            errorLabel.heightAnchor.constraint(equalToConstant: 16),
             
             tableView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 8),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -276,7 +276,7 @@ class CreateIrregularTrackerViewController: UIViewController {
             return
         }
         
-      
+        
         let newTracker = Tracker(
             id: UUID(),
             title: title,
@@ -317,7 +317,7 @@ extension CreateIrregularTrackerViewController: UITableViewDataSource, UITableVi
         cell.detailTextLabel?.text = selectedCategory
         cell.detailTextLabel?.font = .systemFont(ofSize: 17)
         cell.detailTextLabel?.textColor = .gray
-    
+        
         
         // Если категория не выбрана - центровочка основного текста
         if selectedCategory == nil {
@@ -325,7 +325,7 @@ extension CreateIrregularTrackerViewController: UITableViewDataSource, UITableVi
             cell.textLabel?.frame = cell.contentView.bounds
         } else {
             cell.textLabel?.textAlignment = .natural // или .left
-            cell.textLabel?.frame = CGRect(x: 0, y: 0, width: cell.contentView.bounds.width, height: 20) 
+            cell.textLabel?.frame = CGRect(x: 0, y: 0, width: cell.contentView.bounds.width, height: 20)
         }
         
         return cell
@@ -337,7 +337,7 @@ extension CreateIrregularTrackerViewController: UITableViewDataSource, UITableVi
     // Обработка нажатия на ячейку (Категории)
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-              selectCategory()
+        selectCategory()
     }
 }
 
@@ -395,7 +395,7 @@ extension CreateIrregularTrackerViewController: UICollectionViewDataSource, UICo
         }
     }
 }
-    
+
 extension CreateIrregularTrackerViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let currentText = textField.text ?? ""
@@ -410,35 +410,35 @@ extension CreateIrregularTrackerViewController: UITextFieldDelegate {
 
 /*
  // Превью для отслеживания
-#if DEBUG
-import SwiftUI
-
-struct CreateIrregularTrackerViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        let viewController = CreateIrregularTrackerViewController()
-        return UINavigationController(rootViewController: viewController)
-            .toPreview()
-            .edgesIgnoringSafeArea(.all)
-    }
-}
-
-extension UIViewController {
-    func toPreview() -> some View {
-        Preview(viewController: self)
-    }
-    
-    private struct Preview: UIViewControllerRepresentable {
-        let viewController: UIViewController
-        
-        func makeUIViewController(context: Context) -> some UIViewController {
-            viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            // Nothing to update
-        }
-    }
-}
-#endif
-*/
+ #if DEBUG
+ import SwiftUI
+ 
+ struct CreateIrregularTrackerViewController_Preview: PreviewProvider {
+ static var previews: some View {
+ let viewController = CreateIrregularTrackerViewController()
+ return UINavigationController(rootViewController: viewController)
+ .toPreview()
+ .edgesIgnoringSafeArea(.all)
+ }
+ }
+ 
+ extension UIViewController {
+ func toPreview() -> some View {
+ Preview(viewController: self)
+ }
+ 
+ private struct Preview: UIViewControllerRepresentable {
+ let viewController: UIViewController
+ 
+ func makeUIViewController(context: Context) -> some UIViewController {
+ viewController
+ }
+ 
+ func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+ // Nothing to update
+ }
+ }
+ }
+ #endif
+ */
 

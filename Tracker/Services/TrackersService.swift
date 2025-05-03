@@ -10,7 +10,7 @@ struct Tracker {
     let isCompleted: Bool
     let isRegular: Bool
     let creationDate: Date
-
+    
     
     func withCompletedState(_ isCompleted: Bool) -> Tracker {
         return Tracker(
@@ -65,11 +65,11 @@ protocol TrackersServiceProtocol {
 final class TrackersService: TrackersServiceProtocol {
     private(set) var categories: [TrackerCategory] = []
     private(set) var completedTrackers: [TrackerRecord] = []
-
- let trackerStore: TrackerStore
+    
+    let trackerStore: TrackerStore
     let categoryStore: TrackerCategoryStore
     let recordStore: TrackerRecordStore
-
+    
     init(
         trackerStore: TrackerStore = TrackerStore(),
         categoryStore: TrackerCategoryStore = TrackerCategoryStore(),
@@ -78,16 +78,16 @@ final class TrackersService: TrackersServiceProtocol {
         self.trackerStore = trackerStore
         self.categoryStore = categoryStore
         self.recordStore = recordStore
-
+        
         trackerStore.onChange = { [weak self] in
             self?.loadInitialData()
         }
-
+        
         loadInitialData()
     }
-
+    
     // MARK: - Public Methods
-
+    
     func addTracker(_ tracker: Tracker, to categoryTitle: String) {
         do {
             let categoryCoreData: TrackerCategoryCoreData
@@ -96,14 +96,14 @@ final class TrackersService: TrackersServiceProtocol {
             } else {
                 categoryCoreData = try categoryStore.createCategory(title: categoryTitle)
             }
-
+            
             try trackerStore.createTracker(from: tracker, category: categoryCoreData)
             loadInitialData()
         } catch {
             print("Ошибка при добавлении трекера: \(error)")
         }
     }
-
+    
     func completeTracker(id: UUID, date: Date) {
         do {
             try recordStore.addRecord(for: id, date: date)
@@ -112,7 +112,7 @@ final class TrackersService: TrackersServiceProtocol {
             print("Ошибка при завершении трекера: \(error)")
         }
     }
-
+    
     func uncompleteTracker(id: UUID, date: Date) {
         do {
             try recordStore.deleteRecord(for: id, date: date)
@@ -121,7 +121,7 @@ final class TrackersService: TrackersServiceProtocol {
             print("[TrackerSerОшибка при удалении записи трекера: \(error)")
         }
     }
-
+    
     func getTrackers(for date: Date, searchText: String?) -> [TrackerCategory] {
         let weekday = Calendar.current.component(.weekday, from: date)
         guard let currentWeekday = Weekday(rawValue: weekday) else { return [] }
@@ -153,22 +153,22 @@ final class TrackersService: TrackersServiceProtocol {
         }
     }
     // MARK: - loadDataFromCoreData
-
+    
     private func loadInitialData() {
         do {
             let categoriesFromStore = try categoryStore.fetchAllCategories()
             let trackerCoreDataList = try trackerStore.fetchAllTrackers()
             let recordCoreDataList = try recordStore.fetchRecords()
-
+            
             completedTrackers = recordCoreDataList.map {
                 TrackerRecord(id: $0.id ?? UUID(), date: $0.date ?? Date())
             }
-
+            
             var tempCategories: [TrackerCategory] = []
-
+            
             for category in categoriesFromStore {
                 guard let trackerSet = category.trackers as? Set<TrackerCoreData> else { continue }
-
+                
                 let trackers = trackerSet.map { trackerCoreData in
                     Tracker(
                         id: trackerCoreData.id ?? UUID(),
@@ -184,10 +184,10 @@ final class TrackersService: TrackersServiceProtocol {
                         creationDate: trackerCoreData.creationDate ?? Date()
                     )
                 }
-
+                
                 tempCategories.append(TrackerCategory(title: category.title ?? "", trackers: trackers))
             }
-
+            
             categories = tempCategories
         } catch {
             print("Ошибка при загрузке данных: \(error)")

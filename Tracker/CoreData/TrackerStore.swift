@@ -1,9 +1,3 @@
-//
-//  TrackerStore.swift
-//  Tracker
-//
-//  Created by Дионисий Коневиченко on 29.04.2025.
-//
 
 import CoreData
 import Foundation
@@ -21,13 +15,13 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate {
     private var fetchedResultsController: NSFetchedResultsController<TrackerCoreData>?
     
     var onChange: (() -> Void)? // Коллбек для ViewModel
-
+    
     init(context: NSManagedObjectContext = CoreDataManager.shared.context) {
         self.context = context
         super.init()
         setupFetchedResultsController()
     }
-
+    
     func createTracker(from model: Tracker, category: TrackerCategoryCoreData) throws {
         let entity = TrackerCoreData(context: context)
         entity.id = model.id
@@ -41,31 +35,31 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate {
         try context.save()
     }
     private func setupFetchedResultsController() {
-           let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
-           request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-
-           fetchedResultsController = NSFetchedResultsController(
-               fetchRequest: request,
-               managedObjectContext: context,
-               sectionNameKeyPath: nil,
-               cacheName: nil
-           )
-           fetchedResultsController?.delegate = self
-
-           do {
-               try fetchedResultsController?.performFetch()
-           } catch {
-               print("Ошибка при выполнении fetch: \(error)")
-           }
-       }
-
-       func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-           onChange?()
-       }
-
-       func fetchAllTrackers() throws -> [TrackerCoreData] {
-           return fetchedResultsController?.fetchedObjects ?? []
-       }
-   }
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: request,
+            managedObjectContext: context,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        fetchedResultsController?.delegate = self
+        
+        do {
+            try fetchedResultsController?.performFetch()
+        } catch {
+            print("Ошибка при выполнении fetch: \(error)")
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        onChange?()
+    }
+    
+    func fetchAllTrackers() throws -> [TrackerCoreData] {
+        return fetchedResultsController?.fetchedObjects ?? []
+    }
+}
 
 
