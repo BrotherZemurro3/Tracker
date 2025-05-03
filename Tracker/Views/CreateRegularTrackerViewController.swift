@@ -20,8 +20,8 @@ class CreateRegularTrackerViewController: UIViewController {
     private let emojis = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦","🏓","🥇","🎸","🏝️","😪"]
     private let colors: [UIColor] = [
         .red, .orange, .blue, .darkViolet, .darkerGreen,
-        .fuchsia, .lightPink, .cyan, .lightGreen, .darkBlue,
-        .corralOne, .pink, .beige, .lilac, .darkViolet, .darkFuchsia, .lightViolet, .green
+        .fuchsia, .lightPink, .cyan1, .lightGreen, .darkBlue,
+        .corralOne, .pink1, .beige, .lilac, .violet2, .darkFuchsia, .lightViolet, .green1
     ]
     
     private var selectedEmoji: String?

@@ -33,6 +33,7 @@ class ScheduleViewController: UIViewController {
         tableView.isScrollEnabled = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
+        
     }
     // Настройка кнопки сохранения
     private func setupSaveButton() {
@@ -129,7 +130,7 @@ extension ScheduleViewController: UITableViewDelegate {
         }
 
 }
-/*
+
 // Превью
 #if DEBUG
 import SwiftUI
@@ -160,4 +161,4 @@ func updateUIViewController(_ uiViewController: UIViewControllerType, context: C
 }
 }
 #endif
-*/
+
