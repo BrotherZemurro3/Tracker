@@ -9,7 +9,7 @@ struct Tracker {
     let schedule: [Weekday]?
     let isCompleted: Bool
     let isRegular: Bool
-    let creationDate: Date 
+    let creationDate: Date
 
     
     func withCompletedState(_ isCompleted: Bool) -> Tracker {
@@ -126,17 +126,27 @@ final class TrackersService: TrackersServiceProtocol {
                 let matchesSearch = searchText == nil || tracker.title.lowercased().contains(searchText!.lowercased())
                 
                 if !tracker.isRegular {
-                    // Обновил: Для нерегулярных трекеров теперь проверяем, что дата просмотра совпадает с датой создания
-                    return Calendar.current.isDate(date, inSameDayAs: tracker.creationDate) && matchesSearch
+                    // Для нерегулярных трекеров
+                    let creationDay = Calendar.current.startOfDay(for: tracker.creationDate)
+                    let currentDay = Calendar.current.startOfDay(for: date)
+                    
+                    // Если трекер уже был выполнен, показываем только в день создания
+                    if tracker.isCompleted {
+                        return Calendar.current.isDate(date, inSameDayAs: tracker.creationDate) && matchesSearch
+                    }
+                    // Если не выполнен, показываем начиная с дня создания и далее
+                    else {
+                        return currentDay >= creationDay && matchesSearch
+                    }
                 }
                 
+                // Для регулярных трекеров
                 let matchesSchedule = tracker.schedule?.contains(currentWeekday) ?? true
                 return matchesSearch && matchesSchedule
             }
             return trackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: trackers)
         }
     }
-
     // MARK: - loadDataFromCoreData
 
     private func loadInitialData() {
