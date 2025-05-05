@@ -368,14 +368,14 @@ extension CreateIrregularTrackerViewController: UICollectionViewDataSource, UICo
             selectedEmoji = emojis[indexPath.row]
             if let cell = collectionView.cellForItem(at: indexPath) {
                 cell.contentView.backgroundColor = .lightGray.withAlphaComponent(0.3)
-                cell.contentView.layer.cornerRadius = 16
+                cell.contentView.layer.cornerRadius = 8
             }
         } else {
             selectedColor = colors[indexPath.row]
             if let cell = collectionView.cellForItem(at: indexPath) as? ColorCell {
-                cell.contentView.layer.borderWidth = 3
+                cell.contentView.layer.borderWidth = 4
                 cell.contentView.layer.borderColor = colors[indexPath.row].withAlphaComponent(0.3).cgColor
-                cell.contentView.layer.cornerRadius = 16
+                cell.contentView.layer.cornerRadius = 8
                 cell.contentView.layoutMargins = UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3)
             }
         }
@@ -408,7 +408,7 @@ extension CreateIrregularTrackerViewController: UITextFieldDelegate {
     }
 }
 
-/*
+
  // Превью для отслеживания
  #if DEBUG
  import SwiftUI
@@ -440,5 +440,5 @@ extension CreateIrregularTrackerViewController: UITextFieldDelegate {
  }
  }
  #endif
- */
+ 
 
