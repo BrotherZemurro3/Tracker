@@ -1,42 +1,40 @@
-
 import CoreData
 import Foundation
 
 protocol TrackerRecordStorable {
-    func addRecord(for trackedID: UUID, date: Date) throws
-    func deleteRecord(for trackerID: UUID, date: Date) throws
-    func fetchRecords() throws -> [TrackerRecordCoreData]
+    func addRecord(_ record: TrackerRecord) throws
+    func deleteRecord(_ record: TrackerRecord) throws
+    func fetchRecords() throws -> [TrackerRecord]
 }
 
-
-final class TrackerRecordStore {
+final class TrackerRecordStore: TrackerRecordStorable {
     private let context: NSManagedObjectContext
-    
     
     init(context: NSManagedObjectContext = CoreDataManager.shared.context) {
         self.context = context
     }
     
-    func addRecord(for trackedID: UUID, date: Date) throws {
-        let record = TrackerRecordCoreData(context: context)
-        record.id = trackedID
-        record.date = date
+    func addRecord(_ record: TrackerRecord) throws {
+        let recordEntity = TrackerRecordCoreData(context: context)
+        recordEntity.id = record.id
+        recordEntity.date = record.date
         try context.save()
     }
     
-    func deleteRecord(for trackerID: UUID, date: Date) throws {
+    func deleteRecord(_ record: TrackerRecord) throws {
         let request: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@ AND date == %@", trackerID as CVarArg, date as NSDate)
+        request.predicate = NSPredicate(format: "id == %@ AND date == %@", record.id as CVarArg, record.date as NSDate)
         
         let records = try context.fetch(request)
         records.forEach { context.delete($0) }
         try context.save()
     }
     
-    func fetchRecords() throws -> [TrackerRecordCoreData] {
+    func fetchRecords() throws -> [TrackerRecord] {
         let request: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
-        return try context.fetch(request)
+        let coreDataRecords = try context.fetch(request)
+        return coreDataRecords.map { record in
+            TrackerRecord(id: record.id ?? UUID(), date: record.date ?? Date())
+        }
     }
-    
 }
-

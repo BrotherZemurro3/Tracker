@@ -408,7 +408,7 @@ extension CreateIrregularTrackerViewController: UITextFieldDelegate {
     }
 }
 
-
+/*
  // Превью для отслеживания
  #if DEBUG
  import SwiftUI
@@ -440,5 +440,5 @@ extension CreateIrregularTrackerViewController: UITextFieldDelegate {
  }
  }
  #endif
- 
+ */
 
