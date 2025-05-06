@@ -20,8 +20,8 @@ class CreateRegularTrackerViewController: UIViewController {
     private let emojis = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦","🏓","🥇","🎸","🏝️","😪"]
     private let colors: [UIColor] = [
         .red, .orange, .blue, .darkViolet, .darkerGreen,
-        .fuchsia, .lightPink, .cyan, .lightGreen, .darkBlue,
-        .corralOne, .pink, .beige, .lilac, .darkViolet, .darkFuchsia, .lightViolet, .green
+        .fuchsia, .lightPink, .cyan1, .lightGreen, .darkBlue,
+        .corralOne, .pink1, .beige, .lilac, .violet2, .darkFuchsia, .lightViolet, .green1
     ]
     
     private var selectedEmoji: String?
@@ -310,7 +310,7 @@ class CreateRegularTrackerViewController: UIViewController {
             schedule: selectedDays,
             isCompleted: false,
             isRegular: true,
-            shouldRemoveAfterCompletion: false
+            creationDate: Date()
         )
         
         delegate?.didCreateTracker(newTracker, in: selectedCategory)
@@ -411,14 +411,14 @@ extension CreateRegularTrackerViewController: UICollectionViewDataSource, UIColl
             selectedEmoji = emojis[indexPath.row]
             if let cell = collectionView.cellForItem(at: indexPath) {
                 cell.contentView.backgroundColor = .lightGray.withAlphaComponent(0.3)
-                cell.contentView.layer.cornerRadius = 16
+                cell.contentView.layer.cornerRadius = 8
             }
         } else {
             selectedColor = colors[indexPath.row]
             if let cell = collectionView.cellForItem(at: indexPath) as? ColorCell {
-                cell.contentView.layer.borderWidth = 3
+                cell.contentView.layer.borderWidth = 4
                 cell.contentView.layer.borderColor = colors[indexPath.row].withAlphaComponent(0.3).cgColor
-                cell.contentView.layer.cornerRadius = 16
+                cell.contentView.layer.cornerRadius = 8
             }
         }
         updateCreateButtonState()

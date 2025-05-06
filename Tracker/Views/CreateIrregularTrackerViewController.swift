@@ -23,8 +23,8 @@ class CreateIrregularTrackerViewController: UIViewController {
     private let emojis = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦","🏓","🥇","🎸","🏝️","😪"]
     private let colors: [UIColor] = [
         .red, .orange, .blue, .darkViolet, .darkerGreen,
-        .fuchsia, .lightPink, .cyan, .lightGreen, .darkBlue,
-        .corralOne, .pink, .beige, .lilac, .darkViolet, .darkFuchsia, .lightViolet, .green
+        .fuchsia, .lightPink, .cyan1, .lightGreen, .darkBlue,
+        .corralOne, .pink1, .beige, .lilac, .violet2, .darkFuchsia, .lightViolet, .green1
     ]
     
     private var selectedEmoji: String?
@@ -172,9 +172,9 @@ class CreateIrregularTrackerViewController: UIViewController {
             textField.heightAnchor.constraint(equalToConstant: 75),
             
             errorLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 4),
-                   errorLabel.leadingAnchor.constraint(equalTo: textField.leadingAnchor, constant: 16),
-                   errorLabel.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -16),
-                   errorLabel.heightAnchor.constraint(equalToConstant: 16),
+            errorLabel.leadingAnchor.constraint(equalTo: textField.leadingAnchor, constant: 16),
+            errorLabel.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -16),
+            errorLabel.heightAnchor.constraint(equalToConstant: 16),
             
             tableView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 8),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -276,7 +276,7 @@ class CreateIrregularTrackerViewController: UIViewController {
             return
         }
         
-      
+        
         let newTracker = Tracker(
             id: UUID(),
             title: title,
@@ -285,7 +285,7 @@ class CreateIrregularTrackerViewController: UIViewController {
             schedule: nil,
             isCompleted: false,
             isRegular: false,
-            shouldRemoveAfterCompletion: true
+            creationDate: Date()
         )
         
         delegate?.didCreateTracker(newTracker, in: selectedCategory)
@@ -317,7 +317,7 @@ extension CreateIrregularTrackerViewController: UITableViewDataSource, UITableVi
         cell.detailTextLabel?.text = selectedCategory
         cell.detailTextLabel?.font = .systemFont(ofSize: 17)
         cell.detailTextLabel?.textColor = .gray
-    
+        
         
         // Если категория не выбрана - центровочка основного текста
         if selectedCategory == nil {
@@ -325,7 +325,7 @@ extension CreateIrregularTrackerViewController: UITableViewDataSource, UITableVi
             cell.textLabel?.frame = cell.contentView.bounds
         } else {
             cell.textLabel?.textAlignment = .natural // или .left
-            cell.textLabel?.frame = CGRect(x: 0, y: 0, width: cell.contentView.bounds.width, height: 20) 
+            cell.textLabel?.frame = CGRect(x: 0, y: 0, width: cell.contentView.bounds.width, height: 20)
         }
         
         return cell
@@ -337,7 +337,7 @@ extension CreateIrregularTrackerViewController: UITableViewDataSource, UITableVi
     // Обработка нажатия на ячейку (Категории)
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-              selectCategory()
+        selectCategory()
     }
 }
 
@@ -368,14 +368,14 @@ extension CreateIrregularTrackerViewController: UICollectionViewDataSource, UICo
             selectedEmoji = emojis[indexPath.row]
             if let cell = collectionView.cellForItem(at: indexPath) {
                 cell.contentView.backgroundColor = .lightGray.withAlphaComponent(0.3)
-                cell.contentView.layer.cornerRadius = 16
+                cell.contentView.layer.cornerRadius = 8
             }
         } else {
             selectedColor = colors[indexPath.row]
             if let cell = collectionView.cellForItem(at: indexPath) as? ColorCell {
-                cell.contentView.layer.borderWidth = 3
+                cell.contentView.layer.borderWidth = 4
                 cell.contentView.layer.borderColor = colors[indexPath.row].withAlphaComponent(0.3).cgColor
-                cell.contentView.layer.cornerRadius = 16
+                cell.contentView.layer.cornerRadius = 8
                 cell.contentView.layoutMargins = UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3)
             }
         }
@@ -395,7 +395,7 @@ extension CreateIrregularTrackerViewController: UICollectionViewDataSource, UICo
         }
     }
 }
-    
+
 extension CreateIrregularTrackerViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let currentText = textField.text ?? ""
@@ -410,35 +410,35 @@ extension CreateIrregularTrackerViewController: UITextFieldDelegate {
 
 /*
  // Превью для отслеживания
-#if DEBUG
-import SwiftUI
-
-struct CreateIrregularTrackerViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        let viewController = CreateIrregularTrackerViewController()
-        return UINavigationController(rootViewController: viewController)
-            .toPreview()
-            .edgesIgnoringSafeArea(.all)
-    }
-}
-
-extension UIViewController {
-    func toPreview() -> some View {
-        Preview(viewController: self)
-    }
-    
-    private struct Preview: UIViewControllerRepresentable {
-        let viewController: UIViewController
-        
-        func makeUIViewController(context: Context) -> some UIViewController {
-            viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            // Nothing to update
-        }
-    }
-}
-#endif
-*/
+ #if DEBUG
+ import SwiftUI
+ 
+ struct CreateIrregularTrackerViewController_Preview: PreviewProvider {
+ static var previews: some View {
+ let viewController = CreateIrregularTrackerViewController()
+ return UINavigationController(rootViewController: viewController)
+ .toPreview()
+ .edgesIgnoringSafeArea(.all)
+ }
+ }
+ 
+ extension UIViewController {
+ func toPreview() -> some View {
+ Preview(viewController: self)
+ }
+ 
+ private struct Preview: UIViewControllerRepresentable {
+ let viewController: UIViewController
+ 
+ func makeUIViewController(context: Context) -> some UIViewController {
+ viewController
+ }
+ 
+ func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+ // Nothing to update
+ }
+ }
+ }
+ #endif
+ */
 

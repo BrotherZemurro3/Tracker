@@ -9,7 +9,8 @@ struct Tracker {
     let schedule: [Weekday]?
     let isCompleted: Bool
     let isRegular: Bool
-    let shouldRemoveAfterCompletion: Bool
+    let creationDate: Date
+    
     
     func withCompletedState(_ isCompleted: Bool) -> Tracker {
         return Tracker(
@@ -20,8 +21,8 @@ struct Tracker {
             schedule: schedule,
             isCompleted: isCompleted,
             isRegular: isRegular,
-            shouldRemoveAfterCompletion: shouldRemoveAfterCompletion
-            // добавил shouldRemoveAfterCompletion на будущее, что бы реализовать
+            creationDate: creationDate
+            
         )
     }
 }
@@ -65,74 +66,126 @@ final class TrackersService: TrackersServiceProtocol {
     private(set) var categories: [TrackerCategory] = []
     private(set) var completedTrackers: [TrackerRecord] = []
     
-    init() {}
+    let trackerStore: TrackerStore
+    let categoryStore: TrackerCategoryStore
+    let recordStore: TrackerRecordStore
+    
+    init(
+        trackerStore: TrackerStore = TrackerStore(),
+        categoryStore: TrackerCategoryStore = TrackerCategoryStore(),
+        recordStore: TrackerRecordStore = TrackerRecordStore()
+    ) {
+        self.trackerStore = trackerStore
+        self.categoryStore = categoryStore
+        self.recordStore = recordStore
+        
+        trackerStore.onChange = { [weak self] in
+            self?.loadInitialData()
+        }
+        
+        loadInitialData()
+    }
     
     // MARK: - Public Methods
-    // Поиск трекера и добавление в категорию
+    
     func addTracker(_ tracker: Tracker, to categoryTitle: String) {
-        if let index = categories.firstIndex(where: { $0.title == categoryTitle }) {
-            var updatedTrackers = categories[index].trackers
-            updatedTrackers.append(tracker)
-            categories[index] = TrackerCategory(title: categoryTitle, trackers: updatedTrackers)
-        } else {
-            categories.append(TrackerCategory(title: categoryTitle, trackers: [tracker]))
+        print("Adding tracker: \(tracker.title) to category: \(categoryTitle), ID: \(tracker.id)")
+        do {
+            let category: TrackerCategory
+            if let existing = try categoryStore.category(withTitle: categoryTitle) {
+                category = existing
+            } else {
+                category = try categoryStore.createCategory(title: categoryTitle)
+            }
+            
+            try trackerStore.createTracker(tracker, categoryTitle: category.title)
+            loadInitialData()
+        } catch {
+            print("Ошибка при добавлении трекера: \(error)")
         }
-        print("Трекер добавлен. Всего категорий: \(categories.count)")
-    }
-    // Проверка выполнения трекера
-    func completeTracker(id: UUID, date: Date) {
-        // Проверяем, не выполнен ли уже трекер в эту дату
-        let alreadyCompleted = completedTrackers.contains {
-            $0.id == id && Calendar.current.isDate($0.date, inSameDayAs: date)
-        }
-        
-        guard !alreadyCompleted else { return }
-        
-        completedTrackers.append(TrackerRecord(id: id, date: date))
-        print("Трекер \(id) выполнен \(date)")
     }
     
-    // Обновление состояние трекера на "не выполнено" в нужный день
-    func uncompleteTracker(id: UUID, date: Date) {
-        for (categoryIndex, category) in categories.enumerated() {
-            if let trackerIndex = category.trackers.firstIndex(where: { $0.id == id }) {
-                let tracker = category.trackers[trackerIndex]
-                let updatedTracker = tracker.withCompletedState(false)
-                
-                var updatedTrackers = category.trackers
-                updatedTrackers[trackerIndex] = updatedTracker
-                
-                categories[categoryIndex] = category.withTrackers(updatedTrackers)
-                completedTrackers.removeAll { $0.id == id && Calendar.current.isDate($0.date, inSameDayAs: date) }
-                break
-            }
+    func completeTracker(id: UUID, date: Date) {
+        do {
+            try recordStore.addRecord(TrackerRecord(id: id, date: date))
+            loadInitialData()
+        } catch {
+            print("Ошибка при завершении трекера: \(error)")
         }
     }
-    // Определение дня недели для указанной даты и фильтрация трекеров
-    func getTrackers(for date: Date, searchText: String? = nil) -> [TrackerCategory] {
+    
+    func uncompleteTracker(id: UUID, date: Date) {
+        do {
+            try recordStore.deleteRecord(TrackerRecord(id: id, date: date))
+            loadInitialData()
+        } catch {
+            print("Ошибка при удалении записи трекера: \(error)")
+        }
+    }
+    
+    func getTrackers(for date: Date, searchText: String?) -> [TrackerCategory] {
         let weekday = Calendar.current.component(.weekday, from: date)
         guard let currentWeekday = Weekday(rawValue: weekday) else { return [] }
-        print("Фильтрация для дня: \(currentWeekday). Все категории:", categories.map { "\($0.title): \($0.trackers.count)" })
-        let isToday = Calendar.current.isDateInToday(date)
         
-        let filtered = categories.compactMap { category in
+        return categories.compactMap { category in
             let trackers = category.trackers.filter { tracker in
-                let matchesSearch = searchText == nil || tracker.title.lowercased().contains(searchText!.lowercased())
-                
-                // Для нерегулярных трекеров показываем только если это сегодня
-                if !tracker.isRegular {
-                    return isToday && matchesSearch
+                let matchesSearch: Bool
+                if let searchText = searchText?.lowercased(), !searchText.isEmpty {
+                    matchesSearch = tracker.title.lowercased().contains(searchText)
+                } else {
+                    matchesSearch = true
                 }
                 
-                // Для регулярных - по расписанию
+                if !tracker.isRegular {
+                    let creationDay = Calendar.current.startOfDay(for: tracker.creationDate)
+                    let currentDay = Calendar.current.startOfDay(for: date)
+                    
+                    if tracker.isCompleted {
+                        return Calendar.current.isDate(date, inSameDayAs: tracker.creationDate) && matchesSearch
+                    } else {
+                        return currentDay >= creationDay && matchesSearch
+                    }
+                }
+                
                 let matchesSchedule = tracker.schedule?.contains(currentWeekday) ?? true
-                print("Трекер '\(tracker.title)': schedule=\(tracker.schedule?.map { $0.rawValue } ?? []), matches=\(matchesSchedule)")
                 return matchesSearch && matchesSchedule
             }
             return trackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: trackers)
         }
-        print("После фильтрации: \(filtered.count) категорий")
-        return filtered
-        
+    }
+    
+    // MARK: - loadDataFromCoreData
+    
+    private func loadInitialData() {
+        do {
+            let categoriesFromStore = try categoryStore.fetchAllCategories()
+            let trackersFromStore = try trackerStore.fetchAllTrackers()
+            let recordsFromStore = try recordStore.fetchRecords()
+            
+            completedTrackers = recordsFromStore
+            
+            var tempCategories: [TrackerCategory] = []
+            
+            for category in categoriesFromStore {
+                let coreDataCategory = try categoryStore.coreDataCategory(withTitle: category.title)
+                let trackers = trackersFromStore.filter { tracker in
+                    // Проверяем, что трекер принадлежит категории
+                    coreDataCategory?.trackers?.contains { ($0 as? TrackerCoreData)?.id == tracker.id } ?? false
+                }.map { tracker in
+                    tracker.withCompletedState(
+                        completedTrackers.contains { $0.id == tracker.id && Calendar.current.isDate($0.date, inSameDayAs: tracker.creationDate) }
+                    )
+                }
+                
+                if !trackers.isEmpty {
+                    tempCategories.append(TrackerCategory(title: category.title, trackers: trackers))
+                }
+            }
+            
+            categories = tempCategories
+            print("Loaded \(tempCategories.count) categories with trackers: \(tempCategories.map { "\($0.title): \($0.trackers.count)" })")
+        } catch {
+            print("Ошибка при загрузке данных: \(error)")
+        }
     }
 }
