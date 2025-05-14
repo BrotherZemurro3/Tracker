@@ -3,7 +3,7 @@ import UIKit
 
 final class OnboardingViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate  {
     
-   
+    private let hasOnboardedKey = "hasOnboarded"
     private lazy var fowardToTrackersButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("Вот это технологии!", for: .normal)
@@ -63,6 +63,8 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
     
     @objc private func fowardToTrackersButtonTapped() {
         
+        // Сохранение флага, что онбординг был показан
+        UserDefaults.standard.set(true, forKey: hasOnboardedKey)
         let tabBarController = TabBarController()
         if let window = UIApplication.shared.windows.first {
             window.rootViewController = tabBarController
