@@ -41,8 +41,8 @@ final class TabBarController: UITabBarController {
     private func setupTabBar() {
         var controllers: [UIViewController] = []
         
-        tabBar.shadowImage = UIImage() // Убираем стандартную тень (если есть)
-           tabBar.backgroundImage = UIImage() // Убираем фоновое изображение (если нужно)
+        tabBar.shadowImage = UIImage() // Убираем стандартную тень 
+           tabBar.backgroundImage = UIImage() // Убираем фоновое изображение
            
            // Создаем изображение для разделителя (1px высотой)
            let separator = UIView(frame: CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 0.5))
