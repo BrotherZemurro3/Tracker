@@ -1,19 +1,19 @@
 import UIKit
 
 
-final class OnboardingViewController: UIPageViewController {
+final class OnboardingViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate  {
     
    
     private lazy var fowardToTrackersButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("Вот это технологии", for: .normal)
+        button.setTitle("Вот это технологии!", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1
         button.backgroundColor = UIColor(named: "black[day]")
         button.translatesAutoresizingMaskIntoConstraints = false
-     //   button.addTarget(self, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+        button.addTarget(self, action: #selector(fowardToTrackersButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -68,6 +68,33 @@ final class OnboardingViewController: UIPageViewController {
             window.rootViewController = tabBarController
             UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
         }
+        
     }
+
+    // MARK: - DataSource
+    
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        guard let viewControllerIndex = pages.firstIndex(of: viewController) else { return nil }
+        let previousIndex = viewControllerIndex - 1
+        guard previousIndex >= 0 else { return pages.last }
+        return pages[previousIndex]
+    }
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        guard let viewControllerIndex = pages.firstIndex(of: viewController) else { return nil }
+        let nextIndex = viewControllerIndex + 1
+        guard nextIndex < pages.count else { return pages.first }
+        return pages[nextIndex]
+    }
+
+// MARK: - Delegate
+    
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+
+        if let currentViewController = pageViewController.viewControllers?.first,
+           let currentIndex = pages.firstIndex(of: currentViewController) {
+            pageControl.currentPage = currentIndex
+        }
+    }
+    
     
 }
