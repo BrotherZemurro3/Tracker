@@ -143,10 +143,23 @@ extension CategorySelectionViewController: UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+       
+        if let cell = tableView.cellForRow(at: indexPath) as? CategorySelectionCell {
+            cell.configure(with: viewModel.categories[indexPath.row].title, isSelected: true)
+        }
+        
+        
+        for visibleIndexPath in tableView.indexPathsForVisibleRows ?? [] {
+            if visibleIndexPath != indexPath,
+               let otherCell = tableView.cellForRow(at: visibleIndexPath) as? CategorySelectionCell {
+                otherCell.configure(with: viewModel.categories[visibleIndexPath.row].title, isSelected: false)
+            }
+        }
+        
         viewModel.selectCategory(at: indexPath.row)
         navigationController?.popViewController(animated: true)
     }
+
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let cornerRadius: CGFloat = 16
