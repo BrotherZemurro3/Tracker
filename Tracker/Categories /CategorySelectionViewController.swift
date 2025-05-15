@@ -60,7 +60,7 @@ class CategorySelectionViewController: UIViewController {
         view.addSubview(imageView)
         
         // Настройка лейбла для пустого состояния
-        categoryLabel.text = "Привычки и события можно объединить по смыслу"
+        categoryLabel.text = "Привычки и события можно\n объединить по смыслу"
         categoryLabel.textColor = .black
         categoryLabel.font = .systemFont(ofSize: 12)
         categoryLabel.textAlignment = .center
