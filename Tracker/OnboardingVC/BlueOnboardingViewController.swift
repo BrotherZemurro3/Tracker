@@ -25,7 +25,7 @@ final class BlueOnboardingViewController: UIViewController {
         NSLayoutConstraint.activate([
             blueOnboardinglabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             blueOnboardinglabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            blueOnboardinglabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -304),
+            blueOnboardinglabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -287),
         ])
     }
     

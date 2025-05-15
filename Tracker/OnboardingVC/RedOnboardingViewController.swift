@@ -26,7 +26,7 @@ final class RedOnboardingViewController: UIViewController {
         NSLayoutConstraint.activate([
             redOnboardinglabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             redOnboardinglabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            redOnboardinglabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -304),
+            redOnboardinglabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -287),
         ])
     }
 }
