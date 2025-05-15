@@ -100,14 +100,14 @@ class CategorySelectionViewController: UIViewController {
         // Изначально скрываем таблицу и показываем пустое состояние
         updateCategoryEmptyStateVisibility()
     }
-    
+// MARK: - Скрытие заглушки
     private func updateCategoryEmptyStateVisibility() {
         let isEmpty = viewModel.categories.isEmpty
         imageView.isHidden = !isEmpty
         categoryLabel.isHidden = !isEmpty
         tableView.isHidden = isEmpty
     }
-    
+// MARK: - Байдинги
     private func setupBindings() {
         viewModel.onCategoriesUpdate = { [weak self] in
             self?.tableView.reloadData()
@@ -117,19 +117,20 @@ class CategorySelectionViewController: UIViewController {
     
     @objc private func addCategoryTapped() {
         onCreateNewCategory()
-        print("Кнопка нажата")
+     
     }
 }
 
 extension CategorySelectionViewController: UITableViewDataSource, UITableViewDelegate {
+    // Количество ячеек
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.categories.count
     }
-    
+    // Высота ячейки
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
-    
+    // Создание и настройка ячейки
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: CategorySelectionCell.reuseIdentifier,
@@ -141,9 +142,9 @@ extension CategorySelectionViewController: UITableViewDataSource, UITableViewDel
         cell.configure(with: viewModel.categories[indexPath.row].title)
         return cell
     }
-    
+    // Выбор ячейки
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       
+        
         if let cell = tableView.cellForRow(at: indexPath) as? CategorySelectionCell {
             cell.configure(with: viewModel.categories[indexPath.row].title, isSelected: true)
         }
@@ -159,8 +160,8 @@ extension CategorySelectionViewController: UITableViewDataSource, UITableViewDel
         viewModel.selectCategory(at: indexPath.row)
         navigationController?.popViewController(animated: true)
     }
-
     
+    // Отображение ячейки 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let cornerRadius: CGFloat = 16
         let isLastCell = indexPath.row == viewModel.categories.count - 1

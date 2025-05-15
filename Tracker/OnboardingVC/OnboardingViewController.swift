@@ -56,7 +56,7 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
             fowardToTrackersButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             fowardToTrackersButton.heightAnchor.constraint(equalToConstant: 60)
         ])
-
+        
         
     }
     
@@ -72,7 +72,7 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
         }
         
     }
-
+    
     // MARK: - DataSource
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -87,11 +87,11 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
         guard nextIndex < pages.count else { return pages.first }
         return pages[nextIndex]
     }
-
-// MARK: - Delegate
+    
+    // MARK: - Delegate
     
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-
+        
         if let currentViewController = pageViewController.viewControllers?.first,
            let currentIndex = pages.firstIndex(of: currentViewController) {
             pageControl.currentPage = currentIndex

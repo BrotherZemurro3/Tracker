@@ -20,8 +20,8 @@ final class CategorySelectionViewModel: CategorySelectionViewModelProtocol {
     var onCategorySelected: ((String) -> Void)?
     
     init(categoryStore: TrackerCategoryStorable = TrackerCategoryStore()) {
-          self.categoryStore = categoryStore
-      }
+        self.categoryStore = categoryStore
+    }
     
     
     func loadCategories() {
