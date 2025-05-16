@@ -4,7 +4,7 @@ import UIKit
 
 class CreateRegularTrackerViewController: UIViewController {
     weak var delegate: TrackerCreationDelegate?
-    
+    private let categoryViewModel = CategorySelectionViewModel()
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let tableView = UITableView()
@@ -262,20 +262,22 @@ class CreateRegularTrackerViewController: UIViewController {
     }
     // Категории
     @objc private func selectCategory() {
-        let alert = UIAlertController(title: "Выберите категорию", message: nil, preferredStyle: .actionSheet)
-        let categories = ["Важное", "Работа", "Личное", "Спорт"]
-        
-        for category in categories {
-            let action = UIAlertAction(title: category, style: .default) { [weak self] _ in
-                self?.selectedCategory = category
-                self?.tableView.reloadData()
-                self?.updateCreateButtonState()
-            }
-            alert.addAction(action)
+        let categorySelectionVC = CategorySelectionViewController(viewModel: categoryViewModel, onCreateNewCategory: { [weak self] in
+            self?.showNewCategoryScreen()
         }
-        
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        present(alert, animated: true)
+        )
+        categoryViewModel.onCategorySelected = { [weak self] category in
+            self?.selectedCategory = category
+            self?.tableView.reloadData()
+            self?.updateCreateButtonState()
+            
+        }
+        navigationController?.pushViewController(categorySelectionVC, animated: true)
+    }
+    // Переключение на экран создания категорий
+    private func showNewCategoryScreen() {
+        let newCategoryVC = NewCategoryViewController(viewModel: categoryViewModel)
+        navigationController?.pushViewController(newCategoryVC, animated: true)
     }
         // Выбор дня
     @objc private func selectSchedule() {
@@ -338,7 +340,7 @@ extension CreateRegularTrackerViewController: UITableViewDataSource, UITableView
             cell.textLabel?.text = "Категории"
             cell.textLabel?.textColor = .black
             cell.textLabel?.font = .systemFont(ofSize: 17)
-            cell.detailTextLabel?.text = selectedCategory
+            cell.detailTextLabel?.text = selectedCategory ?? "Не выбрано"
             cell.detailTextLabel?.font = .systemFont(ofSize: 17)
             cell.detailTextLabel?.textColor = .gray
             cell.backgroundColor = UIColor(named: "lightGray")

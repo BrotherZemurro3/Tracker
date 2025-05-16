@@ -165,7 +165,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
             self.actionButton.transform = .identity
         }
         
-         actionButton.isEnabled = !isCompletedToday
+        actionButton.isEnabled = !isCompletedToday
         
     }
     
@@ -173,13 +173,13 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         guard let trackerId = trackerId else { return }
         
         let today = Calendar.current.startOfDay(for: Date())
-          let selectedDate = Calendar.current.startOfDay(for: currentDate)
-          let isFutureDate = selectedDate > today
-          
-          guard !isFutureDate else {
-              print("Нельзя отмечать трекеры на будущие даты")
-              return
-          }
+        let selectedDate = Calendar.current.startOfDay(for: currentDate)
+        let isFutureDate = selectedDate > today
+        
+        guard !isFutureDate else {
+            print("Нельзя отмечать трекеры на будущие даты")
+            return
+        }
         
         // Анимация нажатия
         UIView.animate(withDuration: 0.2, animations: {

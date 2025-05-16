@@ -19,7 +19,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = TabBarController()
+        // Проверяем, был ли уже показан онбординг
+        let hasOnboarded = UserDefaults.standard.bool(forKey: "hasOnboarded")
+        
+        if hasOnboarded {
+            // Если онбординг был показан, сразу открываем основной интерфейс
+            window?.rootViewController = TabBarController()
+        } else {
+            // Если нет, показываем онбординг
+            window?.rootViewController = OnboardingViewController()
+        }
+        
+        
         window?.makeKeyAndVisible()
     }
 

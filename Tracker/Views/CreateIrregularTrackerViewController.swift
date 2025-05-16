@@ -2,6 +2,7 @@ import UIKit
 
 class CreateIrregularTrackerViewController: UIViewController {
     weak var delegate: TrackerCreationDelegate?
+    private let categoryViewModel = CategorySelectionViewModel()
     private let contentView = UIView()
     private let tableView = UITableView()
     private let textField = UITextField()
@@ -248,20 +249,22 @@ class CreateIrregularTrackerViewController: UIViewController {
     }
     // Выбор категории
     @objc private func selectCategory() {
-        let alert = UIAlertController(title: "Выберите категорию", message: nil, preferredStyle: .actionSheet)
-        let categories = ["Важное", "Работа", "Личное", "Спорт"]
-        
-        for category in categories {
-            let action = UIAlertAction(title: category, style: .default) { [weak self] _ in
-                self?.selectedCategory = category
-                self?.tableView.reloadData()
-                self?.updateCreateButtonState()
-            }
-            alert.addAction(action)
+        let categorySelectionVC = CategorySelectionViewController(viewModel: categoryViewModel, onCreateNewCategory: { [weak self] in
+            self?.showNewCategoryScreen()
         }
-        
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        present(alert, animated: true)
+        )
+        categoryViewModel.onCategorySelected = { [weak self] category in
+            self?.selectedCategory = category
+            self?.tableView.reloadData()
+            self?.updateCreateButtonState()
+            
+        }
+        navigationController?.pushViewController(categorySelectionVC, animated: true)
+    }
+    // Переключение на экран создания категорий
+    private func showNewCategoryScreen() {
+        let newCategoryVC = NewCategoryViewController(viewModel: categoryViewModel)
+        navigationController?.pushViewController(newCategoryVC, animated: true)
     }
     // Отмена создания трекера
     @objc private func cancelCreation() {
