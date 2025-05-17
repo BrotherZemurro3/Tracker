@@ -5,14 +5,20 @@ final class BlueOnboardingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+        setupBackground()
+        setupLabel()
+    
+    }
+    
+ private func setupBackground() {
         let blueBackgroundImage = UIImageView(image: UIImage(named: "blueOnboardingBack"))
         blueBackgroundImage.contentMode = .scaleAspectFit
         blueBackgroundImage.frame = view.bounds
         view?.addSubview(blueBackgroundImage)
         view?.sendSubviewToBack(blueBackgroundImage)
-        
+    }
+    
+    private func setupLabel() {
         let blueOnboardinglabel = UILabel()
         blueOnboardinglabel.text = "Отслеживайте только то, что хотите"
         blueOnboardinglabel.textColor = UIColor(named: "black[day]")
@@ -28,5 +34,4 @@ final class BlueOnboardingViewController: UIViewController {
             blueOnboardinglabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -287),
         ])
     }
-    
 }

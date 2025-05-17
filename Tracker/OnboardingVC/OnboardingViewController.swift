@@ -35,7 +35,11 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupPageViewController()
+        setupLayout()
+    }
+    
+    private func setupPageViewController() {
         dataSource = self
         delegate = self
         
@@ -43,6 +47,9 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
             setViewControllers([first], direction: .forward, animated: true, completion: nil)
         }
         
+    }
+    
+    private func setupLayout() {
         view.addSubview(pageControl)
         view.addSubview(fowardToTrackersButton)
         
@@ -56,7 +63,6 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
             fowardToTrackersButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             fowardToTrackersButton.heightAnchor.constraint(equalToConstant: 60)
         ])
-        
         
     }
     

@@ -17,14 +17,14 @@ final class NewCategoryViewController: UIViewController {
         return textField
     }()
     
-    private lazy var createButton: UIButton = {
+    private lazy var createCategoryButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Готово", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .gray
         button.layer.cornerRadius = 16
         button.isEnabled = false
-        button.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(doneButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -49,7 +49,7 @@ final class NewCategoryViewController: UIViewController {
         view.backgroundColor = .white
         
         view.addSubview(textField)
-        view.addSubview(createButton)
+        view.addSubview(createCategoryButton)
         
         NSLayoutConstraint.activate([
             textField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
@@ -57,10 +57,10 @@ final class NewCategoryViewController: UIViewController {
             textField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             textField.heightAnchor.constraint(equalToConstant: 75),
             
-            createButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            createButton.heightAnchor.constraint(equalToConstant: 60)
+            createCategoryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            createCategoryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            createCategoryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            createCategoryButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
@@ -70,11 +70,11 @@ final class NewCategoryViewController: UIViewController {
     
     @objc private func textFieldDidChange() {
         guard let text = textField.text else { return }
-        createButton.isEnabled = !text.isEmpty
-        createButton.backgroundColor = createButton.isEnabled ? .black : .gray
+        createCategoryButton.isEnabled = !text.isEmpty
+        createCategoryButton.backgroundColor = createCategoryButton.isEnabled ? .black : .gray
     }
     
-    @objc private func createButtonTapped() {
+    @objc private func doneButton() {
         guard let categoryName = textField.text, !categoryName.isEmpty else { return }
         viewModel.createCategory(with: categoryName)
         navigationController?.popViewController(animated: true)
