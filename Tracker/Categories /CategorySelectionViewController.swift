@@ -1,6 +1,7 @@
 import UIKit
 
-class CategorySelectionViewController: UIViewController {
+
+final class CategorySelectionViewController: UIViewController {
     private let viewModel: CategorySelectionViewModelProtocol
     private let onCreateNewCategory: () -> Void
     private let categoryLabel = UILabel()

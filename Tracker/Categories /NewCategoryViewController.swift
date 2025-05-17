@@ -1,6 +1,6 @@
 import UIKit
 
-class NewCategoryViewController: UIViewController {
+final class NewCategoryViewController: UIViewController {
     private let viewModel: CategorySelectionViewModelProtocol
     
     private lazy var textField: UITextField = {

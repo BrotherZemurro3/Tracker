@@ -18,9 +18,9 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
     }()
     
     lazy var pages: [UIViewController] = {
-        let blueONB = BlueOnboardingViewController()
-        let redONB = RedOnboardingViewController()
-        return [blueONB,redONB]
+        let blueVC = BlueOnboardingViewController()
+        let redVC = RedOnboardingViewController()
+        return [blueVC,redVC]
     }()
     
     lazy var pageControl: UIPageControl = {

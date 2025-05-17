@@ -44,7 +44,7 @@ final class CategorySelectionViewModel: CategorySelectionViewModelProtocol {
             _ = try categoryStore.createCategory(title: title)
             loadCategories()
         } catch {
-            print("Неудалось создать категориюЖ \(error)")
+            print("Не удалось создать категорию: \(error)")
         }
     }
 }
