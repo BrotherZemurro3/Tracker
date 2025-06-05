@@ -11,25 +11,25 @@ enum Weekday: Int, CaseIterable {
     
     var fullName: String {
         switch self {
-        case .monday: return "Понедельник"
-        case .tuesday: return "Вторник"
-        case .wednesday: return "Среда"
-        case .thursday: return "Четверг"
-        case .friday: return "Пятница"
-        case .saturday: return "Суббота"
-        case .sunday: return "Воскресенье"
+        case .monday: return "monday.title".localized
+        case .tuesday: return "tuesday.title".localized
+        case .wednesday: return "wednesday.title".localized
+        case .thursday: return "thursday.title".localized
+        case .friday: return "friday.title".localized
+        case .saturday: return "saturday.title".localized
+        case .sunday: return "sunday.title".localized
         }
     }
     
     var shortName: String {
         switch self {
-        case .monday: return "Пн"
-        case .tuesday: return "Вт"
-        case .wednesday: return "Ср"
-        case .thursday: return "Чт"
-        case .friday: return "Пт"
-        case .saturday: return "Сб"
-        case .sunday: return "Вс"
+        case .monday: return "mondayShort.title".localized
+        case .tuesday: return "tuesdayShort.title".localized
+        case .wednesday: return "wednesdayShort.title".localized
+        case .thursday: return "thursdayShort.title".localized
+        case .friday: return "fridayShort.title".localized
+        case .saturday: return "saturdayShort.title".localized
+        case .sunday: return "sundayShort.title".localized
         }
     }
     

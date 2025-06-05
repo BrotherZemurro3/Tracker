@@ -10,7 +10,7 @@ class ScheduleViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        title = "Расписание"
+        title = "schedule.title".localized
         setupUI()
     }
     
@@ -38,7 +38,7 @@ class ScheduleViewController: UIViewController {
     }
     // Настройка кнопки сохранения
     private func setupSaveButton() {
-        saveButton.setTitle("Готово", for: .normal)
+        saveButton.setTitle("doneButton.title".localized, for: .normal)
         saveButton.backgroundColor = .black
         saveButton.setTitleColor(.white, for: .normal)
         saveButton.layer.cornerRadius = 16
