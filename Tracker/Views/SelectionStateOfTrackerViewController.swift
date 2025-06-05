@@ -13,7 +13,7 @@ class SelectionStateOfTrackerViewController: UIViewController {
     
     private func setupUI() {
         // Создание трекеров
-        createTrackerLabel.text = "Создание трекера"
+        createTrackerLabel.text = "createTracker.title".localized
         createTrackerLabel.tintColor = .black
         createTrackerLabel.font = UIFont(name: "YS Display-Medium", size: 16)
         createTrackerLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -21,7 +21,7 @@ class SelectionStateOfTrackerViewController: UIViewController {
         
         
         // Кнопка привычки
-        habitButton.setTitle("Привычка", for: .normal)
+        habitButton.setTitle("habit.title".localized, for: .normal)
         habitButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         habitButton.backgroundColor = .black
         habitButton.setTitleColor(.white, for: .normal)
@@ -31,7 +31,7 @@ class SelectionStateOfTrackerViewController: UIViewController {
         view.addSubview(habitButton)
         
         // Кнопка нерегулярного события
-        irregularHabitButton.setTitle("Нерегулярное событие", for: .normal)
+        irregularHabitButton.setTitle("irregularEvent.title".localized, for: .normal)
         irregularHabitButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         irregularHabitButton.backgroundColor = .black
         irregularHabitButton.setTitleColor(.white, for: .normal)

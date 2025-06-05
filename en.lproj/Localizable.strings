@@ -1,17 +1,57 @@
+// Common UI
 "whatGoingToTrackLabel.title" = "What are we going to track?";
-
-"delete" = "Delete";
-
+"delete.title" = "Delete";
 "delete.confirmation" = "Are you sure you want to delete the tracker?";
+"cancel.title" = "Cancel";
+"create.title" = "Create";
+"doneButton.title" = "Done";
 
-"cancel" = "Cancel";
+// Tabs
+"trackers.title" = "Trackers";
+"statistic.title" = "Statistics";
+"trackers.tab.title" = "Trackers";
+"statistic.tab.title" = "Statistics";
 
-"trackers" = "Trackers";
+// Search & Filters
+"search.placeholder" = "Search";
+"filters.title" = "Filters";
+"notSelected.subtitle" = "Not selected";
 
-"search" = "Search";
+// Tracker Types
+"createTracker.title" = "Create tracker";
+"habit.title" = "Habit";
+"irregularEvent.title" = "Irregular event";
+"newHabit.title" = "New habit";
+"newIrregularEvent.title" = "New irregular event";
 
-"statistic" = "Statistic";
+// Inputs
+"textField.placeholder" = "Enter tracker name";
+"newCategory.placeholder" = "Enter category name";
+"errorLabel.title" = "Limit of 38 characters";
 
-"filters" = "Фильтры";
+// Categories
+"categories.title" = "Categories";
+"category.title" = "Category";
+"categoryLable.title" = "Habits and events can be grouped by meaning";
+"addCategoryButton.title" = "Add category";
+"newCategory.title" = "New category";
 
+// Schedule
+"schedule.title" = "Schedule";
+"monday.title" = "Monday";
+"tuesday.title" = "Tuesday";
+"wednesday.title" = "Wednesday";
+"thursday.title" = "Thursday";
+"friday.title" = "Friday";
+"saturday.title" = "Saturday";
+"sunday.title" = "Sunday";
+"mondayShort.title" = "Mon";
+"tuesdayShort.title" = "Tue";
+"wednesdayShort.title" = "Wed";
+"thursdayShort.title" = "Thu";
+"fridayShort.title" = "Fri";
+"saturdayShort.title" = "Sat";
+"sundayShort.title" = "Sun";
 
+// Design
+"colorLabel.title" = "Color";

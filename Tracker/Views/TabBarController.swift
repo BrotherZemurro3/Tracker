@@ -8,8 +8,8 @@ final class TabBarController: UITabBarController {
         
         var title: String {
             switch self {
-            case .statistic: return "Статистика"
-            case .trackers: return "Трекеры"
+            case .statistic: return "statistic.tab.title".localized
+            case .trackers: return "trackers.tab.title".localized
             }
         }
         

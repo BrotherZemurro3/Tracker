@@ -12,7 +12,7 @@ class TrackersViewController: UIViewController {
     private let whatGoingToTrackLabel = UILabel()
     private let imageView: UIImageView
     private var currentDate = Date()
-    private let searchPlaceholderText = "search.placeholder".localized
+
     // MARK: - Инициализация
     init(trackersService: TrackersServiceProtocol = TrackersService()) {
         self.trackersService = trackersService
@@ -48,7 +48,7 @@ class TrackersViewController: UIViewController {
     // MARK: - Настройка UI
     private func setupUI() {
         // Лейб Трекеры
-        trackersLabel.text = "trackers".localized
+        trackersLabel.text = "trackers.title".localized
         trackersLabel.tintColor = .black
         trackersLabel.font = .systemFont(ofSize: 34, weight: .bold)
         trackersLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -59,7 +59,7 @@ class TrackersViewController: UIViewController {
         ])
         // Строка поиска трекеров
         searchTrackersBar.delegate = self
-        searchTrackersBar.placeholder = "Поиск"
+        searchTrackersBar.placeholder = "search.placeholder".localized
         searchTrackersBar.translatesAutoresizingMaskIntoConstraints = false
         searchTrackersBar.searchBarStyle = .minimal
         view.addSubview(searchTrackersBar)

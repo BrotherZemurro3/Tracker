@@ -41,7 +41,7 @@ class CreateIrregularTrackerViewController: UIViewController {
     }
     // Установка навигационного бара
     private func setupNavigationBar() {
-        title = "Новое нерегулярное событие"
+        title = "newIrregularEvent.title".localized
         navigationController?.navigationBar.titleTextAttributes = [.font: UIFont.systemFont(ofSize: 16)]
     }
     // Установка UI
@@ -63,7 +63,7 @@ class CreateIrregularTrackerViewController: UIViewController {
     
     // Строка ввода названия
     private func setupTextField() {
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = "textField.placeholder".localized
         textField.backgroundColor = UIColor(named: "lightGray")
         textField.layer.cornerRadius = 16
         textField.clipsToBounds = true
@@ -76,7 +76,7 @@ class CreateIrregularTrackerViewController: UIViewController {
         textField.rightView = paddingView
         textField.rightViewMode = .always
         
-        errorLabel.text = "Ограничение 38 символов"
+        errorLabel.text = "errorLabel.title".localized
         errorLabel.font = .systemFont(ofSize: 17)
         errorLabel.textColor = .red
         errorLabel.isHidden = true
@@ -111,7 +111,7 @@ class CreateIrregularTrackerViewController: UIViewController {
     }
     // Лейбл Цвет и таблица цветов
     private func setupColorSection() {
-        colorLabel.text = "Цвет"
+        colorLabel.text = "colorLabel.title".localized
         colorLabel.font = .boldSystemFont(ofSize: 19)
         colorLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(colorLabel)
@@ -126,7 +126,7 @@ class CreateIrregularTrackerViewController: UIViewController {
     // Кнопки отменить и создать
     private func setupButtons() {
         
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle("cancel.title".localized, for: .normal)
         cancelButton.setTitleColor(.red, for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         cancelButton.backgroundColor = .white
@@ -136,7 +136,7 @@ class CreateIrregularTrackerViewController: UIViewController {
         cancelButton.addTarget(self, action: #selector(cancelCreation), for: .touchUpInside)
         
         
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle("create.title".localized, for: .normal)
         createButton.setTitleColor(.white, for: .normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         createButton.backgroundColor = .gray
@@ -311,7 +311,7 @@ extension CreateIrregularTrackerViewController: UITableViewDataSource, UITableVi
         cell.layer.masksToBounds = true
         
         // Основной текст
-        cell.textLabel?.text = "Категории"
+        cell.textLabel?.text = "categories.title".localized
         cell.textLabel?.textColor = .black
         cell.backgroundColor = UIColor(named: "lightGray")
         cell.textLabel?.font = .systemFont(ofSize: 17)

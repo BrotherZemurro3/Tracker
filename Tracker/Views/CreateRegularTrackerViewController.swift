@@ -39,7 +39,7 @@ class CreateRegularTrackerViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        title = "Новая привычка"
+        title = "newHabit.title".localized
         navigationController?.navigationBar.titleTextAttributes = [
             .font: UIFont.systemFont(ofSize: 16)
         ]
@@ -71,7 +71,7 @@ class CreateRegularTrackerViewController: UIViewController {
     }
     
     private func setupTextField() {
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = "textField.placeholder".localized
         textField.backgroundColor = UIColor(named: "lightGray")
         textField.layer.cornerRadius = 16
         textField.clipsToBounds = true
@@ -83,7 +83,7 @@ class CreateRegularTrackerViewController: UIViewController {
         textField.rightView = paddingView
         textField.rightViewMode = .always
         
-        errorLabel.text = "Ограничение 38 символов"
+        errorLabel.text = "errorLabel.title".localized
         errorLabel.font = .systemFont(ofSize: 17)
         errorLabel.textColor = .red
         errorLabel.isHidden = true
@@ -117,7 +117,7 @@ class CreateRegularTrackerViewController: UIViewController {
     }
     
     private func setupColorSection() {
-        colorLabel.text = "Цвет"
+        colorLabel.text = "colorLabel.title".localized
         colorLabel.font = .boldSystemFont(ofSize: 19)
         colorLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(colorLabel)
@@ -131,7 +131,7 @@ class CreateRegularTrackerViewController: UIViewController {
     }
     
     private func setupButtons() {
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle("cancel.title".localized, for: .normal)
         cancelButton.setTitleColor(.red, for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         cancelButton.backgroundColor = .white
@@ -140,7 +140,7 @@ class CreateRegularTrackerViewController: UIViewController {
         cancelButton.layer.cornerRadius = 16
         cancelButton.addTarget(self, action: #selector(cancelCreation), for: .touchUpInside)
         
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle("create.title".localized, for: .normal)
         createButton.setTitleColor(.white, for: .normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         createButton.backgroundColor = .gray
@@ -339,7 +339,7 @@ extension CreateRegularTrackerViewController: UITableViewDataSource, UITableView
         
         if indexPath.row == 0 {
             // Ячейка категории
-            cell.textLabel?.text = "Категории"
+            cell.textLabel?.text = "categories.title".localized
             cell.textLabel?.textColor = .black
             cell.textLabel?.font = .systemFont(ofSize: 17)
             cell.detailTextLabel?.text = selectedCategory ?? "Не выбрано"
@@ -349,7 +349,7 @@ extension CreateRegularTrackerViewController: UITableViewDataSource, UITableView
         } else {
             // Ячейка расписания
             if selectedDays.isEmpty {
-                cell.textLabel?.text = "Расписание"
+                cell.textLabel?.text = "schedule.title".localized
                 cell.textLabel?.textAlignment = .center
                 cell.detailTextLabel?.text = nil
             } else {
