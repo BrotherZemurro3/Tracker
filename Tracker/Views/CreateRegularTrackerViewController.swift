@@ -342,7 +342,7 @@ extension CreateRegularTrackerViewController: UITableViewDataSource, UITableView
             cell.textLabel?.text = "categories.title".localized
             cell.textLabel?.textColor = .black
             cell.textLabel?.font = .systemFont(ofSize: 17)
-            cell.detailTextLabel?.text = selectedCategory ?? "Не выбрано"
+            cell.detailTextLabel?.text = selectedCategory ?? "notSelected.title".localized
             cell.detailTextLabel?.font = .systemFont(ofSize: 17)
             cell.detailTextLabel?.textColor = .gray
             cell.backgroundColor = UIColor(named: "lightGray")

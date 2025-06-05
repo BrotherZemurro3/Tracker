@@ -35,6 +35,7 @@
 "categoryLable.title" = "Привычки и события можно объединить по смыслу";
 "addCategoryButton.title" = "Добавить категорию";
 "newCategory.title" = "Новая категория";
+"notSelected.title" = "Не выбрано";
 
 // Schedule
 "schedule.title" = "Расписание";

@@ -35,6 +35,7 @@
 "categoryLable.title" = "Habits and events can be grouped by meaning";
 "addCategoryButton.title" = "Add category";
 "newCategory.title" = "New category";
+"notSelected.title" = "Not selected";
 
 // Schedule
 "schedule.title" = "Schedule";

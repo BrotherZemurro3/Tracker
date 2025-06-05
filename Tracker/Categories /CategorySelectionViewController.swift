@@ -23,7 +23,7 @@ final class CategorySelectionViewController: UIViewController {
     
     private lazy var addButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle("addCategoryButton.title".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .black
         button.layer.cornerRadius = 16
@@ -51,7 +51,7 @@ final class CategorySelectionViewController: UIViewController {
     }
     
     private func setupUI() {
-        title = "Категория"
+        title = "category.title".localized
         view.backgroundColor = .white
         
         // Настройка изображения для пустого состояния
@@ -61,7 +61,7 @@ final class CategorySelectionViewController: UIViewController {
         view.addSubview(imageView)
         
         // Настройка лейбла для пустого состояния
-        categoryLabel.text = "Привычки и события можно\n объединить по смыслу"
+        categoryLabel.text = "categoryLable.title".localized
         categoryLabel.textColor = .black
         categoryLabel.font = .systemFont(ofSize: 12)
         categoryLabel.textAlignment = .center

@@ -35,6 +35,7 @@
 "categoryLable.title" = "Gewohnheiten und Ereignisse können nach Bedeutung gruppiert werden";
 "addCategoryButton.title" = "Kategorie hinzufügen";
 "newCategory.title" = "Neue Kategorie";
+"notSelected.title" = "Nicht ausgewählt";
 
 // Schedule
 "schedule.title" = "Zeitplan";
