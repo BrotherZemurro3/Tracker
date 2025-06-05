@@ -31,6 +31,7 @@ class CreateRegularTrackerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupNavigationBar()
         setupUI()
         setupHideKeyboardOnTap()
@@ -152,6 +153,7 @@ class CreateRegularTrackerViewController: UIViewController {
         buttonsContainer.distribution = .fillEqually
         buttonsContainer.spacing = 8
         buttonsContainer.translatesAutoresizingMaskIntoConstraints = false
+        
         
         view.addSubview(buttonsContainer)
         
@@ -450,6 +452,7 @@ extension CreateRegularTrackerViewController: UITextFieldDelegate {
         return updatedText.count <= 38
     }
 }
+
 /*
  // Превью для отслеживания
 #if DEBUG
