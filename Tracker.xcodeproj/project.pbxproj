@@ -32,6 +32,7 @@
 		3A64C2102DF1E3FC008CE91D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3A64C2122DF1E431008CE91D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3A64C2132DF1E432008CE91D /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		3A64C21B2DF2D0F8008CE91D /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3A7873542D9176E6001606FE /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A78736E2D9176E8001606FE /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A7873782D9176E8001606FE /* TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -219,6 +220,7 @@
 				ru,
 				de,
 				"en-GB",
+				he,
 			);
 			mainGroup = 3A78734B2D9176E6001606FE;
 			minimizedProjectReferenceProxies = 1;
@@ -304,6 +306,7 @@
 				3A64C2102DF1E3FC008CE91D /* en */,
 				3A64C2122DF1E431008CE91D /* ru */,
 				3A64C2132DF1E432008CE91D /* de */,
+				3A64C21B2DF2D0F8008CE91D /* he */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

@@ -1,0 +1,58 @@
+// Common UI
+"whatGoingToTrackLabel.title" = "מה אנחנו הולכים לעקוב?";
+"delete.title" = "מחיקה";
+"delete.confirmation" = "האם אתה בטוח שברצונך למחוק את הטראקר?";
+"cancel.title" = "ביטול";
+"create.title" = "יצירה";
+"doneButton.title" = "סיום";
+
+// Tabs
+"trackers.title" = "טראקרים";
+"statistic.title" = "סטטיסטיקות";
+"trackers.tab.title" = "טראקרים";
+"statistic.tab.title" = "סטטיסטיקות";
+
+// Search & Filters
+"search.placeholder" = "חיפוש";
+"filters.title" = "מסננים";
+"notSelected.subtitle" = "לא נבחר";
+
+// Tracker Types
+"createTracker.title" = "יצירת טראקר";
+"habit.title" = "הרגל";
+"irregularEvent.title" = "אירוע לא קבוע";
+"newHabit.title" = "הרגל חדש";
+"newIrregularEvent.title" = "אירוע לא קבוע חדש";
+
+// Inputs
+"textField.placeholder" = "הזן שם טראקר";
+"newCategory.placeholder" = "הזן שם קטגוריה";
+"errorLabel.title" = "מגבלת תווים: 38";
+
+// Categories
+"categories.title" = "קטגוריות";
+"category.title" = "קטגוריה";
+"categoryLable.title" = "ניתן לקבץ הרגלים ואירועים לפי משמעות";
+"addCategoryButton.title" = "הוספת קטגוריה";
+"newCategory.title" = "קטגוריה חדשה";
+"notSelected.title" = "לא נבחר";
+
+// Schedule
+"schedule.title" = "לוח זמנים";
+"monday.title" = "יום שני";
+"tuesday.title" = "יום שלישי";
+"wednesday.title" = "יום רביעי";
+"thursday.title" = "יום חמישי";
+"friday.title" = "יום שישי";
+"saturday.title" = "יום שבת";
+"sunday.title" = "יום ראשון";
+"mondayShort.title" = "ב׳";
+"tuesdayShort.title" = "ג׳";
+"wednesdayShort.title" = "ד׳";
+"thursdayShort.title" = "ה׳";
+"fridayShort.title" = "ו׳";
+"saturdayShort.title" = "ש׳";
+"sundayShort.title" = "א׳";
+
+// Design
+"colorLabel.title" = "צבע";

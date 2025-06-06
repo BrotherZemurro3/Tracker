@@ -108,11 +108,12 @@ class TrackersViewController: UIViewController {
         let addBarButton = UIBarButtonItem(customView: addButton)
         navigationItem.leftBarButtonItem = addBarButton
         
-        // Настроим UIDatePicker на правой кнопке
+        //  UIDatePicker на правой кнопке
         let datePicker = UIDatePicker()
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
+        
         
         // Создаем кнопку с UIDatePicker
         let dateBarButton = UIBarButtonItem(customView: datePicker)
