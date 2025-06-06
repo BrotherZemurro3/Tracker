@@ -6,7 +6,7 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
     private let hasOnboardedKey = "hasOnboarded"
     private lazy var fowardToTrackersButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle("button.onboard.title".localized, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 16

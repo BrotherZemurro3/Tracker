@@ -78,6 +78,14 @@ class CreateRegularTrackerViewController: UIViewController {
         textField.clipsToBounds = true
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         textField.delegate = self
+        // RTL support
+        if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {
+            textField.semanticContentAttribute = .forceRightToLeft
+            textField.semanticContentAttribute = .forceRightToLeft
+            textField.textAlignment = .right
+        } else {
+            textField.textAlignment = .natural
+        }
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftView = paddingView
         textField.leftViewMode = .always

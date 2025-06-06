@@ -19,7 +19,7 @@ final class RedOnboardingViewController: UIViewController {
     
     func setupLabel() {
         let redOnboardingLabel = UILabel()
-        redOnboardingLabel.text = "Даже если это не литры воды и йога"
+        redOnboardingLabel.text = "redOnboardingLabel.title".localized
         redOnboardingLabel.textColor = UIColor(named: "black[day]")
         redOnboardingLabel.font = .systemFont(ofSize: 32, weight: .bold)
         redOnboardingLabel.numberOfLines = 0

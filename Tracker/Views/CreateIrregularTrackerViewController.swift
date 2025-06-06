@@ -75,6 +75,14 @@ class CreateIrregularTrackerViewController: UIViewController {
         textField.leftViewMode = .always
         textField.rightView = paddingView
         textField.rightViewMode = .always
+        // RTL support
+        if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {
+            textField.semanticContentAttribute = .forceRightToLeft
+            textField.semanticContentAttribute = .forceRightToLeft
+            textField.textAlignment = .right
+        } else {
+            textField.textAlignment = .natural
+        }
         
         errorLabel.text = "errorLabel.title".localized
         errorLabel.font = .systemFont(ofSize: 17)

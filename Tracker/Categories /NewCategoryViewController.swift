@@ -14,6 +14,14 @@ final class NewCategoryViewController: UIViewController {
         textField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.rightViewMode = .always
         textField.translatesAutoresizingMaskIntoConstraints = false
+        // RTL support
+        if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {
+            textField.semanticContentAttribute = .forceRightToLeft
+            textField.semanticContentAttribute = .forceRightToLeft
+            textField.textAlignment = .right
+        } else {
+            textField.textAlignment = .natural
+        }
         return textField
     }()
     

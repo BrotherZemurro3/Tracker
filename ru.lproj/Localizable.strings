@@ -56,3 +56,8 @@
 
 // Design
 "colorLabel.title" = "Цвет";
+
+// Онбординг
+"button.onboard.title" = "Вот это технологии!";
+"redOnboardingLabel.title" = "Даже если это не литры воды и йога";
+"blueOnboardinglabel.title" = "Отслеживайте только то, что хотите";

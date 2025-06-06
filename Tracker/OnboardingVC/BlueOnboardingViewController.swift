@@ -20,7 +20,7 @@ final class BlueOnboardingViewController: UIViewController {
     
     private func setupLabel() {
         let blueOnboardinglabel = UILabel()
-        blueOnboardinglabel.text = "Отслеживайте только то, что хотите"
+        blueOnboardinglabel.text = "blueOnboardinglabel.title".localized
         blueOnboardinglabel.textColor = UIColor(named: "black[day]")
         blueOnboardinglabel.font = .systemFont(ofSize: 32, weight: .bold)
         blueOnboardinglabel.numberOfLines = 0

@@ -62,6 +62,15 @@ class TrackersViewController: UIViewController {
         searchTrackersBar.placeholder = "search.placeholder".localized
         searchTrackersBar.translatesAutoresizingMaskIntoConstraints = false
         searchTrackersBar.searchBarStyle = .minimal
+
+        // RTL support
+        if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {
+            searchTrackersBar.semanticContentAttribute = .forceRightToLeft
+            searchTrackersBar.searchTextField.semanticContentAttribute = .forceRightToLeft
+            searchTrackersBar.searchTextField.textAlignment = .right
+        } else {
+            searchTrackersBar.searchTextField.textAlignment = .natural
+        }
         view.addSubview(searchTrackersBar)
         NSLayoutConstraint.activate([
             searchTrackersBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),

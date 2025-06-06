@@ -56,3 +56,8 @@
 
 // Design
 "colorLabel.title" = "צבע";
+
+// Onboarding
+"button.onboard.title" = "זו טכנולוגיה!";
+"redOnboardingLabel.title" = "גם אם זה לא ליטרים של מים ויוגה";
+"blueOnboardinglabel.title" = "עקוב רק אחרי מה שאתה רוצה";

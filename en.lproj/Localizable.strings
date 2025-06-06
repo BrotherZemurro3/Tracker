@@ -56,3 +56,9 @@
 
 // Design
 "colorLabel.title" = "Color";
+
+// Onboarding
+"button.onboard.title" = "Wow, that’s technology!";
+"redOnboardingLabel.title" = "Even if it’s not liters of water and yoga";
+
+"blueOnboardinglabel.title" = "Track only what you want";
