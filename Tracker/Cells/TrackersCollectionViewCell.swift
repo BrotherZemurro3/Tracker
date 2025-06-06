@@ -54,7 +54,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         emojiLabel.textAlignment = .center
         coloredBackgroundView.addSubview(emojiLabel)
         
-        titleLabel.textAlignment = .left
+        titleLabel.textAlignment = .natural
         titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
         titleLabel.numberOfLines = 2
         titleLabel.textColor = .white
@@ -128,21 +128,11 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         actionButton.isEnabled = !isFutureDate 
     }
     private func updateDaysCountText() {
-        let dayString = formatDaysCount(completedDays)
+        let dayString = String.localizedStringWithFormat(
+            NSLocalizedString("days_count", comment: "Number of days"),
+            completedDays
+        )
         daysCountLabel.text = "\(completedDays) \(dayString)"
-    }
-    
-    private func formatDaysCount(_ count: Int) -> String {
-        let remainder10 = count % 10
-        let remainder100 = count % 100
-        
-        if remainder10 == 1 && remainder100 != 11 {
-            return "день"
-        } else if remainder10 >= 2 && remainder10 <= 4 && (remainder100 < 10 || remainder100 >= 20) {
-            return "дня"
-        } else {
-            return "дней"
-        }
     }
     
     private func updateButtonAppearance(animated: Bool = true) {

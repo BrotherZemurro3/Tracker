@@ -74,6 +74,7 @@ class CreateRegularTrackerViewController: UIViewController {
         textField.placeholder = "textField.placeholder".localized
         textField.backgroundColor = UIColor(named: "lightGray")
         textField.layer.cornerRadius = 16
+        textField.textAlignment = .natural
         textField.clipsToBounds = true
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         textField.delegate = self

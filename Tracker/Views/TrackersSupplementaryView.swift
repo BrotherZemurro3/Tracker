@@ -9,7 +9,7 @@ final class TrackersSupplementaryView: UICollectionReusableView {
         super.init(frame: frame)
         
         titleLabel.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-        titleLabel.textAlignment = .left
+        titleLabel.textAlignment = .natural
         titleLabel.textColor = .black
         addSubview(titleLabel)
         

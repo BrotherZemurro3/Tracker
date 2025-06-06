@@ -112,8 +112,9 @@ class TrackersViewController: UIViewController {
         let datePicker = UIDatePicker()
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
+        datePicker.locale = Locale.current
+        datePicker.calendar = Calendar.current
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
-        
         
         // Создаем кнопку с UIDatePicker
         let dateBarButton = UIBarButtonItem(customView: datePicker)
