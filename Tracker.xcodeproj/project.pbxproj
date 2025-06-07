@@ -34,13 +34,13 @@
 		3A64C2122DF1E431008CE91D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3A64C2132DF1E432008CE91D /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3A64C21B2DF2D0F8008CE91D /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
-		3A64C2242DF30318008CE91D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = "en.lproj/Localizable 2.stringsdict"; sourceTree = "<group>"; };
 		3A64C2262DF30773008CE91D /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		3A64C2272DF30774008CE91D /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = he; path = he.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		3A64C2282DF30775008CE91D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		3A7873542D9176E6001606FE /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A78736E2D9176E8001606FE /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A7873782D9176E8001606FE /* TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3AAA3CEE2DF44BBD006E6B98 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		3AC8DA352D982C83003DC720 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -321,10 +321,10 @@
 		3A64C2232DF30318008CE91D /* Localizable.stringsdict */ = {
 			isa = PBXVariantGroup;
 			children = (
-				3A64C2242DF30318008CE91D /* en */,
 				3A64C2262DF30773008CE91D /* de */,
 				3A64C2272DF30774008CE91D /* he */,
 				3A64C2282DF30775008CE91D /* ru */,
+				3AAA3CEE2DF44BBD006E6B98 /* en */,
 			);
 			name = Localizable.stringsdict;
 			sourceTree = "<group>";
