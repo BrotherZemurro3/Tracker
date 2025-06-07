@@ -91,6 +91,42 @@ extension TrackersCollectionView: UICollectionViewDelegateFlowLayout {
         return CGSize(width: width, height: 158)
     }
     
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            // Создаем меню с действиями
+            return self.makeContextMenu(for: indexPath)
+        }
+    }
+    
+    private func makeContextMenu(for indexPath: IndexPath) -> UIMenu {
+        // Действия
+        let edit = UIAction(title: "Редактировать", image: UIImage(systemName: "pencil")) { _ in
+            self.editItem(at: indexPath)
+        }
+        
+        let delete = UIAction(title: "Удалить", image: UIImage(systemName: "trash"), attributes: .destructive) { _ in
+            self.deleteItem(at: indexPath)
+        }
+        
+        // Создание меню
+        return UIMenu(title: "", children: [edit, delete])
+    }
+    
+    private func editItem(at indexPath: IndexPath) {
+        // Реализация редактирования
+        print("Редактировать элемент в секции \(indexPath.section), строке \(indexPath.row)")
+    }
+    
+    private func deleteItem(at indexPath: IndexPath) {
+        // Реализация удаления
+        print("Удалить элемент в секции \(indexPath.section), строке \(indexPath.row)")
+        
+        // удаление из данных и коллекции
+      //  yourDataArray.remove(at: indexPath.row)
+       // collectionView.deleteItems(at: [indexPath])
+    }
+
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     }
@@ -98,6 +134,7 @@ extension TrackersCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 1
     }
+    
     // Расстояние между строками ячеек по горизонтали
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 9
