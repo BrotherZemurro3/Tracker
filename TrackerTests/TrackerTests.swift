@@ -15,6 +15,7 @@ final class TrackerTests: XCTestCase {
         let vc = TrackersViewController()
         
         
+        
         assertSnapshot(matching: vc, as: .image)
     }
 }

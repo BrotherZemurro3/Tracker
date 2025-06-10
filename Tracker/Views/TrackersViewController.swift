@@ -12,7 +12,7 @@ class TrackersViewController: UIViewController {
     private let whatGoingToTrackLabel = UILabel()
     private let imageView: UIImageView
     private var currentDate = Date()
-
+private let colors = Colors()
     // MARK: - Инициализация
     init(trackersService: TrackersServiceProtocol = TrackersService()) {
         self.trackersService = trackersService
@@ -28,7 +28,7 @@ class TrackersViewController: UIViewController {
     // MARK: - Жизненный цикл
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = colors.viewBackgroundColor
         setupUI()
         navigationTabBarAppearance()
         setupCollectionView()
@@ -112,8 +112,12 @@ class TrackersViewController: UIViewController {
         
         // Кнопка с иконкой "плюс"
         let addButton = UIButton(type: .custom)
-        addButton.setImage(UIImage(named: "addTracker")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)), for: .normal)
-        addButton.addTarget(self, action: #selector(buttonTappedPlus), for: .touchUpInside)
+        addButton.setImage(UIImage(named: "addTracker")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)) .withRenderingMode(.alwaysTemplate), for: .normal)
+        addButton.tintColor = .label
+                addButton.addTarget(self, action: #selector(buttonTappedPlus), for: .touchUpInside)
+                
+        
+
         let addBarButton = UIBarButtonItem(customView: addButton)
         navigationItem.leftBarButtonItem = addBarButton
         
