@@ -5,9 +5,10 @@ class SelectionStateOfTrackerViewController: UIViewController {
     private let habitButton = UIButton()
     private let irregularHabitButton = UIButton()
    private  let createTrackerLabel = UILabel()
+    private let colors = Colors.shared
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = colors.viewBackgroundColor
         setupUI()
     }
     
@@ -23,8 +24,8 @@ class SelectionStateOfTrackerViewController: UIViewController {
         // Кнопка привычки
         habitButton.setTitle("habit.title".localized, for: .normal)
         habitButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        habitButton.backgroundColor = .black
-        habitButton.setTitleColor(.white, for: .normal)
+        habitButton.backgroundColor = Colors.shared.adaptiveButtonBackground
+        habitButton.setTitleColor(Colors.shared.adaptiveButtonText, for: .normal)
         habitButton.layer.cornerRadius = 16
         habitButton.addTarget(self, action: #selector(chooseHabit), for: .touchUpInside)
         habitButton.translatesAutoresizingMaskIntoConstraints = false
@@ -33,8 +34,8 @@ class SelectionStateOfTrackerViewController: UIViewController {
         // Кнопка нерегулярного события
         irregularHabitButton.setTitle("irregularEvent.title".localized, for: .normal)
         irregularHabitButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        irregularHabitButton.backgroundColor = .black
-        irregularHabitButton.setTitleColor(.white, for: .normal)
+        irregularHabitButton.backgroundColor = Colors.shared.adaptiveButtonBackground
+        irregularHabitButton.setTitleColor(Colors.shared.adaptiveButtonText, for: .normal)
         irregularHabitButton.layer.cornerRadius = 16
         irregularHabitButton.addTarget(self, action: #selector(chooseIrregular), for: .touchUpInside)
         irregularHabitButton.translatesAutoresizingMaskIntoConstraints = false

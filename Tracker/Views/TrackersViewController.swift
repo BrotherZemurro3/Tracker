@@ -12,7 +12,7 @@ class TrackersViewController: UIViewController {
     private let whatGoingToTrackLabel = UILabel()
     private let imageView: UIImageView
     private var currentDate = Date()
-private let colors = Colors()
+    private let colors = Colors.shared
     // MARK: - Инициализация
     init(trackersService: TrackersServiceProtocol = TrackersService()) {
         self.trackersService = trackersService
