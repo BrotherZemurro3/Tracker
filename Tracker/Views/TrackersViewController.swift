@@ -43,6 +43,15 @@ class TrackersViewController: UIViewController {
         imageView.isHidden = !isEmpty
         whatGoingToTrackLabel.isHidden = !isEmpty
         collectionView.isHidden = isEmpty // Добавляем скрытие коллекции при пустом состоянии
+        
+        if let searchText = searchTrackersBar.text, !searchText.isEmpty {
+            imageView.image = UIImage(named: "nothingToSearch")
+            whatGoingToTrackLabel.text = "Ничего не найдено".localized
+        } else {
+            imageView.image = imageForEmptyStatisticList
+            whatGoingToTrackLabel.text = "whatGoingToTrackLabel.title".localized
+        }
+        
     }
     
     // MARK: - Настройка UI
@@ -62,7 +71,7 @@ class TrackersViewController: UIViewController {
         searchTrackersBar.placeholder = "search.placeholder".localized
         searchTrackersBar.translatesAutoresizingMaskIntoConstraints = false
         searchTrackersBar.searchBarStyle = .minimal
-
+       
         // RTL support
         if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {
             searchTrackersBar.semanticContentAttribute = .forceRightToLeft
@@ -182,15 +191,34 @@ extension TrackersViewController: TrackerCreationDelegate {
 }
 // MARK: - UISearchBarDelegate
 extension TrackersViewController: UISearchBarDelegate {
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        // Скрываю клавиатуру при нажатии на кнопку "Search" или "Готово"
-        searchBar.resignFirstResponder()
-        
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+
+        viewModel.loadTrackers(for: currentDate, searchText: searchText.isEmpty ? nil : searchText)
     }
-    // Скрываю клавиатуру при начале скролла Test
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         searchTrackersBar.resignFirstResponder()
     }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        searchBar.setShowsCancelButton(false, animated: true)
+        searchBar.resignFirstResponder()
+        viewModel.loadTrackers(for: currentDate)
+    }
+    // Скрываем кнопку "Отмена" при завершении поиска (если нужно)
+      func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+          searchBar.setShowsCancelButton(false, animated: true)
+      }
+    
 }
 extension UIViewController {
     func setupHideKeyboardOnTap() {
@@ -203,6 +231,8 @@ extension UIViewController {
         view.endEditing(true) // Скрывает все текстовые поля и клавиатуру
     }
 }
+
+
 /*
  // Превью
  #if DEBUG
