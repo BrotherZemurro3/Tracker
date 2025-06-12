@@ -58,7 +58,6 @@ protocol TrackersServiceProtocol {
     func completeTracker(id: UUID, date: Date)
     func uncompleteTracker(id: UUID, date: Date)
     func getTrackers(for date: Date, searchText: String?) -> [TrackerCategory]
-    
 }
 
 // MARK: - Trackers Service Implementation

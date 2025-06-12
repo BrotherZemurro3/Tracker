@@ -12,6 +12,7 @@ class TrackersViewController: UIViewController {
     private let whatGoingToTrackLabel = UILabel()
     private let imageView: UIImageView
     private var currentDate = Date()
+    private lazy var filtersButton = UIButton()
     private let colors = UIColors.shared
     // MARK: - Инициализация
     init(trackersService: TrackersServiceProtocol = TrackersService()) {
@@ -36,6 +37,7 @@ class TrackersViewController: UIViewController {
         viewModel.loadTrackers(for: currentDate)
         updateEmptyStateVisibility()
         setupHideKeyboardOnTap()
+        setupFiltersButton()
     }
     // MARK: - Обновление состояния пустого списка
     private func updateEmptyStateVisibility() {
@@ -107,9 +109,27 @@ class TrackersViewController: UIViewController {
             whatGoingToTrackLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor), // Центр по X
             whatGoingToTrackLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
             whatGoingToTrackLabel.leadingAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            whatGoingToTrackLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+            whatGoingToTrackLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
         ])
     }
+    
+    private func setupFiltersButton() {
+           filtersButton.setTitle("Фильтры", for: .normal)
+           filtersButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+           filtersButton.setTitleColor(.white, for: .normal)
+           filtersButton.backgroundColor = .blue // Или ваш цвет из UIColors
+           filtersButton.layer.cornerRadius = 16
+           filtersButton.addTarget(self, action: #selector(filtersButtonTapped), for: .touchUpInside)
+           filtersButton.translatesAutoresizingMaskIntoConstraints = false
+           view.addSubview(filtersButton)
+           
+           NSLayoutConstraint.activate([
+               filtersButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+               filtersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+               filtersButton.widthAnchor.constraint(equalToConstant: 114),
+               filtersButton.heightAnchor.constraint(equalToConstant: 50)
+           ])
+       }
     // MARK: - NavigationTabBar
     private func navigationTabBarAppearance() {
         // Внешний вид навигационного бара
@@ -156,7 +176,7 @@ class TrackersViewController: UIViewController {
         print("Выбрана дата: \(currentDate), день недели: \(weekday)")
         viewModel.loadTrackers(for: currentDate)
     }
-    
+    @objc private func filtersButtonTapped() {}
     
     // MARK: - Настройка CollectionView
     private func setupCollectionView() {
