@@ -68,8 +68,6 @@
 		};
 		3AAA3CF52DF4556B006E6B98 /* TrackerTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = TrackerTests;
 			sourceTree = "<group>";
 		};
@@ -106,7 +104,6 @@
 				DA8EA68FDCB85E6FB06B0042 /* Pods-TrackerTests.debug.xcconfig */,
 				D03F8878E1C8C19C3F7A1C1A /* Pods-TrackerTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

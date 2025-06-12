@@ -135,6 +135,7 @@ class TrackersViewController: UIViewController {
     }
     // MARK: - Обработчики событий
     @objc private func buttonTappedPlus() {
+        AnalyticsService.shared.report(event: "addTapped", screen: "main")
         let selectionVC = SelectionStateOfTrackerViewController()
         selectionVC.delegate = self
         let navController = UINavigationController(rootViewController: selectionVC)

@@ -37,6 +37,15 @@ final class TabBarController: UITabBarController {
         self.delegate = self
         view.backgroundColor = .lightGray
     }
+    override func viewDidAppear(_ animated: Bool) {
+          super.viewDidAppear(animated)
+          AnalyticsService.shared.report(event: "opened", screen: "Main")
+      }
+
+      override func viewWillDisappear(_ animated: Bool) {
+          super.viewWillDisappear(animated)
+          AnalyticsService.shared.report(event: "closed", screen: "Main")
+      }
     
     private func setupTabBar() {
         var controllers: [UIViewController] = []

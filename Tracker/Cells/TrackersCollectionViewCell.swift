@@ -169,6 +169,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         
         guard !isFutureDate else {
             print("Нельзя отмечать трекеры на будущие даты")
+            AnalyticsService.shared.report(event: "click", screen: "tackerCell", item: "track")
             return
         }
         
@@ -184,11 +185,21 @@ class TrackersCollectionViewCell: UICollectionViewCell {
                     self.completedDays = max(0, self.completedDays - 1)
                     self.isCompletedToday = false
                     self.onActionButtonTapped?(trackerId, false)
+                    AnalyticsService.shared.report(
+                                           event: "click",
+                                           screen: "Main",
+                                           item: "untrack"
+                                       )
                 } else {
                     // Если не выполнено - отмечаю
                     self.completedDays += 1
                     self.isCompletedToday = true
                     self.onActionButtonTapped?(trackerId, true)
+                    AnalyticsService.shared.report(
+                                           event: "click",
+                                           screen: "Main",
+                                           item: "track"
+                                       )
                 }
                 
                 self.updateDaysCountText()
