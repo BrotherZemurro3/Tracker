@@ -37,6 +37,7 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate, TrackerS
         entity.schedule = tracker.schedule?.map { String($0.rawValue) }.joined(separator: ",")
         entity.isRegular = tracker.isRegular
         entity.creationDate = tracker.creationDate
+        entity.isPinned = tracker.isPinned
         entity.category = categoryCoreData
         print("Saving tracker: \(tracker.title) to category: \(categoryTitle)")
         try context.save()
@@ -56,8 +57,34 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate, TrackerS
                     .compactMap { Weekday(rawValue: $0) },
                 isCompleted: false,
                 isRegular: trackerCoreData.isRegular,
-                creationDate: trackerCoreData.creationDate ?? Date()
+                creationDate: trackerCoreData.creationDate ?? Date(),
+                isPinned: trackerCoreData.isPinned
             )
+        }
+    }
+    
+    func pinTracker(_ trackerId: UUID) throws {
+            let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", trackerId as CVarArg)
+            
+            let trackers = try context.fetch(request)
+            if let tracker = trackers.first {
+                tracker.isPinned = true
+                try context.save()
+                print("Закреплен трекер: \(trackerId)")
+            }
+        }
+    
+    func unpinTracker(_ trackerId: UUID) throws {
+            let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", trackerId as CVarArg)
+            
+            let trackers = try context.fetch(request)
+            if let tracker = trackers.first {
+                tracker.isPinned = false
+                try context.save()
+                print("Откреплен трекер: \(trackerId)")
+            }
         }
     }
     

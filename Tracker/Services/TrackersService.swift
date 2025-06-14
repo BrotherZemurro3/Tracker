@@ -10,6 +10,7 @@ struct Tracker {
     let isCompleted: Bool
     let isRegular: Bool
     let creationDate: Date
+    let isPinned: Bool
     
     
     func withCompletedState(_ isCompleted: Bool) -> Tracker {
@@ -21,7 +22,8 @@ struct Tracker {
             schedule: schedule,
             isCompleted: isCompleted,
             isRegular: isRegular,
-            creationDate: creationDate
+            creationDate: creationDate,
+            isPinned: isPinned
             
         )
     }
