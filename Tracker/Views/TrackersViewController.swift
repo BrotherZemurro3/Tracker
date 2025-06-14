@@ -181,6 +181,7 @@ class TrackersViewController: UIViewController {
     // MARK: - Настройка CollectionView
     private func setupCollectionView() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.deleteDelegate = self 
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
@@ -249,6 +250,24 @@ extension UIViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true) // Скрывает все текстовые поля и клавиатуру
+    }
+}
+
+extension TrackersViewController: TrackersCollectionViewDelegate {
+    
+    func didRequestDeleteTracker(_ trackerId: UUID) {
+        let alert = UIAlertController(title: "",
+                                  message: "Вы уверены, что хотите удалить этот трекер?",
+                                  preferredStyle: .actionSheet)
+        
+        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+            self?.viewModel.deleteTracker(id: trackerId)
+        }
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+        
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: true)
     }
 }
 

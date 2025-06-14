@@ -23,7 +23,7 @@ final class TrackersViewModel {
     func loadTrackers(for date: Date, searchText: String? = nil) {
         currentDate = date
         let loadedTrackers = trackersService.getTrackers(for: date, searchText: searchText)
-        
+        trackers = loadedTrackers.filter { !$0.trackers.isEmpty }
         // Обновляем статус выполнения трекеров
         trackers = loadedTrackers.map { category in
             let updatedTrackers = category.trackers.map { tracker in
@@ -42,6 +42,11 @@ final class TrackersViewModel {
     func addTracker(_ tracker: Tracker, to categoryTitle: String) {
         print("Добавляем трекер:", tracker)
         trackersService.addTracker(tracker, to: categoryTitle)
+        loadTrackers(for: currentDate)
+    }
+    func deleteTracker(id: UUID) {
+        print("Удаляем трекер с ID: \(id)")
+        trackersService.deleteTracker(id)
         loadTrackers(for: currentDate)
     }
     // Возвращение количество выполненных дней для трекера

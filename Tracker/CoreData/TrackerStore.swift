@@ -61,6 +61,16 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate, TrackerS
         }
     }
     
+    func deleteTracker(_ trackerId: UUID) throws {
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", trackerId as CVarArg)
+        
+        let trackers = try context.fetch(request)
+        trackers.forEach { context.delete($0) }
+        try context.save()
+        print("Удалён трекер: \(trackerId)")
+    }
+    
     private func setupFetchedResultsController() {
         let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]

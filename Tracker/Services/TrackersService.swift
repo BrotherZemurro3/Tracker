@@ -58,6 +58,8 @@ protocol TrackersServiceProtocol {
     func completeTracker(id: UUID, date: Date)
     func uncompleteTracker(id: UUID, date: Date)
     func getTrackers(for date: Date, searchText: String?) -> [TrackerCategory]
+    func deleteTracker(_ trackerId: UUID)
+    
 }
 
 // MARK: - Trackers Service Implementation
@@ -103,6 +105,16 @@ final class TrackersService: TrackersServiceProtocol {
             print("Ошибка при добавлении трекера: \(error)")
         }
     }
+    func deleteTracker(_ trackerId: UUID) {
+        do {
+            let records = try recordStore.fetchRecords().filter { $0.id == trackerId }
+            try records.forEach { try recordStore.deleteRecord($0) }
+            try trackerStore.deleteTracker(trackerId)
+            loadInitialData()
+        } catch {
+            print("Ошибка при удалении трекера: \(error)")
+        }
+    }
     
     func completeTracker(id: UUID, date: Date) {
         do {
@@ -126,8 +138,8 @@ final class TrackersService: TrackersServiceProtocol {
         let weekday = Calendar.current.component(.weekday, from: date)
         guard let currentWeekday = Weekday(rawValue: weekday) else { return [] }
         
-        return categories.compactMap { category in
-            let trackers = category.trackers.filter { tracker in
+        let filteredCategories = categories.compactMap { category in
+                let trackers = category.trackers.filter { tracker in
                 let matchesSearch: Bool
                 if let searchText = searchText?.lowercased(), !searchText.isEmpty {
                     matchesSearch = tracker.title.lowercased().contains(searchText)
@@ -151,6 +163,7 @@ final class TrackersService: TrackersServiceProtocol {
             }
             return trackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: trackers)
         }
+        return filteredCategories
     }
     
     // MARK: - loadDataFromCoreData

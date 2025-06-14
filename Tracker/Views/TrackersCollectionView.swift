@@ -1,9 +1,14 @@
 import UIKit
 
+protocol TrackersCollectionViewDelegate: AnyObject {
+    func didRequestDeleteTracker(_ trackerId: UUID)
+}
+
 final class TrackersCollectionView: UICollectionView {
     private var viewModel: TrackersViewModel
     private var currentDate: Date = Date()
-    
+    weak var deleteDelegate: TrackersCollectionViewDelegate?
+
     init(viewModel: TrackersViewModel) {
         self.viewModel = viewModel
         let layout = UICollectionViewFlowLayout()
@@ -119,11 +124,9 @@ extension TrackersCollectionView: UICollectionViewDelegateFlowLayout {
     
     private func deleteItem(at indexPath: IndexPath) {
         // Реализация удаления
+        let tracker = viewModel.trackers[indexPath.section].trackers[indexPath.row]
         print("Удалить элемент в секции \(indexPath.section), строке \(indexPath.row)")
-        
-        // удаление из данных и коллекции
-      //  yourDataArray.remove(at: indexPath.row)
-       // collectionView.deleteItems(at: [indexPath])
+        deleteDelegate?.didRequestDeleteTracker(tracker.id)
     }
 
     
