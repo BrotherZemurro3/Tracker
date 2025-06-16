@@ -61,7 +61,8 @@ protocol TrackersServiceProtocol {
     func uncompleteTracker(id: UUID, date: Date)
     func getTrackers(for date: Date, searchText: String?) -> [TrackerCategory]
     func deleteTracker(_ trackerId: UUID)
-    
+    func pinTracker(_ trackerId: UUID)
+    func unpinTracker(_ trackerId: UUID)
 }
 
 // MARK: - Trackers Service Implementation
@@ -135,6 +136,22 @@ final class TrackersService: TrackersServiceProtocol {
             print("Ошибка при удалении записи трекера: \(error)")
         }
     }
+    func pinTracker(_ trackerId: UUID) {
+            do {
+                try trackerStore.updateTrackerPinnedState(trackerId, isPinned: true)
+                loadInitialData()
+            } catch {
+                print("Ошибка при закреплении трекера: \(error)")
+            }
+        }
+    func unpinTracker(_ trackerId: UUID) {
+            do {
+                try trackerStore.updateTrackerPinnedState(trackerId, isPinned: false)
+                loadInitialData()
+            } catch {
+                print("Ошибка при откреплении трекера: \(error)")
+            }
+        }
     
     func getTrackers(for date: Date, searchText: String?) -> [TrackerCategory] {
         let weekday = Calendar.current.component(.weekday, from: date)
@@ -163,7 +180,8 @@ final class TrackersService: TrackersServiceProtocol {
                 let matchesSchedule = tracker.schedule?.contains(currentWeekday) ?? true
                 return matchesSearch && matchesSchedule
             }
-            return trackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: trackers)
+            let sortedTrackers = trackers.sorted { $0.isPinned && !$1.isPinned }
+            return sortedTrackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: sortedTrackers)
         }
         return filteredCategories
     }

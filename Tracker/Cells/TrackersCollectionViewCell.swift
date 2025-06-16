@@ -3,15 +3,18 @@ import UIKit
 class TrackersCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "TrackerCell"
     var onActionButtonTapped: ((UUID, Bool) -> Void)?
+    var onPinTapped: ((UUID) -> Void)?
     private let coloredBackgroundView = UIView()
     private let titleLabel = UILabel()
     private let emojiLabel = UILabel()
     private let emojiBackgroundView = UIView()
+    private let pinImageView = UIImageView()
     private let actionButton = UIButton(type: .system)
     private let daysCountLabel = UILabel()
     private let padding: CGFloat = 12
     private var trackerId: UUID?
     private var isCompletedToday: Bool = false
+    private var isPinned: Bool = false
     private var completedDays: Int = 0
     var currentDate = Date()
     private var colors = UIColors.shared
@@ -55,6 +58,12 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         emojiLabel.textAlignment = .center
         coloredBackgroundView.addSubview(emojiLabel)
         
+        // Настройка иконки булавки
+                pinImageView.translatesAutoresizingMaskIntoConstraints = false
+        pinImageView.image = UIImage(systemName: "pin.fill")?.withTintColor(.white)
+                pinImageView.isHidden = true // Скрыта по умолчанию
+                coloredBackgroundView.addSubview(pinImageView)
+        
         titleLabel.textAlignment = .natural
         titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
         titleLabel.numberOfLines = 2
@@ -87,6 +96,12 @@ class TrackersCollectionViewCell: UICollectionViewCell {
             emojiLabel.widthAnchor.constraint(equalToConstant: 24),
             emojiLabel.heightAnchor.constraint(equalToConstant: 24),
             
+            // Иконка булавки
+                        pinImageView.topAnchor.constraint(equalTo: coloredBackgroundView.topAnchor, constant: padding),
+                        pinImageView.trailingAnchor.constraint(equalTo: coloredBackgroundView.trailingAnchor, constant: -padding),
+                        pinImageView.widthAnchor.constraint(equalToConstant: 24),
+                        pinImageView.heightAnchor.constraint(equalToConstant: 24),
+            
             // Название трекера
             titleLabel.leadingAnchor.constraint(equalTo: coloredBackgroundView.leadingAnchor, constant: padding),
             titleLabel.trailingAnchor.constraint(equalTo: coloredBackgroundView.trailingAnchor, constant: -padding),
@@ -109,6 +124,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         self.completedDays = completedDays
         self.isCompletedToday = isCompletedToday
         self.currentDate = currentDate
+        self.isPinned = tracker.isPinned
         
         // Проверяем, является ли выбранная дата будущей
         let today = Calendar.current.startOfDay(for: Date())
@@ -119,6 +135,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         coloredBackgroundView.backgroundColor = tracker.color
         titleLabel.text = tracker.title
         emojiLabel.text = tracker.emoji
+        pinImageView.isHidden = !tracker.isPinned
         
         updateDaysCountText()
         updateButtonAppearance()
@@ -207,4 +224,8 @@ class TrackersCollectionViewCell: UICollectionViewCell {
             }
         }
     }
+    override func prepareForReuse() {
+            super.prepareForReuse()
+            pinImageView.isHidden = true
+        }
 }

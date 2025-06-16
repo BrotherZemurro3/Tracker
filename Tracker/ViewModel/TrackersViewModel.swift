@@ -49,6 +49,18 @@ final class TrackersViewModel {
         trackersService.deleteTracker(id)
         loadTrackers(for: currentDate)
     }
+    
+    func pinTracker(id: UUID) {
+            print("Закрепляем трекер с ID: \(id)")
+            trackersService.pinTracker(id)
+            loadTrackers(for: currentDate)
+        }
+
+        func unpinTracker(id: UUID) {
+            print("Открепляем трекер с ID: \(id)")
+            trackersService.unpinTracker(id)
+            loadTrackers(for: currentDate)
+        }
     // Возвращение количество выполненных дней для трекера
     func getCompletedDaysCount(for trackerId: UUID) -> Int {
         let completed = trackersService.completedTrackers.filter { $0.id == trackerId }

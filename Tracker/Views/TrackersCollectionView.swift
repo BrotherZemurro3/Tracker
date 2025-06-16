@@ -2,6 +2,7 @@ import UIKit
 
 protocol TrackersCollectionViewDelegate: AnyObject {
     func didRequestDeleteTracker(_ trackerId: UUID)
+    func didRequestPinTracker(_ trackerId: UUID, isPinned: Bool)
 }
 
 final class TrackersCollectionView: UICollectionView {
@@ -104,17 +105,27 @@ extension TrackersCollectionView: UICollectionViewDelegateFlowLayout {
     }
     
     private func makeContextMenu(for indexPath: IndexPath) -> UIMenu {
-        // Действия
-        let edit = UIAction(title: "Редактировать", image: UIImage(systemName: "pencil")) { _ in
-            self.editItem(at: indexPath)
+        let tracker = viewModel.trackers[indexPath.section].trackers[indexPath.row]
+        
+        // Действие для закрепления/открепления
+        let pinTitle = tracker.isPinned ? "Открепить" : "Закрепить"
+        let pinImage = UIImage(systemName: tracker.isPinned ? "pin.slash" : "pin")
+        let pinAction = UIAction(title: pinTitle, image: pinImage) { [weak self] _ in
+            self?.deleteDelegate?.didRequestPinTracker(tracker.id, isPinned: !tracker.isPinned)
         }
         
-        let delete = UIAction(title: "Удалить", image: UIImage(systemName: "trash"), attributes: .destructive) { _ in
-            self.deleteItem(at: indexPath)
+        // Действие для редактирования
+        let editAction = UIAction(title: "Редактировать", image: UIImage(systemName: "pencil")) { [weak self] _ in
+            self?.editItem(at: indexPath)
+        }
+        
+        // Действие для удаления
+        let deleteAction = UIAction(title: "Удалить", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
+            self?.deleteItem(at: indexPath)
         }
         
         // Создание меню
-        return UIMenu(title: "", children: [edit, delete])
+        return UIMenu(title: "", children: [pinAction, editAction, deleteAction])
     }
     
     private func editItem(at indexPath: IndexPath) {

@@ -269,6 +269,13 @@ extension TrackersViewController: TrackersCollectionViewDelegate {
         alert.addAction(cancelAction)
         present(alert, animated: true)
     }
+    func didRequestPinTracker(_ trackerId: UUID, isPinned: Bool) {
+          if isPinned {
+              viewModel.pinTracker(id: trackerId)
+          } else {
+              viewModel.unpinTracker(id: trackerId)
+          }
+      }
 }
 
 

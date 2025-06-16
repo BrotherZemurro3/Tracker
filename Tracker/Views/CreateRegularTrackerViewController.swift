@@ -325,7 +325,8 @@ class CreateRegularTrackerViewController: UIViewController {
             schedule: selectedDays,
             isCompleted: false,
             isRegular: true,
-            creationDate: Date()
+            creationDate: Date(),
+            isPinned: false
         )
         
         delegate?.didCreateTracker(newTracker, in: selectedCategory)

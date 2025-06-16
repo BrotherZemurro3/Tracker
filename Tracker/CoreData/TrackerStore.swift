@@ -63,30 +63,18 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate, TrackerS
         }
     }
     
-    func pinTracker(_ trackerId: UUID) throws {
-            let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
-            request.predicate = NSPredicate(format: "id == %@", trackerId as CVarArg)
-            
-            let trackers = try context.fetch(request)
-            if let tracker = trackers.first {
-                tracker.isPinned = true
-                try context.save()
-                print("Закреплен трекер: \(trackerId)")
-            }
+    func updateTrackerPinnedState(_ trackerId: UUID, isPinned: Bool) throws {
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", trackerId as CVarArg)
+        
+        guard let tracker = try context.fetch(request).first else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Tracker not found"])
         }
-    
-    func unpinTracker(_ trackerId: UUID) throws {
-            let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
-            request.predicate = NSPredicate(format: "id == %@", trackerId as CVarArg)
-            
-            let trackers = try context.fetch(request)
-            if let tracker = trackers.first {
-                tracker.isPinned = false
-                try context.save()
-                print("Откреплен трекер: \(trackerId)")
-            }
-        }
+        tracker.isPinned = isPinned
+        try context.save()
+        print("Updated pinned state for tracker: \(trackerId) to \(isPinned)")
     }
+    
     
     func deleteTracker(_ trackerId: UUID) throws {
         let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
@@ -120,4 +108,5 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate, TrackerS
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         onChange?()
     }
+    
 }

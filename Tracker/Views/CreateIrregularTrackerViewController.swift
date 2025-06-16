@@ -299,7 +299,8 @@ class CreateIrregularTrackerViewController: UIViewController {
             schedule: nil,
             isCompleted: false,
             isRegular: false,
-            creationDate: Date()
+            creationDate: Date(),
+            isPinned: false
         )
         
         delegate?.didCreateTracker(newTracker, in: selectedCategory)
