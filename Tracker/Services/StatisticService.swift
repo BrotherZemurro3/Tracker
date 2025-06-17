@@ -1,6 +1,6 @@
 import Foundation
 
-protocol StatisticServiceProtocol {
+protocol StatisticsServiceProtocol {
     func calculateStatistics(completedTrackers: [TrackerRecord], allTrackers: [Tracker]) -> Statistics
 }
 
@@ -12,10 +12,14 @@ struct Statistics {
     let averageValue: Double
     
 }
+struct StatisticsItem {
+    let title: String
+    let value: Int
+}
 
 
 
-final class StatisticService: StatisticServiceProtocol {
+final class StatisticsService: StatisticsServiceProtocol {
     
     func calculateStatistics(completedTrackers: [TrackerRecord], allTrackers: [Tracker]) -> Statistics {
         
