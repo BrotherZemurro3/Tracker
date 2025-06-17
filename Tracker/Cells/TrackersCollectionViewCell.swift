@@ -60,7 +60,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         
         // Настройка иконки булавки
                 pinImageView.translatesAutoresizingMaskIntoConstraints = false
-        pinImageView.image = UIImage(systemName: "pin.fill")?.withTintColor(.white)
+        pinImageView.image = UIImage(systemName: "pin.fill")
                 pinImageView.isHidden = true // Скрыта по умолчанию
                 coloredBackgroundView.addSubview(pinImageView)
         
@@ -99,8 +99,8 @@ class TrackersCollectionViewCell: UICollectionViewCell {
             // Иконка булавки
                         pinImageView.topAnchor.constraint(equalTo: coloredBackgroundView.topAnchor, constant: padding),
                         pinImageView.trailingAnchor.constraint(equalTo: coloredBackgroundView.trailingAnchor, constant: -padding),
-                        pinImageView.widthAnchor.constraint(equalToConstant: 24),
-                        pinImageView.heightAnchor.constraint(equalToConstant: 24),
+                        pinImageView.widthAnchor.constraint(equalToConstant: 14),
+                        pinImageView.heightAnchor.constraint(equalToConstant: 14),
             
             // Название трекера
             titleLabel.leadingAnchor.constraint(equalTo: coloredBackgroundView.leadingAnchor, constant: padding),
