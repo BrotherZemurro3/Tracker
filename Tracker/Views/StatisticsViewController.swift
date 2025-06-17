@@ -105,7 +105,7 @@ final class StatisticsViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             // Title Label constraints
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             titleLabel.heightAnchor.constraint(equalToConstant: 41), // Добавлено
@@ -117,10 +117,10 @@ final class StatisticsViewController: UIViewController {
             placeholderView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             // Table View constraints
-            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 77),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: 121)
         ])
         
         updatePlaceholderVisibility()
@@ -147,3 +147,4 @@ extension StatisticsViewController: UITableViewDataSource, UITableViewDelegate {
         return 90
     }
 }
+

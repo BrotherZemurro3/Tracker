@@ -86,7 +86,7 @@ final class StatisticsCell: UITableViewCell {
             valueLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
             valueLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
             
-            titleLabel.topAnchor.constraint(equalTo: valueLabel.bottomAnchor, constant: 1), // Уменьшил отступ
+            titleLabel.topAnchor.constraint(equalTo: valueLabel.bottomAnchor, constant: 0), // Уменьшил отступ
             titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
             titleLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12)
