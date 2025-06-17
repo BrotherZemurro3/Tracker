@@ -108,7 +108,7 @@ final class StatisticsViewController: UIViewController {
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            titleLabel.heightAnchor.constraint(equalToConstant: 41), // Добавлено
+            titleLabel.heightAnchor.constraint(equalToConstant: 41),
             
             // Placeholder constraints
             placeholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
