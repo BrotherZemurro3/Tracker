@@ -71,7 +71,7 @@ final class TrackersService: TrackersServiceProtocol {
     static let shared = TrackersService()
     private(set) var categories: [TrackerCategory] = []
     private(set) var completedTrackers: [TrackerRecord] = []
-    
+    weak var statisticsUpdater: StatisticsUpdater? // Добавляем свойство
     let trackerStore: TrackerStore
     let categoryStore: TrackerCategoryStore
     let recordStore: TrackerRecordStore
@@ -88,11 +88,22 @@ final class TrackersService: TrackersServiceProtocol {
         trackerStore.onChange = { [weak self] in
             self?.loadInitialData()
         }
-        
+        NotificationCenter.default.addObserver(
+                    self,
+                    selector: #selector(contextDidSave),
+                    name: NSNotification.Name.NSManagedObjectContextDidSave,
+                    object: CoreDataManager.shared.context
+                )
         loadInitialData()
     }
-    
+    deinit {
+            NotificationCenter.default.removeObserver(self)
+        }
     // MARK: - Public Methods
+    @objc private func contextDidSave() {
+            print("Received NSManagedObjectContextDidSave at \(Date())")
+            loadInitialData()
+        }
     
     func addTracker(_ tracker: Tracker, to categoryTitle: String) {
         print("Adding tracker: \(tracker.title) to category: \(categoryTitle), ID: \(tracker.id)")
@@ -126,6 +137,7 @@ final class TrackersService: TrackersServiceProtocol {
             try recordStore.addRecord(TrackerRecord(id: id, date: date))
             loadInitialData() // Загружаем данные синхронно
             print("After completeTracker, completedTrackers: \(completedTrackers.map { "ID: \($0.id), Date: \($0.date)" })")
+            statisticsUpdater?.updateStatistics()
             NotificationCenter.default.post(name: NSNotification.Name("TrackerCompletedNotification"), object: nil)
         } catch {
             print("Ошибка при завершении трекера: \(error)")
@@ -136,6 +148,7 @@ final class TrackersService: TrackersServiceProtocol {
             try recordStore.deleteRecord(TrackerRecord(id: id, date: date))
             loadInitialData() // Загружаем данные синхронно
             print("After uncompleteTracker, completedTrackers: \(completedTrackers.map { "ID: \($0.id), Date: \($0.date)" })")
+            statisticsUpdater?.updateStatistics()
             NotificationCenter.default.post(name: NSNotification.Name("TrackerCompletedNotification"), object: nil)
         } catch {
             print("Ошибка при удалении записи трекера: \(error)")
@@ -220,6 +233,7 @@ final class TrackersService: TrackersServiceProtocol {
                 }
                 
                 categories = tempCategories
+                statisticsUpdater?.updateStatistics()
                 print("Loaded \(tempCategories.count) categories with trackers: \(tempCategories.map { "\($0.title): \($0.trackers.count)" })")
                 
                 // Отправляем уведомление после обновления данных

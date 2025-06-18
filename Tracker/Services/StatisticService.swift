@@ -4,6 +4,9 @@ protocol StatisticsServiceProtocol {
     func calculateStatistics(completedTrackers: [TrackerRecord], allTrackers: [Tracker]) -> Statistics
 }
 
+protocol StatisticsUpdater: AnyObject {
+    func updateStatistics()
+}
 
 struct Statistics {
     let bestPeriod: Int

@@ -16,7 +16,7 @@ class TrackersViewController: UIViewController {
     private let colors = UIColors.shared
     private var selectedFilter: TrackerFilter = .all 
     // MARK: - Инициализация
-    init(trackersService: TrackersServiceProtocol = TrackersService()) {
+    init(trackersService: TrackersServiceProtocol = TrackersService.shared) {
         self.trackersService = trackersService
         self.viewModel = TrackersViewModel(trackersService: trackersService)
         self.collectionView = TrackersCollectionView(viewModel: self.viewModel)

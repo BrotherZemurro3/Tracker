@@ -1,6 +1,6 @@
 import UIKit
 
-final class StatisticsViewController: UIViewController {
+final class StatisticsViewController: UIViewController, StatisticsUpdater{
     private let trackersService: TrackersServiceProtocol
     private let statisticsService: StatisticsServiceProtocol
     
@@ -17,6 +17,9 @@ final class StatisticsViewController: UIViewController {
         self.trackersService = trackersService
         self.statisticsService = statisticsService
         super.init(nibName: nil, bundle: nil)
+        if let trackersService = trackersService as? TrackersService {
+                    trackersService.statisticsUpdater = self
+                }
     }
     
     required init?(coder: NSCoder) {
@@ -45,23 +48,23 @@ final class StatisticsViewController: UIViewController {
         updateStatistics()
     }
     
-    private func updateStatistics() {
-        let allTrackers = trackersService.categories.flatMap { $0.trackers }
-        let completedTrackers = trackersService.completedTrackers
-        print("Updating statistics: allTrackers count: \(allTrackers.count), completedTrackers count: \(completedTrackers.count), completedTrackers: \(completedTrackers.map { "ID: \($0.id), Date: \($0.date)" })")
-        
-        let statistics = statisticsService.calculateStatistics(
-            completedTrackers: completedTrackers,
-            allTrackers: allTrackers
-        )
-        print("Statistics: bestPeriod: \(statistics.bestPeriod), perfectDays: \(statistics.perfectDays), trackersCompleted: \(statistics.trackersCompleted), averageValue: \(statistics.averageValue)")
-        
-        statisticsItems = [
-            StatisticsItem(title: "Лучший период", value: statistics.bestPeriod),
-            StatisticsItem(title: "Идеальные дни", value: statistics.perfectDays),
-            StatisticsItem(title: "Трекеров завершено", value: statistics.trackersCompleted),
-            StatisticsItem(title: "Среднее значение", value: Int(statistics.averageValue.rounded()))
-        ]
+    func updateStatistics() {
+            let allTrackers = trackersService.categories.flatMap { $0.trackers }
+            let completedTrackers = trackersService.completedTrackers
+            print("Updating statistics at \(Date()): allTrackers count: \(allTrackers.count), completedTrackers count: \(completedTrackers.count)")
+            
+            let statistics = statisticsService.calculateStatistics(
+                completedTrackers: completedTrackers,
+                allTrackers: allTrackers
+            )
+            print("Statistics: bestPeriod: \(statistics.bestPeriod), perfectDays: \(statistics.perfectDays), trackersCompleted: \(statistics.trackersCompleted), averageValue: \(statistics.averageValue)")
+            
+            statisticsItems = [
+                StatisticsItem(title: "Лучший период", value: statistics.bestPeriod),
+                StatisticsItem(title: "Идеальные дни", value: statistics.perfectDays),
+                StatisticsItem(title: "Трекеров завершено", value: statistics.trackersCompleted),
+                StatisticsItem(title: "Среднее значение", value: Int(statistics.averageValue.rounded()))
+            ]
         
         DispatchQueue.main.async { [weak self] in
             print("Reloading tableView with \(self?.statisticsItems.count ?? 0) items")
