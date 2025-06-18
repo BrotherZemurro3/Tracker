@@ -1,7 +1,11 @@
+
 import UIKit
 
 final class NewCategoryViewController: UIViewController {
     private let viewModel: CategorySelectionViewModelProtocol
+    private let initialTitle: String?
+    private let isEditingCategory: Bool
+    private let editIndex: Int?
     private let colors = UIColors.shared
     private lazy var textField: UITextField = {
         let textField = UITextField()
@@ -14,9 +18,7 @@ final class NewCategoryViewController: UIViewController {
         textField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.rightViewMode = .always
         textField.translatesAutoresizingMaskIntoConstraints = false
-        // RTL support
         if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {
-            textField.semanticContentAttribute = .forceRightToLeft
             textField.semanticContentAttribute = .forceRightToLeft
             textField.textAlignment = .right
         } else {
@@ -27,7 +29,7 @@ final class NewCategoryViewController: UIViewController {
     
     private lazy var createCategoryButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("doneButton.title".localized, for: .normal)
+        button.setTitle(isEditingCategory ? "saveButton.title".localized : "doneButton.title".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .gray
         button.layer.cornerRadius = 16
@@ -37,8 +39,11 @@ final class NewCategoryViewController: UIViewController {
         return button
     }()
     
-    init(viewModel: CategorySelectionViewModelProtocol) {
+    init(viewModel: CategorySelectionViewModelProtocol, initialTitle: String? = nil, isEditingCategory: Bool = false, editIndex: Int? = nil) {
         self.viewModel = viewModel
+        self.initialTitle = initialTitle
+        self.isEditingCategory = isEditingCategory
+        self.editIndex = editIndex
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -50,10 +55,15 @@ final class NewCategoryViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupTextField()
+        if let initialTitle = initialTitle {
+            textField.text = initialTitle
+            createCategoryButton.isEnabled = !initialTitle.isEmpty
+            createCategoryButton.backgroundColor = UIColors.shared.adaptiveButtonBackground
+        }
     }
     
     private func setupUI() {
-        title = "newCategory.title".localized
+        title = isEditingCategory ? "editCategory.title".localized : "newCategory.title".localized
         view.backgroundColor = UIColors.shared.viewBackgroundColor
         
         view.addSubview(textField)
@@ -81,12 +91,16 @@ final class NewCategoryViewController: UIViewController {
         createCategoryButton.isEnabled = !text.isEmpty
         createCategoryButton.backgroundColor = createCategoryButton.isEnabled ? UIColors.shared.adaptiveButtonBackground : .gray
         createCategoryButton.titleLabel?.textColor = UIColors.shared.adaptiveButtonText
-    
     }
     
     @objc private func doneButton() {
         guard let categoryName = textField.text, !categoryName.isEmpty else { return }
-        viewModel.createCategory(with: categoryName)
+        if isEditingCategory, let index = editIndex {
+            viewModel.editCategory(at: index, newTitle: categoryName)
+        } else {
+            viewModel.createCategory(with: categoryName)
+        }
         navigationController?.popViewController(animated: true)
     }
 }
+

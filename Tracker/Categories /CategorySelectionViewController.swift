@@ -1,5 +1,5 @@
-import UIKit
 
+import UIKit
 
 final class CategorySelectionViewController: UIViewController {
     private let viewModel: CategorySelectionViewModelProtocol
@@ -102,14 +102,14 @@ final class CategorySelectionViewController: UIViewController {
         // Изначально скрываем таблицу и показываем пустое состояние
         updateCategoryEmptyStateVisibility()
     }
-// MARK: - Скрытие заглушки
+    
     private func updateCategoryEmptyStateVisibility() {
         let isEmpty = viewModel.categories.isEmpty
         imageView.isHidden = !isEmpty
         categoryLabel.isHidden = !isEmpty
         tableView.isHidden = isEmpty
     }
-// MARK: - Байдинги
+    
     private func setupBindings() {
         viewModel.onCategoriesUpdate = { [weak self] in
             self?.tableView.reloadData()
@@ -119,20 +119,24 @@ final class CategorySelectionViewController: UIViewController {
     
     @objc private func addCategoryTapped() {
         onCreateNewCategory()
-     
+    }
+    
+    private func showEditCategoryScreen(forCategoryAt index: Int) {
+        let categoryTitle = viewModel.categories[index].title
+        let editCategoryVC = NewCategoryViewController(viewModel: viewModel, initialTitle: categoryTitle, isEditingCategory: true, editIndex: index)
+        navigationController?.pushViewController(editCategoryVC, animated: true)
     }
 }
 
 extension CategorySelectionViewController: UITableViewDataSource, UITableViewDelegate {
-    // Количество ячеек
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.categories.count
     }
-    // Высота ячейки
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
-    // Создание и настройка ячейки
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: CategorySelectionCell.reuseIdentifier,
@@ -144,13 +148,11 @@ extension CategorySelectionViewController: UITableViewDataSource, UITableViewDel
         cell.configure(with: viewModel.categories[indexPath.row].title)
         return cell
     }
-    // Выбор ячейки
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         if let cell = tableView.cellForRow(at: indexPath) as? CategorySelectionCell {
             cell.configure(with: viewModel.categories[indexPath.row].title, isSelected: true)
         }
-        
         
         for visibleIndexPath in tableView.indexPathsForVisibleRows ?? [] {
             if visibleIndexPath != indexPath,
@@ -163,12 +165,10 @@ extension CategorySelectionViewController: UITableViewDataSource, UITableViewDel
         navigationController?.popViewController(animated: true)
     }
     
-    // Отображение ячейки 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let cornerRadius: CGFloat = 16
         let isLastCell = indexPath.row == viewModel.categories.count - 1
         
-        // Настройка закругления
         if isLastCell {
             cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
             cell.layer.cornerRadius = cornerRadius
@@ -177,11 +177,35 @@ extension CategorySelectionViewController: UITableViewDataSource, UITableViewDel
             cell.layer.cornerRadius = 0
         }
         
-        // Настройка разделителей
         if isLastCell {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         } else {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let editAction = UIAction(title: "Редактировать".localized, image: UIImage(systemName: "pencil")) { [weak self] _ in
+                self?.showEditCategoryScreen(forCategoryAt: indexPath.row)
+            }
+            let deleteAction = UIAction(title: "Удалить".localized, image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
+                self?.confirmDeleteCategory(at: indexPath.row)
+            }
+            return UIMenu(title: "", children: [editAction, deleteAction])
+        }
+    }
+    
+    private func confirmDeleteCategory(at index: Int) {
+        let alert = UIAlertController(
+            title: nil,
+            message: "Эта категория точно не нужна?",
+            preferredStyle: .actionSheet
+        )
+        alert.addAction(UIAlertAction(title: "Отмена".localized, style: .cancel))
+        alert.addAction(UIAlertAction(title: "Удалить".localized, style: .destructive) { [weak self] _ in
+            self?.viewModel.deleteCategory(at: index)
+        })
+        present(alert, animated: true)
     }
 }
