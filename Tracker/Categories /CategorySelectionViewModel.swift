@@ -9,6 +9,8 @@ protocol CategorySelectionViewModelProtocol: AnyObject {
     func loadCategories()
     func selectCategory(at index: Int)
     func createCategory(with title: String)
+    func editCategory(at index: Int, newTitle: String)
+    func deleteCategory(at index: Int)
     
 }
 
@@ -38,6 +40,28 @@ final class CategorySelectionViewModel: CategorySelectionViewModelProtocol {
         let selectedCategory = categories[index].title
         onCategorySelected?(selectedCategory)
     }
+    
+    func editCategory(at index: Int, newTitle: String) {
+            guard index >= 0 && index < categories.count else { return }
+            let oldTitle = categories[index].title
+            do {
+                try categoryStore.updateCategory(oldTitle: oldTitle, newTitle: newTitle)
+                loadCategories()
+            } catch {
+                print("Не удалось обновить категорию \(oldTitle): \(error)")
+            }
+        }
+        
+        func deleteCategory(at index: Int) {
+            guard index >= 0 && index < categories.count else { return }
+            let title = categories[index].title
+            do {
+                try categoryStore.deleteCategory(title: title)
+                loadCategories()
+            } catch {
+                print("Не удалось удалить категорию \(title): \(error)")
+            }
+        }
     
     func createCategory(with title: String) {
         do {
