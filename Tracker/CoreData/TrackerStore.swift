@@ -5,6 +5,7 @@ import UIKit
 protocol TrackerStorable {
     func createTracker(_ tracker: Tracker, categoryTitle: String) throws
     func fetchAllTrackers() throws -> [Tracker]
+    
 }
 
 final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate, TrackerStorable {
