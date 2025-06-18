@@ -3,6 +3,7 @@ import UIKit
 protocol TrackersCollectionViewDelegate: AnyObject {
     func didRequestDeleteTracker(_ trackerId: UUID)
     func didRequestPinTracker(_ trackerId: UUID, isPinned: Bool)
+    func didRequestEditTracker(_ tracker: Tracker, categoryTitle: String, completedDays: Int)
 }
 
 final class TrackersCollectionView: UICollectionView {
@@ -22,7 +23,8 @@ final class TrackersCollectionView: UICollectionView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    // MARK: - Кофигурация ячейки
+    
+    // MARK: - Конфигурация ячейки
     private func configureCollectionView() {
         delegate = self
         dataSource = self
@@ -31,6 +33,7 @@ final class TrackersCollectionView: UICollectionView {
                  forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                  withReuseIdentifier: "Header")
     }
+    
     private func setupBindings() {
         viewModel.onDataUpdated = { [weak self] in
             DispatchQueue.main.async {
@@ -38,14 +41,15 @@ final class TrackersCollectionView: UICollectionView {
             }
         }
     }
+    
     // MARK: - Обновление даты
     private func update(date: Date) {
         currentDate = date
         viewModel.loadTrackers(for: date)
     }
 }
-// MARK: - UICollectionViewDataSource
 
+// MARK: - UICollectionViewDataSource
 extension TrackersCollectionView: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return viewModel.trackers.count
@@ -64,8 +68,8 @@ extension TrackersCollectionView: UICollectionViewDataSource {
         
         cell.configure(
             with: tracker,
-            completedDays: viewModel.getCompletedDaysCount(for: tracker.id),
-            isCompletedToday: viewModel.isTrackerCompletedToday(tracker.id),
+            completedDays: completedDays,
+            isCompletedToday: isCompletedToday,
             currentDate: viewModel.currentDate
         )
         
@@ -99,7 +103,6 @@ extension TrackersCollectionView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-            // Создаем меню с действиями
             return self.makeContextMenu(for: indexPath)
         }
     }
@@ -108,52 +111,49 @@ extension TrackersCollectionView: UICollectionViewDelegateFlowLayout {
         let tracker = viewModel.trackers[indexPath.section].trackers[indexPath.row]
         
         // Действие для закрепления/открепления
-        let pinTitle = tracker.isPinned ? "Открепить" : "Закрепить"
+        let pinTitle = tracker.isPinned ? "Открепить".localized : "Закрепить".localized
         let pinImage = UIImage(systemName: tracker.isPinned ? "pin.slash" : "pin")
         let pinAction = UIAction(title: pinTitle, image: pinImage) { [weak self] _ in
             self?.deleteDelegate?.didRequestPinTracker(tracker.id, isPinned: !tracker.isPinned)
         }
         
         // Действие для редактирования
-        let editAction = UIAction(title: "Редактировать", image: UIImage(systemName: "pencil")) { [weak self] _ in
+        let editAction = UIAction(title: "Редактировать".localized, image: UIImage(systemName: "pencil")) { [weak self] _ in
             self?.editItem(at: indexPath)
         }
         
         // Действие для удаления
-        let deleteAction = UIAction(title: "Удалить", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
+        let deleteAction = UIAction(title: "Удалить".localized, image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
             self?.deleteItem(at: indexPath)
         }
         
-        // Создание меню
         return UIMenu(title: "", children: [pinAction, editAction, deleteAction])
     }
     
     private func editItem(at indexPath: IndexPath) {
-        // Реализация редактирования
-        print("Редактировать элемент в секции \(indexPath.section), строке \(indexPath.row)")
+        let tracker = viewModel.trackers[indexPath.section].trackers[indexPath.row]
+        let categoryTitle = viewModel.trackers[indexPath.section].title
+        let completedDays = viewModel.getCompletedDaysCount(for: tracker.id)
+        deleteDelegate?.didRequestEditTracker(tracker, categoryTitle: categoryTitle, completedDays: completedDays)
     }
     
     private func deleteItem(at indexPath: IndexPath) {
-        // Реализация удаления
         let tracker = viewModel.trackers[indexPath.section].trackers[indexPath.row]
-        print("Удалить элемент в секции \(indexPath.section), строке \(indexPath.row)")
         deleteDelegate?.didRequestDeleteTracker(tracker.id)
     }
-
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     }
-    // Расстояние между строками ячеек по вертикали
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 1
     }
     
-    // Расстояние между строками ячеек по горизонтали
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 9
     }
-    // Размер заголовка секции
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {

@@ -82,6 +82,12 @@ final class TrackersViewModel {
         loadTrackers(for: currentDate)
     }
     
+    func didUpdateTracker(_ tracker: Tracker, in categoryTitle: String, oldCategoryTitle: String?) {
+         print("Updating tracker:", tracker.title)
+         trackersService.updateTracker(tracker, in: categoryTitle, oldCategoryTitle: oldCategoryTitle)
+         loadTrackers(for: currentDate)
+     }
+    
     func pinTracker(id: UUID) {
         print("Закрепляем трекер с ID: \(id)")
         trackersService.pinTracker(id)

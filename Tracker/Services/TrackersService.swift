@@ -60,6 +60,7 @@ protocol TrackersServiceProtocol {
     func addTracker(_ tracker: Tracker, to categoryTitle: String)
     func completeTracker(id: UUID, date: Date)
     func uncompleteTracker(id: UUID, date: Date)
+    func updateTracker(_ tracker: Tracker, in categoryTitle: String, oldCategoryTitle: String?)
     func getTrackers(for date: Date, searchText: String?) -> [TrackerCategory]
     func deleteTracker(_ trackerId: UUID)
     func pinTracker(_ trackerId: UUID)
@@ -119,6 +120,21 @@ final class TrackersService: TrackersServiceProtocol {
             loadInitialData()
         } catch {
             print("Ошибка при добавлении трекера: \(error)")
+        }
+    }
+    func updateTracker(_ tracker: Tracker, in categoryTitle: String, oldCategoryTitle: String?) {
+        print("Updating tracker: \(tracker.title) to category: \(categoryTitle), ID: \(tracker.id)")
+        do {
+            if oldCategoryTitle != categoryTitle {
+                // Ensure new category exists
+                if try categoryStore.category(withTitle: categoryTitle) == nil {
+                    _ = try categoryStore.createCategory(title: categoryTitle)
+                }
+            }
+            try trackerStore.updateTracker(tracker, categoryTitle: categoryTitle)
+            loadInitialData()
+        } catch {
+            print("Ошибка при обновлении трекера: \(error)")
         }
     }
     func deleteTracker(_ trackerId: UUID) {

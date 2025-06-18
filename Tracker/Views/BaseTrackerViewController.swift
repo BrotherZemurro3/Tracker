@@ -3,18 +3,18 @@ import UIKit
 class BaseTrackerViewController: UIViewController, TrackerCreationDelegate {
     weak var delegate: TrackerCreationDelegate?
     private let categoryViewModel = CategorySelectionViewModel()
-    private let scrollView = UIScrollView()
-    private let contentView = UIView()
-    private let tableView = UITableView()
-    private let textField = UITextField()
-    private let errorLabel = UILabel()
-    private let emojiLabel = UILabel()
-    private let colorLabel = UILabel()
-    private let emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    private let colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    private let cancelButton = UIButton(type: .system)
-    private let createButton = UIButton(type: .system)
-    private let colors = UIColors.shared
+     let scrollView = UIScrollView()
+     let contentView = UIView()
+     let tableView = UITableView()
+     let textField = UITextField()
+     let errorLabel = UILabel()
+     let emojiLabel = UILabel()
+     let colorLabel = UILabel()
+     let emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+     let colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+     let cancelButton = UIButton(type: .system)
+     let createButton = UIButton(type: .system)
+     let colors = UIColors.shared
 
     let emojis = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝️", "😪"]
     let colorOptions: [UIColor] = [
@@ -313,6 +313,9 @@ class BaseTrackerViewController: UIViewController, TrackerCreationDelegate {
     func didCreateTracker(_ tracker: Tracker, in categoryTitle: String) {
         delegate?.didCreateTracker(tracker, in: categoryTitle)
     }
+    func didUpdateTracker(_ tracker: Tracker, in categoryTitle: String, oldCategoryTitle: String?) {
+           delegate?.didUpdateTracker(tracker, in: categoryTitle, oldCategoryTitle: oldCategoryTitle)
+       }
 }
 
 extension BaseTrackerViewController: UITableViewDataSource, UITableViewDelegate {

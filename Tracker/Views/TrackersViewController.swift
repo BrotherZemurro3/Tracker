@@ -215,6 +215,11 @@ extension TrackersViewController: TrackerCreationDelegate {
         updateEmptyStateVisibility()
         dismiss(animated: true)
     }
+    func didUpdateTracker(_ tracker: Tracker, in categoryTitle: String, oldCategoryTitle: String?) {
+          viewModel.didUpdateTracker(tracker, in: categoryTitle, oldCategoryTitle: oldCategoryTitle)
+          updateEmptyStateVisibility()
+          navigationController?.popViewController(animated: true)
+      }
 }
 // MARK: - UISearchBarDelegate
 extension TrackersViewController: UISearchBarDelegate {
@@ -260,7 +265,13 @@ extension UIViewController {
 }
 
 extension TrackersViewController: TrackersCollectionViewDelegate {
-    
+    func didRequestPinTracker(_ trackerId: UUID, isPinned: Bool) {
+          if isPinned {
+              viewModel.pinTracker(id: trackerId)
+          } else {
+              viewModel.unpinTracker(id: trackerId)
+          }
+      }
     func didRequestDeleteTracker(_ trackerId: UUID) {
         let alert = UIAlertController(title: "",
                                   message: "Вы уверены, что хотите удалить этот трекер?",
@@ -275,14 +286,15 @@ extension TrackersViewController: TrackersCollectionViewDelegate {
         alert.addAction(cancelAction)
         present(alert, animated: true)
     }
-    func didRequestPinTracker(_ trackerId: UUID, isPinned: Bool) {
-          if isPinned {
-              viewModel.pinTracker(id: trackerId)
-          } else {
-              viewModel.unpinTracker(id: trackerId)
-          }
-      }
-}
+    func didRequestEditTracker(_ tracker: Tracker, categoryTitle: String, completedDays: Int) {
+         let editVC = EditTrackerViewController(tracker: tracker, categoryTitle: categoryTitle, completedDays: completedDays)
+         editVC.delegate = self
+         let navController = UINavigationController(rootViewController: editVC)
+         present(navController, animated: true)
+     }
+ }
+
+
 extension TrackersViewController: TrackerFilterDelegate {
     func didSelectFilter(_ filter: TrackerFilter) {
         selectedFilter = filter
