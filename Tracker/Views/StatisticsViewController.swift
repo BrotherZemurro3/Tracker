@@ -11,7 +11,7 @@ final class StatisticsViewController: UIViewController {
     private var statisticsItems: [StatisticsItem] = []
     
     init(
-        trackersService: TrackersServiceProtocol = TrackersService(),
+        trackersService: TrackersServiceProtocol = TrackersService.shared,
         statisticsService: StatisticsServiceProtocol = StatisticsService()
     ) {
         self.trackersService = trackersService
@@ -36,19 +36,25 @@ final class StatisticsViewController: UIViewController {
             object: nil
         )
     }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("TrackerCompletedNotification"), object: nil)
+    }
     
     @objc private func handleTrackerCompleted() {
+        print("Received TrackerCompletedNotification, updating statistics")
         updateStatistics()
     }
     
     private func updateStatistics() {
         let allTrackers = trackersService.categories.flatMap { $0.trackers }
         let completedTrackers = trackersService.completedTrackers
+        print("Updating statistics: allTrackers count: \(allTrackers.count), completedTrackers count: \(completedTrackers.count), completedTrackers: \(completedTrackers.map { "ID: \($0.id), Date: \($0.date)" })")
         
         let statistics = statisticsService.calculateStatistics(
             completedTrackers: completedTrackers,
             allTrackers: allTrackers
         )
+        print("Statistics: bestPeriod: \(statistics.bestPeriod), perfectDays: \(statistics.perfectDays), trackersCompleted: \(statistics.trackersCompleted), averageValue: \(statistics.averageValue)")
         
         statisticsItems = [
             StatisticsItem(title: "Лучший период", value: statistics.bestPeriod),
@@ -57,9 +63,10 @@ final class StatisticsViewController: UIViewController {
             StatisticsItem(title: "Среднее значение", value: Int(statistics.averageValue.rounded()))
         ]
         
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            self.updatePlaceholderVisibility()
+        DispatchQueue.main.async { [weak self] in
+            print("Reloading tableView with \(self?.statisticsItems.count ?? 0) items")
+            self?.tableView.reloadData()
+            self?.updatePlaceholderVisibility()
         }
     }
     

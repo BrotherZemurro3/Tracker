@@ -53,6 +53,7 @@ struct TrackerRecord {
 
 // MARK: - Trackers Service Protocol
 protocol TrackersServiceProtocol {
+    
     var categories: [TrackerCategory] { get }
     var completedTrackers: [TrackerRecord] { get }
     
@@ -67,6 +68,7 @@ protocol TrackersServiceProtocol {
 
 // MARK: - Trackers Service Implementation
 final class TrackersService: TrackersServiceProtocol {
+    static let shared = TrackersService()
     private(set) var categories: [TrackerCategory] = []
     private(set) var completedTrackers: [TrackerRecord] = []
     
@@ -122,16 +124,19 @@ final class TrackersService: TrackersServiceProtocol {
     func completeTracker(id: UUID, date: Date) {
         do {
             try recordStore.addRecord(TrackerRecord(id: id, date: date))
-            loadInitialData()
+            loadInitialData() // Загружаем данные синхронно
+            print("After completeTracker, completedTrackers: \(completedTrackers.map { "ID: \($0.id), Date: \($0.date)" })")
+            NotificationCenter.default.post(name: NSNotification.Name("TrackerCompletedNotification"), object: nil)
         } catch {
             print("Ошибка при завершении трекера: \(error)")
         }
     }
-    
     func uncompleteTracker(id: UUID, date: Date) {
         do {
             try recordStore.deleteRecord(TrackerRecord(id: id, date: date))
-            loadInitialData()
+            loadInitialData() // Загружаем данные синхронно
+            print("After uncompleteTracker, completedTrackers: \(completedTrackers.map { "ID: \($0.id), Date: \($0.date)" })")
+            NotificationCenter.default.post(name: NSNotification.Name("TrackerCompletedNotification"), object: nil)
         } catch {
             print("Ошибка при удалении записи трекера: \(error)")
         }
@@ -189,35 +194,37 @@ final class TrackersService: TrackersServiceProtocol {
     // MARK: - loadDataFromCoreData
     
     private func loadInitialData() {
-        do {
-            let categoriesFromStore = try categoryStore.fetchAllCategories()
-            let trackersFromStore = try trackerStore.fetchAllTrackers()
-            let recordsFromStore = try recordStore.fetchRecords()
-            
-            completedTrackers = recordsFromStore
-            
-            var tempCategories: [TrackerCategory] = []
-            
-            for category in categoriesFromStore {
-                let coreDataCategory = try categoryStore.coreDataCategory(withTitle: category.title)
-                let trackers = trackersFromStore.filter { tracker in
-                    // Проверяем, что трекер принадлежит категории
-                    coreDataCategory?.trackers?.contains { ($0 as? TrackerCoreData)?.id == tracker.id } ?? false
-                }.map { tracker in
-                    tracker.withCompletedState(
-                        completedTrackers.contains { $0.id == tracker.id && Calendar.current.isDate($0.date, inSameDayAs: tracker.creationDate) }
-                    )
+            do {
+                let categoriesFromStore = try categoryStore.fetchAllCategories()
+                let trackersFromStore = try trackerStore.fetchAllTrackers()
+                let recordsFromStore = try recordStore.fetchRecords()
+                
+                completedTrackers = recordsFromStore
+                print("Loaded completedTrackers: \(recordsFromStore.map { "ID: \($0.id), Date: \($0.date)" })")
+                
+                var tempCategories: [TrackerCategory] = []
+                
+                for category in categoriesFromStore {
+                    let coreDataCategory = try categoryStore.coreDataCategory(withTitle: category.title)
+                    let trackers = trackersFromStore.filter { tracker in
+                        coreDataCategory?.trackers?.contains { ($0 as? TrackerCoreData)?.id == tracker.id } ?? false
+                    }.map { tracker in
+                        tracker.withCompletedState(
+                            completedTrackers.contains { $0.id == tracker.id && Calendar.current.isDate($0.date, inSameDayAs: tracker.creationDate) }
+                        )
+                    }
+                    
+                    if !trackers.isEmpty {
+                        tempCategories.append(TrackerCategory(title: category.title, trackers: trackers))
+                    }
                 }
                 
-                if !trackers.isEmpty {
-                    tempCategories.append(TrackerCategory(title: category.title, trackers: trackers))
-                }
+                categories = tempCategories
+                print("Loaded \(tempCategories.count) categories with trackers: \(tempCategories.map { "\($0.title): \($0.trackers.count)" })")
+                
+                // Отправляем уведомление после обновления данных
+                NotificationCenter.default.post(name: NSNotification.Name("TrackerCompletedNotification"), object: nil)
+            } catch {
+                print("Ошибка при загрузке данных: \(error)")
             }
-            
-            categories = tempCategories
-            print("Loaded \(tempCategories.count) categories with trackers: \(tempCategories.map { "\($0.title): \($0.trackers.count)" })")
-        } catch {
-            print("Ошибка при загрузке данных: \(error)")
-        }
-    }
-}
+        }}

@@ -19,6 +19,7 @@ final class TrackerRecordStore: TrackerRecordStorable {
         recordEntity.id = record.id
         recordEntity.date = record.date
         try context.save()
+        print("Added record: ID: \(record.id), Date: \(record.date)")
     }
     
     func deleteRecord(_ record: TrackerRecord) throws {
@@ -35,6 +36,7 @@ final class TrackerRecordStore: TrackerRecordStorable {
         let coreDataRecords = try context.fetch(request)
         return coreDataRecords.map { record in
             TrackerRecord(id: record.id ?? UUID(), date: record.date ?? Date())
+            
         }
     }
 }

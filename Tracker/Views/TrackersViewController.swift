@@ -14,6 +14,7 @@ class TrackersViewController: UIViewController {
     private var currentDate = Date()
     private lazy var filtersButton = UIButton()
     private let colors = UIColors.shared
+    private var selectedFilter: TrackerFilter = .all 
     // MARK: - Инициализация
     init(trackersService: TrackersServiceProtocol = TrackersService()) {
         self.trackersService = trackersService
@@ -176,7 +177,12 @@ class TrackersViewController: UIViewController {
         print("Выбрана дата: \(currentDate), день недели: \(weekday)")
         viewModel.loadTrackers(for: currentDate)
     }
-    @objc private func filtersButtonTapped() {}
+    @objc private func filtersButtonTapped() {
+           let filterVC = TrackerFilterViewController(selectedFilter: selectedFilter)
+           filterVC.delegate = self
+           let navController = UINavigationController(rootViewController: filterVC)
+           present(navController, animated: true)
+       }
     
     // MARK: - Настройка CollectionView
     private func setupCollectionView() {
@@ -277,7 +283,12 @@ extension TrackersViewController: TrackersCollectionViewDelegate {
           }
       }
 }
-
+extension TrackersViewController: TrackerFilterDelegate {
+    func didSelectFilter(_ filter: TrackerFilter) {
+        selectedFilter = filter
+        viewModel.setFilter(filter)
+    }
+}
 
 /*
  // Превью

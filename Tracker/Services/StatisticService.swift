@@ -22,7 +22,7 @@ struct StatisticsItem {
 final class StatisticsService: StatisticsServiceProtocol {
     
     func calculateStatistics(completedTrackers: [TrackerRecord], allTrackers: [Tracker]) -> Statistics {
-        
+        print("Calculating statistics with completedTrackers: \(completedTrackers.map { "ID: \($0.id), Date: \($0.date)" })")
         // Лучший период - макс дней подряд с выполняемыми трекерами
         
         let bestPeriod = calculateBestPeriod(records: completedTrackers)
@@ -37,6 +37,7 @@ final class StatisticsService: StatisticsServiceProtocol {
     }
     
     private func calculateBestPeriod(records: [TrackerRecord]) -> Int {
+        
         guard !records.isEmpty else { return 0 }
         
         let dates = records.map { $0.date.startOfDay }.sorted()
