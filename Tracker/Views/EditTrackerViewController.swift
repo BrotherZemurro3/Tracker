@@ -2,27 +2,27 @@ import UIKit
 
 final class EditTrackerViewController: BaseTrackerViewController {
     private let tracker: Tracker
-    private let oldCategoryTitle: String
-    private let completedDays: Int
-    private let headerLabel = UILabel()
-    private let daysLabel = UILabel()
-
+        private let headerLabel = UILabel()
+        private let daysLabel = UILabel()
+    override var isEditingMode: Bool { return true }
+    
     init(tracker: Tracker, categoryTitle: String, completedDays: Int) {
-        self.tracker = tracker
-        self.oldCategoryTitle = categoryTitle
+            self.tracker = tracker
+            super.init(nibName: nil, bundle: nil)
         self.completedDays = completedDays
-        super.init(nibName: nil, bundle: nil)
-        // Pre-fill data
-        selectedEmoji = tracker.emoji
-        selectedColor = tracker.color
-        selectedCategory = categoryTitle
-        selectedDays = tracker.schedule ?? []
-    }
+            self.trackerToEdit = tracker
+            self.oldCategoryTitle = categoryTitle
+            self.selectedEmoji = tracker.emoji
+            self.selectedColor = tracker.color
+            self.selectedCategory = categoryTitle
+            self.selectedDays = tracker.schedule ?? []
+        }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHeader()
@@ -94,29 +94,5 @@ final class EditTrackerViewController: BaseTrackerViewController {
                 cell.contentView.layer.cornerRadius = 8
             }
         }
-    }
-
-     func createTracker() {
-        guard let title = textField.text, !title.isEmpty,
-              let selectedEmoji = selectedEmoji,
-              let selectedColor = selectedColor,
-              let selectedCategory = selectedCategory else {
-            return
-        }
-
-        let updatedTracker = Tracker(
-            id: tracker.id,
-            title: title,
-            color: selectedColor,
-            emoji: selectedEmoji,
-            schedule: isRegular ? selectedDays : nil,
-            isCompleted: tracker.isCompleted,
-            isRegular: tracker.isRegular,
-            creationDate: tracker.creationDate,
-            isPinned: tracker.isPinned
-        )
-
-        delegate?.didUpdateTracker(updatedTracker, in: selectedCategory, oldCategoryTitle: oldCategoryTitle)
-        dismiss(animated: true)
     }
 }

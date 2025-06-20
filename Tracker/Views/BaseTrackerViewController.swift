@@ -4,6 +4,10 @@ class BaseTrackerViewController: UIViewController, TrackerCreationDelegate {
     weak var delegate: TrackerCreationDelegate?
     private let categoryViewModel = CategorySelectionViewModel()
      let scrollView = UIScrollView()
+    var isEditingMode: Bool { return false } // По умолчанию создание
+    var trackerToEdit: Tracker? // Для хранения редактируемого трекера
+        var oldCategoryTitle: String? // Для хранения старой категории
+        var completedDays: Int = 0 // Для хранения количества выполненных дней
      let contentView = UIView()
      let tableView = UITableView()
      let textField = UITextField()
@@ -147,7 +151,7 @@ class BaseTrackerViewController: UIViewController, TrackerCreationDelegate {
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         createButton.backgroundColor = .gray
         createButton.layer.cornerRadius = 16
-        createButton.addTarget(self, action: #selector(createTracker), for: .touchUpInside)
+        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
         createButton.isEnabled = false
 
         let buttonsContainer = UIStackView(arrangedSubviews: [cancelButton, createButton])
@@ -265,29 +269,62 @@ class BaseTrackerViewController: UIViewController, TrackerCreationDelegate {
         dismiss(animated: true)
     }
 
-    @objc private func createTracker() {
-        guard let title = textField.text, !title.isEmpty,
-              let selectedEmoji = selectedEmoji,
-              let selectedColor = selectedColor,
-              let selectedCategory = selectedCategory else {
-            return
+    @objc func createButtonTapped() {
+            if isEditingMode {
+                updateTracker()
+            } else {
+                createTracker()
+            }
+        }
+    func createTracker() {
+            guard let title = textField.text, !title.isEmpty,
+                  let selectedEmoji = selectedEmoji,
+                  let selectedColor = selectedColor,
+                  let selectedCategory = selectedCategory else {
+                return
+            }
+
+            let tracker = Tracker(
+                id: UUID(),
+                title: title,
+                color: selectedColor,
+                emoji: selectedEmoji,
+                schedule: isRegular ? selectedDays : nil,
+                isCompleted: false,
+                isRegular: isRegular,
+                creationDate: Date(),
+                isPinned: false
+            )
+
+            delegate?.didCreateTracker(tracker, in: selectedCategory)
+            dismiss(animated: true)
         }
 
-        let newTracker = Tracker(
-            id: UUID(),
-            title: title,
-            color: selectedColor,
-            emoji: selectedEmoji,
-            schedule: isRegular ? selectedDays : nil,
-            isCompleted: false,
-            isRegular: isRegular,
-            creationDate: Date(),
-            isPinned: false
-        )
+        func updateTracker() {
+            guard let title = textField.text, !title.isEmpty,
+                  let selectedEmoji = selectedEmoji,
+                  let selectedColor = selectedColor,
+                  let selectedCategory = selectedCategory,
+                  let tracker = trackerToEdit else {
+                return
+            }
 
-        delegate?.didCreateTracker(newTracker, in: selectedCategory)
-        dismiss(animated: true)
-    }
+            let updatedTracker = Tracker(
+                id: tracker.id, // Сохраняем тот же ID
+                title: title,
+                color: selectedColor,
+                emoji: selectedEmoji,
+                schedule: isRegular ? selectedDays : nil,
+                isCompleted: tracker.isCompleted,
+                isRegular: tracker.isRegular,
+                creationDate: tracker.creationDate,
+                isPinned: tracker.isPinned
+            )
+
+            delegate?.didUpdateTracker(updatedTracker, in: selectedCategory, oldCategoryTitle: oldCategoryTitle)
+            dismiss(animated: true)
+        }
+    
 
     // MARK: - Subclass Hooks
     func updateCreateButtonState() {
