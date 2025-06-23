@@ -4,6 +4,7 @@ final class EditTrackerViewController: BaseTrackerViewController {
     private let tracker: Tracker
         private let headerLabel = UILabel()
         private let daysLabel = UILabel()
+    
     override var isEditingMode: Bool { return true }
     
     init(tracker: Tracker, categoryTitle: String, completedDays: Int) {
@@ -28,9 +29,14 @@ final class EditTrackerViewController: BaseTrackerViewController {
         setupHeader()
         textField.text = tracker.title
         updateCreateButtonState()
+      
+    }
+    // Вызывал selectInitialEmojiAndColor после появления view, когда коллекции точно загружены
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         selectInitialEmojiAndColor()
     }
-
+    
     override var isRegular: Bool {
         return tracker.isRegular
     }

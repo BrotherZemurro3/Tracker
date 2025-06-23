@@ -46,6 +46,7 @@ class TrackersViewController: UIViewController {
         imageView.isHidden = !isEmpty
         whatGoingToTrackLabel.isHidden = !isEmpty
         collectionView.isHidden = isEmpty // Добавляем скрытие коллекции при пустом состоянии
+        filtersButton.isHidden = isEmpty
         
         if let searchText = searchTrackersBar.text, !searchText.isEmpty {
             imageView.image = UIImage(named: "nothingToSearch")
@@ -118,8 +119,9 @@ class TrackersViewController: UIViewController {
            filtersButton.setTitle("Фильтры", for: .normal)
            filtersButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
            filtersButton.setTitleColor(.white, for: .normal)
-           filtersButton.backgroundColor = .blue // Или ваш цвет из UIColors
+           filtersButton.backgroundColor = .blue
            filtersButton.layer.cornerRadius = 16
+        filtersButton.isHidden = true
            filtersButton.addTarget(self, action: #selector(filtersButtonTapped), for: .touchUpInside)
            filtersButton.translatesAutoresizingMaskIntoConstraints = false
            view.addSubview(filtersButton)

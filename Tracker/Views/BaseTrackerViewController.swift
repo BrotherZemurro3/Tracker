@@ -43,7 +43,11 @@ class BaseTrackerViewController: UIViewController, TrackerCreationDelegate {
 
     // MARK: - Setup Methods
     private func setupNavigationBar() {
-        title = isRegular ? "newHabit.title".localized : "newIrregularEvent.title".localized
+        if isEditingMode {
+            title = isRegular ? "Редактирование привычки" : "Редактирование нерегулярного действия"
+        } else {
+            title = isRegular ? "newHabit.title".localized : "newIrregularEvent.title".localized
+        }
         navigationController?.navigationBar.titleTextAttributes = [.font: UIFont.systemFont(ofSize: 16)]
     }
 
