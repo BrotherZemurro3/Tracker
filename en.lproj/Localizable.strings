@@ -17,6 +17,22 @@
 "filters.title" = "Filters";
 "notSelected.subtitle" = "Not selected";
 
+// Filters
+"allTrackers.title" = "All trackers";
+"todayTrakers.title" = "Today's trackers";
+"completedTrackers.title" = "Completed";
+"notCompletedTrackers.title" = "Uncompleted";
+
+// Edit
+"edit.title" = "Edit";
+"editCategory.title" = "Edit category";
+"editRegular.title" = "Edit habit";
+"editIrregular.title" = "Edit irregular event";
+
+// Pin-Unpin
+"pin.title" = "Pin";
+"unpin.title" = "Unpin";
+
 // Tracker Types
 "createTracker.title" = "Create tracker";
 "habit.title" = "Habit";
@@ -27,7 +43,7 @@
 // Inputs
 "textField.placeholder" = "Enter tracker name";
 "newCategory.placeholder" = "Enter category name";
-"errorLabel.title" = "Limit of 38 characters";
+"errorLabel.title" = "38 character limit";
 
 // Categories
 "categories.title" = "Categories";
@@ -36,6 +52,7 @@
 "addCategoryButton.title" = "Add category";
 "newCategory.title" = "New category";
 "notSelected.title" = "Not selected";
+"thisCategoryIsUnneeded.title" = "Are you sure you don't need this category?";
 
 // Schedule
 "schedule.title" = "Schedule";
@@ -57,8 +74,14 @@
 // Design
 "colorLabel.title" = "Color";
 
-// Onboarding
-"button.onboard.title" = "Wow, that’s technology!";
-"redOnboardingLabel.title" = "Even if it’s not liters of water and yoga";
+// Statistics
+"nothingToAnalize.title" = "Nothing to analyze yet";
+"bestPeriod.title" = "Best period";
+"bestStreak.title" = "Perfect days";
+"trackesDone.title" = "Trackers completed";
+"averageAmount.title" = "Average value";
 
+// Onboarding
+"button.onboard.title" = "That's technology!";
+"redOnboardingLabel.title" = "Even if it's not liters of water and yoga";
 "blueOnboardinglabel.title" = "Track only what you want";

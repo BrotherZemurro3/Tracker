@@ -44,7 +44,7 @@ class BaseTrackerViewController: UIViewController, TrackerCreationDelegate {
     // MARK: - Setup Methods
     private func setupNavigationBar() {
         if isEditingMode {
-            title = isRegular ? "Редактирование привычки" : "Редактирование нерегулярного действия"
+            title = isRegular ? "editRegular.title".localized : "editIrregular.title".localized
         } else {
             title = isRegular ? "newHabit.title".localized : "newIrregularEvent.title".localized
         }
@@ -342,7 +342,7 @@ class BaseTrackerViewController: UIViewController, TrackerCreationDelegate {
         }
         if isRegular && selectedDays.isEmpty {
             createButton.isEnabled = false
-            createButton.backgroundColor = .gray
+            createButton.backgroundColor = UIColor(named: "black[day]")
             return
         }
         createButton.isEnabled = true

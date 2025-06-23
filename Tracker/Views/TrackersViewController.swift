@@ -279,13 +279,13 @@ extension TrackersViewController: TrackersCollectionViewDelegate {
       }
     func didRequestDeleteTracker(_ trackerId: UUID) {
         let alert = UIAlertController(title: "",
-                                  message: "Вы уверены, что хотите удалить этот трекер?",
+                                      message: "delete.confirmation".localized,
                                   preferredStyle: .actionSheet)
         
-        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        let deleteAction = UIAlertAction(title: "delete.title".localized, style: .destructive) { [weak self] _ in
             self?.viewModel.deleteTracker(id: trackerId)
         }
-        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+        let cancelAction = UIAlertAction(title: "cancel.title".localized, style: .cancel)
         
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
@@ -304,6 +304,9 @@ extension TrackersViewController: TrackerFilterDelegate {
     func didSelectFilter(_ filter: TrackerFilter) {
         selectedFilter = filter
         viewModel.setFilter(filter)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                self?.dismiss(animated: true, completion: nil)
+            }
     }
 }
 

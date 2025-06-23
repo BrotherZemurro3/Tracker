@@ -186,10 +186,10 @@ extension CategorySelectionViewController: UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-            let editAction = UIAction(title: "Редактировать".localized, image: UIImage(systemName: "pencil")) { [weak self] _ in
+            let editAction = UIAction(title: "edit.title".localized) { [weak self] _ in
                 self?.showEditCategoryScreen(forCategoryAt: indexPath.row)
             }
-            let deleteAction = UIAction(title: "Удалить".localized, image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
+            let deleteAction = UIAction(title: "delete.title".localized, attributes: .destructive) { [weak self] _ in
                 self?.confirmDeleteCategory(at: indexPath.row)
             }
             return UIMenu(title: "", children: [editAction, deleteAction])
@@ -199,11 +199,11 @@ extension CategorySelectionViewController: UITableViewDataSource, UITableViewDel
     private func confirmDeleteCategory(at index: Int) {
         let alert = UIAlertController(
             title: nil,
-            message: "Эта категория точно не нужна?",
+            message: "thisCategoryIsUnneeded.title".localized,
             preferredStyle: .actionSheet
         )
-        alert.addAction(UIAlertAction(title: "Отмена".localized, style: .cancel))
-        alert.addAction(UIAlertAction(title: "Удалить".localized, style: .destructive) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: "cancel.title".localized, style: .cancel))
+        alert.addAction(UIAlertAction(title: "delete.title".localized, style: .destructive) { [weak self] _ in
             self?.viewModel.deleteCategory(at: index)
         })
         present(alert, animated: true)

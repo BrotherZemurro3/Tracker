@@ -5,10 +5,14 @@ protocol TrackerFilterDelegate: AnyObject {
 }
 
 enum TrackerFilter: String, CaseIterable {
-    case all = "Все трекеры"
-    case today = "Трекеры на сегодня"
-    case completed = "Завершенные"
-    case notCompleted = "Не завершенные"
+    case all = "allTrackers.title"
+    case today = "todayTrakers.title"
+    case completed = "completedTrackers.title"
+    case notCompleted = "notCompletedTrackers.title"
+    
+    var localizedText: String {
+        return NSLocalizedString(self.rawValue, comment: "")
+    }
 }
 
 final class TrackerFilterViewController: UIViewController {
@@ -33,7 +37,7 @@ final class TrackerFilterViewController: UIViewController {
     
     private func setupUI() {
         view.backgroundColor = UIColors.shared.viewBackgroundColor
-        title = "Фильтры".localized
+        title = "filters.title".localized
         navigationItem.largeTitleDisplayMode = .never
         
         setupTableView()

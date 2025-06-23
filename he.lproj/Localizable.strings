@@ -8,34 +8,51 @@
 
 // Tabs
 "trackers.title" = "טראקרים";
-"statistic.title" = "סטטיסטיקות";
+"statistic.title" = "סטטיסטיקה";
 "trackers.tab.title" = "טראקרים";
-"statistic.tab.title" = "סטטיסטיקות";
+"statistic.tab.title" = "סטטיסטיקה";
 
 // Search & Filters
 "search.placeholder" = "חיפוש";
 "filters.title" = "מסננים";
 "notSelected.subtitle" = "לא נבחר";
 
+// Filters
+"allTrackers.title" = "כל הטראקרים";
+"todayTrakers.title" = "טראקרים להיום";
+"completedTrackers.title" = "הושלמו";
+"notCompletedTrackers.title" = "לא הושלמו";
+
+// Edit
+"edit.title" = "עריכה";
+"editCategory.title" = "עריכת קטגוריה";
+"editRegular.title" = "עריכת הרגל";
+"editIrregular.title" = "עריכת אירוע לא סדיר";
+
+// Pin-Unpin
+"pin.title" = "הצמדה";
+"unpin.title" = "הסרת הצמדה";
+
 // Tracker Types
 "createTracker.title" = "יצירת טראקר";
 "habit.title" = "הרגל";
-"irregularEvent.title" = "אירוע לא קבוע";
+"irregularEvent.title" = "אירוע לא סדיר";
 "newHabit.title" = "הרגל חדש";
-"newIrregularEvent.title" = "אירוע לא קבוע חדש";
+"newIrregularEvent.title" = "אירוע לא סדיר חדש";
 
 // Inputs
 "textField.placeholder" = "הזן שם טראקר";
 "newCategory.placeholder" = "הזן שם קטגוריה";
-"errorLabel.title" = "מגבלת תווים: 38";
+"errorLabel.title" = "מגבלה של 38 תווים";
 
 // Categories
 "categories.title" = "קטגוריות";
 "category.title" = "קטגוריה";
 "categoryLable.title" = "ניתן לקבץ הרגלים ואירועים לפי משמעות";
-"addCategoryButton.title" = "הוספת קטגוריה";
+"addCategoryButton.title" = "הוסף קטגוריה";
 "newCategory.title" = "קטגוריה חדשה";
 "notSelected.title" = "לא נבחר";
+"thisCategoryIsUnneeded.title" = "אתה בטוח שלא צריך את הקטגוריה הזו?";
 
 // Schedule
 "schedule.title" = "לוח זמנים";
@@ -57,7 +74,14 @@
 // Design
 "colorLabel.title" = "צבע";
 
+// Statistics
+"nothingToAnalize.title" = "עדיין אין מה לנתח";
+"bestPeriod.title" = "התקופה הטובה ביותר";
+"bestStreak.title" = "ימים מושלמים";
+"trackesDone.title" = "טראקרים שהושלמו";
+"averageAmount.title" = "ערך ממוצע";
+
 // Onboarding
-"button.onboard.title" = "זו טכנולוגיה!";
+"button.onboard.title" = "אלה הטכנולוגיות!";
 "redOnboardingLabel.title" = "גם אם זה לא ליטרים של מים ויוגה";
 "blueOnboardinglabel.title" = "עקוב רק אחרי מה שאתה רוצה";

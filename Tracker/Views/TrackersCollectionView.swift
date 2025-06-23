@@ -111,19 +111,18 @@ extension TrackersCollectionView: UICollectionViewDelegateFlowLayout {
         let tracker = viewModel.trackers[indexPath.section].trackers[indexPath.row]
         
         // Действие для закрепления/открепления
-        let pinTitle = tracker.isPinned ? "Открепить".localized : "Закрепить".localized
-        let pinImage = UIImage(systemName: tracker.isPinned ? "pin.slash" : "pin")
-        let pinAction = UIAction(title: pinTitle, image: pinImage) { [weak self] _ in
+        let pinTitle = tracker.isPinned ? "unpin.title".localized : "pin.title".localized
+        let pinAction = UIAction(title: pinTitle) { [weak self] _ in
             self?.deleteDelegate?.didRequestPinTracker(tracker.id, isPinned: !tracker.isPinned)
         }
         
         // Действие для редактирования
-        let editAction = UIAction(title: "Редактировать".localized, image: UIImage(systemName: "pencil")) { [weak self] _ in
+        let editAction = UIAction(title: "edit.title".localized) { [weak self] _ in
             self?.editItem(at: indexPath)
         }
         
         // Действие для удаления
-        let deleteAction = UIAction(title: "Удалить".localized, image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
+        let deleteAction = UIAction(title: "delete.title".localized, attributes: .destructive) { [weak self] _ in
             self?.deleteItem(at: indexPath)
         }
         

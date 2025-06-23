@@ -40,7 +40,7 @@ final class StatisticsCell: UITableViewCell {
         gradientBorderView.layer.masksToBounds = true
         
         // Настройка контейнера
-        containerView.backgroundColor = .white
+        containerView.backgroundColor = UIColors.shared.viewBackgroundColor
         containerView.layer.cornerRadius = 15
         containerView.layer.masksToBounds = true
         

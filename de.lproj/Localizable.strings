@@ -1,5 +1,5 @@
 // Common UI
-"whatGoingToTrackLabel.title" = "Was möchten wir tracken?";
+"whatGoingToTrackLabel.title" = "Was möchten wir verfolgen?";
 "delete.title" = "Löschen";
 "delete.confirmation" = "Möchten Sie den Tracker wirklich löschen?";
 "cancel.title" = "Abbrechen";
@@ -16,6 +16,23 @@
 "search.placeholder" = "Suche";
 "filters.title" = "Filter";
 "notSelected.subtitle" = "Nicht ausgewählt";
+
+// Filters
+"allTrackers.title" = "Alle Tracker";
+"todayTrakers.title" = "Heutige Tracker";
+"completedTrackers.title" = "Abgeschlossen";
+"notCompletedTrackers.title" = "Nicht abgeschlossen";
+
+
+// Edit
+"edit.title" = "Bearbeiten";
+"editCategory.title" = "Kategorie bearbeiten";
+"editRegular.title" = "Gewohnheit bearbeiten";
+"editIrregular.title" = "Unregelmäßiges Ereignis bearbeiten";
+
+// Pin-Unpin
+"pin.title" = "Anheften";
+"unpin.title" = "Lösen";
 
 // Tracker Types
 "createTracker.title" = "Tracker erstellen";
@@ -36,6 +53,7 @@
 "addCategoryButton.title" = "Kategorie hinzufügen";
 "newCategory.title" = "Neue Kategorie";
 "notSelected.title" = "Nicht ausgewählt";
+"thisCategoryIsUnneeded.title" = "Sind Sie sicher, dass Sie diese Kategorie nicht brauchen?";
 
 // Schedule
 "schedule.title" = "Zeitplan";
@@ -57,8 +75,14 @@
 // Design
 "colorLabel.title" = "Farbe";
 
-// Onboarding
-"button.onboard.title" = "Das ist mal Technologie!";
-"redOnboardingLabel.title" = "Auch wenn es nicht Liter Wasser und Yoga sind";
+// Statistics
+"nothingToAnalize.title" = "Noch nichts zu analysieren";
+"bestPeriod.title" = "Beste Periode";
+"bestStreak.title" = "Perfekte Tage";
+"trackesDone.title" = "Tracker abgeschlossen";
+"averageAmount.title" = "Durchschnittswert";
 
-"blueOnboardinglabel.title" = "Verfolgen Sie nur, was Sie möchten";
+// Onboarding
+"button.onboard.title" = "Das sind Technologien!";
+"redOnboardingLabel.title" = "Auch wenn es nicht Liter Wasser und Yoga sind";
+"blueOnboardinglabel.title" = "Verfolgen Sie nur, was Sie wollen";

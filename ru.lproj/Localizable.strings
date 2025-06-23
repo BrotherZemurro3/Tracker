@@ -17,7 +17,21 @@
 "filters.title" = "Фильтры";
 "notSelected.subtitle" = "Не выбрано";
 
+// Filters
+"allTrackers.title" = "Все трекеры";
+"todayTrakers.title" = "Трекеры на сегодня";
+"completedTrackers.title" = "Завершенные";
+"notCompletedTrackers.title" = "Незавершённые";
 
+// Edit
+"edit.title" = "Редактировать";
+"editCategory.tile" = "Редактирование категории";
+"editRegular.title" = "Редактирование привычки";
+"editIrregular.title" = "Редактирование нерегулярного события";
+
+// Pin-Unpin
+"pin.title" = "Закрепить";
+"unpin.title" = "Открепить";
 
 
 // Tracker Types
@@ -39,7 +53,7 @@
 "addCategoryButton.title" = "Добавить категорию";
 "newCategory.title" = "Новая категория";
 "notSelected.title" = "Не выбрано";
-
+"thisCategoryIsUnneeded.title?" = "Эта категория точно не нужна?";
 
 // Schedule
 "schedule.title" = "Расписание";
@@ -60,6 +74,13 @@
 
 // Design
 "colorLabel.title" = "Цвет";
+
+// Статистика
+"nothingToAnalize.title" = "Анализировать пока нечего";
+"bestPeriod.title" = "Лучший период";
+"bestStreak.title" = "Идеальные дни";
+"trackesDone.title" = "Трекеров завершено";
+"averageAmount.title" = "Среднее значение";
 
 // Онбординг
 "button.onboard.title" = "Вот это технологии!";

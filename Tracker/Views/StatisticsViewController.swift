@@ -60,10 +60,10 @@ final class StatisticsViewController: UIViewController, StatisticsUpdater{
             print("Statistics: bestPeriod: \(statistics.bestPeriod), perfectDays: \(statistics.perfectDays), trackersCompleted: \(statistics.trackersCompleted), averageValue: \(statistics.averageValue)")
             
             statisticsItems = [
-                StatisticsItem(title: "Лучший период", value: statistics.bestPeriod),
-                StatisticsItem(title: "Идеальные дни", value: statistics.perfectDays),
-                StatisticsItem(title: "Трекеров завершено", value: statistics.trackersCompleted),
-                StatisticsItem(title: "Среднее значение", value: Int(statistics.averageValue.rounded()))
+                StatisticsItem(title: "bestPeriod.title".localized, value: statistics.bestPeriod),
+                StatisticsItem(title: "bestStreak.title".localized, value: statistics.perfectDays),
+                StatisticsItem(title: "trackesDone.title".localized, value: statistics.trackersCompleted),
+                StatisticsItem(title: "averageAmount.title".localized, value: Int(statistics.averageValue.rounded()))
             ]
         
         DispatchQueue.main.async { [weak self] in
@@ -85,7 +85,7 @@ final class StatisticsViewController: UIViewController, StatisticsUpdater{
         // Настройка placeholder
         placeholderView.configure(
             image: UIImage(named: "nothingToAnalize"),
-            text: "Анализировать пока нечего"
+            text: "nothingToAnalize.title".localized
         )
         
         // Настройка таблицы
@@ -93,11 +93,11 @@ final class StatisticsViewController: UIViewController, StatisticsUpdater{
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
-        tableView.backgroundColor = .clear
+        tableView.backgroundColor = UIColors.shared.viewBackgroundColor
         tableView.isScrollEnabled = false
         
         // Настройка titleLabel
-        titleLabel.text = "Статистика"
+        titleLabel.text = "statistic.title".localized
         titleLabel.font = .boldSystemFont(ofSize: 34)
         titleLabel.textColor = .label // Используем цвет из вашей системы
         titleLabel.textAlignment = .left
