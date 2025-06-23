@@ -26,7 +26,7 @@ final class EditTrackerViewController: BaseTrackerViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupHeader()
+        setupDaysLabel()
         textField.text = tracker.title
         updateCreateButtonState()
       
@@ -46,31 +46,22 @@ final class EditTrackerViewController: BaseTrackerViewController {
         navigationController?.navigationBar.titleTextAttributes = [.font: UIFont.systemFont(ofSize: 16)]
     }
 
-    private func setupHeader() {
-        headerLabel.text = "editTracker.title".localized
-        headerLabel.font = .boldSystemFont(ofSize: 16)
-        headerLabel.textColor = colors.labelColor
-        headerLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(headerLabel)
-
+    private func setupDaysLabel() {
         let dayString = String.localizedStringWithFormat(
             NSLocalizedString("days_count", comment: "Number of days"),
             completedDays
         )
         daysLabel.text = "\(completedDays) \(dayString)"
-        daysLabel.font = .systemFont(ofSize: 12)
+        daysLabel.font = .systemFont(ofSize: 32, weight: .bold)
         daysLabel.textColor = colors.labelColor
         daysLabel.textAlignment = .center
         daysLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(daysLabel)
 
-        // Adjust textField top constraint to account for header
+        // Adjust textField top constraint to account for daysLabel
         NSLayoutConstraint.deactivate(contentView.constraints.filter { $0.firstItem === textField && $0.firstAttribute == .top })
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 18),
-            headerLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-
-            daysLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 8),
+            daysLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
             daysLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             daysLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 

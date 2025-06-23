@@ -42,11 +42,16 @@ class TrackersViewController: UIViewController {
     }
     // MARK: - Обновление состояния пустого списка
     private func updateEmptyStateVisibility() {
-        let isEmpty = viewModel.trackers.isEmpty // Используем viewModel.trackers вместо trackersService.categories
-        imageView.isHidden = !isEmpty
-        whatGoingToTrackLabel.isHidden = !isEmpty
-        collectionView.isHidden = isEmpty // Добавляем скрытие коллекции при пустом состоянии
-        filtersButton.isHidden = isEmpty
+        let hasTrackersInStorage = !trackersService.categories.isEmpty
+        let isEmptyAfterFilter = viewModel.trackers.isEmpty
+        
+        // Кнопка фильтра видна, если в хранилище есть трекеры (даже если после фильтрации список пуст)
+        filtersButton.isHidden = !hasTrackersInStorage
+        
+        // Пустое состояние показываем только если после фильтрации ничего не найдено
+        imageView.isHidden = !isEmptyAfterFilter
+        whatGoingToTrackLabel.isHidden = !isEmptyAfterFilter
+        collectionView.isHidden = isEmptyAfterFilter
         
         if let searchText = searchTrackersBar.text, !searchText.isEmpty {
             imageView.image = UIImage(named: "nothingToSearch")
@@ -55,9 +60,7 @@ class TrackersViewController: UIViewController {
             imageView.image = imageForEmptyStatisticList
             whatGoingToTrackLabel.text = "whatGoingToTrackLabel.title".localized
         }
-        
     }
-    
     // MARK: - Настройка UI
     private func setupUI() {
         // Лейб Трекеры
@@ -116,7 +119,7 @@ class TrackersViewController: UIViewController {
     }
     
     private func setupFiltersButton() {
-           filtersButton.setTitle("Фильтры", for: .normal)
+        filtersButton.setTitle("filters.title".localized, for: .normal)
            filtersButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
            filtersButton.setTitleColor(.white, for: .normal)
            filtersButton.backgroundColor = .blue
