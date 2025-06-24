@@ -59,10 +59,11 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         coloredBackgroundView.addSubview(emojiLabel)
         
         // Настройка иконки булавки
-                pinImageView.translatesAutoresizingMaskIntoConstraints = false
+        pinImageView.translatesAutoresizingMaskIntoConstraints = false
         pinImageView.image = UIImage(systemName: "pin.fill")
-                pinImageView.isHidden = true // Скрыта по умолчанию
-                coloredBackgroundView.addSubview(pinImageView)
+        pinImageView.tintColor = .white
+        pinImageView.isHidden = true // Скрыта по умолчанию
+        coloredBackgroundView.addSubview(pinImageView)
         
         titleLabel.textAlignment = .natural
         titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
@@ -97,10 +98,10 @@ class TrackersCollectionViewCell: UICollectionViewCell {
             emojiLabel.heightAnchor.constraint(equalToConstant: 24),
             
             // Иконка булавки
-                        pinImageView.topAnchor.constraint(equalTo: coloredBackgroundView.topAnchor, constant: padding),
-                        pinImageView.trailingAnchor.constraint(equalTo: coloredBackgroundView.trailingAnchor, constant: -padding),
-                        pinImageView.widthAnchor.constraint(equalToConstant: 14),
-                        pinImageView.heightAnchor.constraint(equalToConstant: 14),
+            pinImageView.topAnchor.constraint(equalTo: coloredBackgroundView.topAnchor, constant: padding),
+            pinImageView.trailingAnchor.constraint(equalTo: coloredBackgroundView.trailingAnchor, constant: -padding),
+            pinImageView.widthAnchor.constraint(equalToConstant: 14),
+            pinImageView.heightAnchor.constraint(equalToConstant: 14),
             
             // Название трекера
             titleLabel.leadingAnchor.constraint(equalTo: coloredBackgroundView.leadingAnchor, constant: padding),
@@ -143,7 +144,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         // Блокирую кнопку только если:
         // 1. Дата в будущем ИЛИ
         // 2. Трекер уже выполнен на эту дату
-        actionButton.isEnabled = !isFutureDate 
+        actionButton.isEnabled = !isFutureDate
     }
     private func updateDaysCountText() {
         let dayString = String.localizedStringWithFormat(
@@ -203,20 +204,20 @@ class TrackersCollectionViewCell: UICollectionViewCell {
                     self.isCompletedToday = false
                     self.onActionButtonTapped?(trackerId, false)
                     AnalyticsService.shared.report(
-                                           event: "click",
-                                           screen: "Main",
-                                           item: "untrack"
-                                       )
+                        event: "click",
+                        screen: "Main",
+                        item: "untrack"
+                    )
                 } else {
                     // Если не выполнено - отмечаю
                     self.completedDays += 1
                     self.isCompletedToday = true
                     self.onActionButtonTapped?(trackerId, true)
                     AnalyticsService.shared.report(
-                                           event: "click",
-                                           screen: "Main",
-                                           item: "track"
-                                       )
+                        event: "click",
+                        screen: "Main",
+                        item: "track"
+                    )
                 }
                 
                 self.updateDaysCountText()
@@ -225,7 +226,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         }
     }
     override func prepareForReuse() {
-            super.prepareForReuse()
-            pinImageView.isHidden = true
-        }
+        super.prepareForReuse()
+        pinImageView.isHidden = true
+    }
 }

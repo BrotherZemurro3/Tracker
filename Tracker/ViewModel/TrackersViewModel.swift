@@ -22,6 +22,7 @@ final class TrackersViewModel {
     
     // Установка фильтра
     func setFilter(_ filter: TrackerFilter) {
+        AnalyticsService.shared.report(event: "filter", screen: "Main", item: filter.rawValue)
         selectedFilter = filter
         loadTrackers(for: currentDate)
     }
@@ -77,6 +78,7 @@ final class TrackersViewModel {
     }
     
     func deleteTracker(id: UUID) {
+        AnalyticsService.shared.report(event: "click", screen: "Main", item: "delete")
         print("Удаляем трекер с ID: \(id)")
         trackersService.deleteTracker(id)
         loadTrackers(for: currentDate)
@@ -95,6 +97,7 @@ final class TrackersViewModel {
     }
     
     func unpinTracker(id: UUID) {
+        AnalyticsService.shared.report(event: "click", screen: "Main", item: "unpin")
         print("Открепляем трекер с ID: \(id)")
         trackersService.unpinTracker(id)
         loadTrackers(for: currentDate)
