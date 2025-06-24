@@ -47,30 +47,30 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate, TrackerS
     }
     
     func updateTracker(_ tracker: Tracker, categoryTitle: String) throws {
-            print("Updating tracker: \(tracker.title), ID: \(tracker.id) in category: \(categoryTitle)")
-            let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
-            request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
-            
-            guard let trackerCoreData = try context.fetch(request).first else {
-                throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Tracker not found"])
-            }
-            
-            guard let categoryCoreData = try (categoryStore as? TrackerCategoryStore)?.coreDataCategory(withTitle: categoryTitle) else {
-                throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Category not found"])
-            }
-            
-            trackerCoreData.title = tracker.title
-            trackerCoreData.colorHex = tracker.color.hexString
-            trackerCoreData.emoji = tracker.emoji
-            trackerCoreData.schedule = tracker.schedule?.map { String($0.rawValue) }.joined(separator: ",")
-            trackerCoreData.isRegular = tracker.isRegular
-            trackerCoreData.creationDate = tracker.creationDate
-            trackerCoreData.isPinned = tracker.isPinned
-            trackerCoreData.category = categoryCoreData
-            
-            try context.save()
-            print("Updated tracker: \(tracker.title) in category: \(categoryTitle)")
+        print("Updating tracker: \(tracker.title), ID: \(tracker.id) in category: \(categoryTitle)")
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        
+        guard let trackerCoreData = try context.fetch(request).first else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Tracker not found"])
         }
+        
+        guard let categoryCoreData = try (categoryStore as? TrackerCategoryStore)?.coreDataCategory(withTitle: categoryTitle) else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Category not found"])
+        }
+        
+        trackerCoreData.title = tracker.title
+        trackerCoreData.colorHex = tracker.color.hexString
+        trackerCoreData.emoji = tracker.emoji
+        trackerCoreData.schedule = tracker.schedule?.map { String($0.rawValue) }.joined(separator: ",")
+        trackerCoreData.isRegular = tracker.isRegular
+        trackerCoreData.creationDate = tracker.creationDate
+        trackerCoreData.isPinned = tracker.isPinned
+        trackerCoreData.category = categoryCoreData
+        
+        try context.save()
+        print("Updated tracker: \(tracker.title) in category: \(categoryTitle)")
+    }
     
     func fetchAllTrackers() throws -> [Tracker] {
         let trackers = fetchedResultsController?.fetchedObjects ?? []

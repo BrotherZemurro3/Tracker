@@ -90,21 +90,21 @@ final class TrackersService: TrackersServiceProtocol {
             self?.loadInitialData()
         }
         NotificationCenter.default.addObserver(
-                    self,
-                    selector: #selector(contextDidSave),
-                    name: NSNotification.Name.NSManagedObjectContextDidSave,
-                    object: CoreDataManager.shared.context
-                )
+            self,
+            selector: #selector(contextDidSave),
+            name: NSNotification.Name.NSManagedObjectContextDidSave,
+            object: CoreDataManager.shared.context
+        )
         loadInitialData()
     }
     deinit {
-            NotificationCenter.default.removeObserver(self)
-        }
+        NotificationCenter.default.removeObserver(self)
+    }
     // MARK: - Public Methods
     @objc private func contextDidSave() {
-            print("Received NSManagedObjectContextDidSave at \(Date())")
-            loadInitialData()
-        }
+        print("Received NSManagedObjectContextDidSave at \(Date())")
+        loadInitialData()
+    }
     
     func addTracker(_ tracker: Tracker, to categoryTitle: String) {
         print("Adding tracker: \(tracker.title) to category: \(categoryTitle), ID: \(tracker.id)")
@@ -171,28 +171,28 @@ final class TrackersService: TrackersServiceProtocol {
         }
     }
     func pinTracker(_ trackerId: UUID) {
-            do {
-                try trackerStore.updateTrackerPinnedState(trackerId, isPinned: true)
-                loadInitialData()
-            } catch {
-                print("Ошибка при закреплении трекера: \(error)")
-            }
+        do {
+            try trackerStore.updateTrackerPinnedState(trackerId, isPinned: true)
+            loadInitialData()
+        } catch {
+            print("Ошибка при закреплении трекера: \(error)")
         }
+    }
     func unpinTracker(_ trackerId: UUID) {
-            do {
-                try trackerStore.updateTrackerPinnedState(trackerId, isPinned: false)
-                loadInitialData()
-            } catch {
-                print("Ошибка при откреплении трекера: \(error)")
-            }
+        do {
+            try trackerStore.updateTrackerPinnedState(trackerId, isPinned: false)
+            loadInitialData()
+        } catch {
+            print("Ошибка при откреплении трекера: \(error)")
         }
+    }
     
     func getTrackers(for date: Date, searchText: String?) -> [TrackerCategory] {
         let weekday = Calendar.current.component(.weekday, from: date)
         guard let currentWeekday = Weekday(rawValue: weekday) else { return [] }
         
         let filteredCategories = categories.compactMap { category in
-                let trackers = category.trackers.filter { tracker in
+            let trackers = category.trackers.filter { tracker in
                 let matchesSearch: Bool
                 if let searchText = searchText?.lowercased(), !searchText.isEmpty {
                     matchesSearch = tracker.title.lowercased().contains(searchText)
@@ -223,38 +223,38 @@ final class TrackersService: TrackersServiceProtocol {
     // MARK: - loadDataFromCoreData
     
     private func loadInitialData() {
-            do {
-                let categoriesFromStore = try categoryStore.fetchAllCategories()
-                let trackersFromStore = try trackerStore.fetchAllTrackers()
-                let recordsFromStore = try recordStore.fetchRecords()
-                
-                completedTrackers = recordsFromStore
-                print("Loaded completedTrackers: \(recordsFromStore.map { "ID: \($0.id), Date: \($0.date)" })")
-                
-                var tempCategories: [TrackerCategory] = []
-                
-                for category in categoriesFromStore {
-                    let coreDataCategory = try categoryStore.coreDataCategory(withTitle: category.title)
-                    let trackers = trackersFromStore.filter { tracker in
-                        coreDataCategory?.trackers?.contains { ($0 as? TrackerCoreData)?.id == tracker.id } ?? false
-                    }.map { tracker in
-                        tracker.withCompletedState(
-                            completedTrackers.contains { $0.id == tracker.id && Calendar.current.isDate($0.date, inSameDayAs: tracker.creationDate) }
-                        )
-                    }
-                    
-                    if !trackers.isEmpty {
-                        tempCategories.append(TrackerCategory(title: category.title, trackers: trackers))
-                    }
+        do {
+            let categoriesFromStore = try categoryStore.fetchAllCategories()
+            let trackersFromStore = try trackerStore.fetchAllTrackers()
+            let recordsFromStore = try recordStore.fetchRecords()
+            
+            completedTrackers = recordsFromStore
+            print("Loaded completedTrackers: \(recordsFromStore.map { "ID: \($0.id), Date: \($0.date)" })")
+            
+            var tempCategories: [TrackerCategory] = []
+            
+            for category in categoriesFromStore {
+                let coreDataCategory = try categoryStore.coreDataCategory(withTitle: category.title)
+                let trackers = trackersFromStore.filter { tracker in
+                    coreDataCategory?.trackers?.contains { ($0 as? TrackerCoreData)?.id == tracker.id } ?? false
+                }.map { tracker in
+                    tracker.withCompletedState(
+                        completedTrackers.contains { $0.id == tracker.id && Calendar.current.isDate($0.date, inSameDayAs: tracker.creationDate) }
+                    )
                 }
                 
-                categories = tempCategories
-                statisticsUpdater?.updateStatistics()
-                print("Loaded \(tempCategories.count) categories with trackers: \(tempCategories.map { "\($0.title): \($0.trackers.count)" })")
-                
-                // Отправляем уведомление после обновления данных
-                NotificationCenter.default.post(name: NSNotification.Name("TrackerCompletedNotification"), object: nil)
-            } catch {
-                print("Ошибка при загрузке данных: \(error)")
+                if !trackers.isEmpty {
+                    tempCategories.append(TrackerCategory(title: category.title, trackers: trackers))
+                }
             }
-        }}
+            
+            categories = tempCategories
+            statisticsUpdater?.updateStatistics()
+            print("Loaded \(tempCategories.count) categories with trackers: \(tempCategories.map { "\($0.title): \($0.trackers.count)" })")
+            
+
+            NotificationCenter.default.post(name: NSNotification.Name("TrackerCompletedNotification"), object: nil)
+        } catch {
+            print("Ошибка при загрузке данных: \(error)")
+        }
+    }}

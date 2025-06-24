@@ -40,7 +40,7 @@ enum Weekday: Int, CaseIterable {
     }
     
     
-    // Добавляем вычисляемое свойство для порядка отображения
+   
     var displayOrder: Int {
         switch self {
         case .monday: return 0
@@ -53,7 +53,7 @@ enum Weekday: Int, CaseIterable {
         }
     }
     
-    // Модифицируем allCases для правильного порядка отображения
+ 
     static var displayOrderedCases: [Weekday] {
         return [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
     }

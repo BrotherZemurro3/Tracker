@@ -60,7 +60,7 @@ final class StatisticsService: StatisticsServiceProtocol {
         
         return maxStreak
     }
-
+    
     private func calculatePerfectDays(completedTrackers: [TrackerRecord], allTrackers: [Tracker]) -> Int {
         guard !allTrackers.isEmpty else {return 0}
         

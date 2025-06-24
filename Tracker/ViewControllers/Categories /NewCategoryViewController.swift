@@ -29,7 +29,7 @@ final class NewCategoryViewController: UIViewController {
     
     private lazy var createCategoryButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(isEditingCategory ? "saveButton.title".localized : "doneButton.title".localized, for: .normal)
+        button.setTitle("doneButton.title".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .gray
         button.layer.cornerRadius = 16
@@ -60,6 +60,7 @@ final class NewCategoryViewController: UIViewController {
             createCategoryButton.isEnabled = !initialTitle.isEmpty
             createCategoryButton.backgroundColor = UIColors.shared.adaptiveButtonBackground
         }
+        setupHideKeyboardOnTap()
     }
     
     private func setupUI() {

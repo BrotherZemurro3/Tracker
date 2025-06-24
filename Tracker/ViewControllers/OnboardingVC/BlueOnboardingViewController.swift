@@ -7,10 +7,10 @@ final class BlueOnboardingViewController: UIViewController {
         super.viewDidLoad()
         setupBackground()
         setupLabel()
-    
+        
     }
     
- private func setupBackground() {
+    private func setupBackground() {
         let blueBackgroundImage = UIImageView(image: UIImage(named: "blueOnboardingBack"))
         blueBackgroundImage.contentMode = .scaleAspectFit
         blueBackgroundImage.frame = view.bounds

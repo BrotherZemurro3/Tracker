@@ -8,7 +8,7 @@ final class RedOnboardingViewController: UIViewController {
         super.viewDidLoad()
         setupBackground()
         setupLabel()
-}
+    }
     func setupBackground() {
         let redBackgroundImage = UIImageView(image: UIImage(named: "redOnboardingBack"))
         redBackgroundImage.contentMode = .scaleAspectFit

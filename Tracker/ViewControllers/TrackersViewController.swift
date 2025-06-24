@@ -51,10 +51,10 @@ class TrackersViewController: UIViewController {
         let hasTrackersInStorage = !trackersService.categories.isEmpty
         let isEmptyAfterFilter = viewModel.trackers.isEmpty
         
-        // Кнопка фильтра видна, если в хранилище есть трекеры (даже если после фильтрации список пуст)
+
         filtersButton.isHidden = !hasTrackersInStorage
         
-        // Пустое состояние показываем только если после фильтрации ничего не найдено
+
         imageView.isHidden = !isEmptyAfterFilter
         whatGoingToTrackLabel.isHidden = !isEmptyAfterFilter
         collectionView.isHidden = isEmptyAfterFilter
@@ -272,7 +272,7 @@ extension UIViewController {
     }
     
     @objc func dismissKeyboard() {
-        view.endEditing(true) // Скрывает все текстовые поля и клавиатуру
+        view.endEditing(true) 
     }
 }
 
@@ -286,7 +286,6 @@ extension TrackersViewController: TrackersCollectionViewDelegate {
         }
     }
     func didRequestDeleteTracker(_ trackerId: UUID) {
-        // Аналитика для удаления
         AnalyticsService.shared.report(event: "click", screen: "Main", item: "delete")
         let alert = UIAlertController(title: "",
                                       message: "delete.confirmation".localized,

@@ -39,7 +39,6 @@ final class TrackerCategoryStore: TrackerCategoryStorable {
         guard let category = try context.fetch(request).first else {
             throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Category not found"])
         }
-        // Удаляем связанные трекеры
         if let trackers = category.trackers as? Set<TrackerCoreData> {
             trackers.forEach { context.delete($0) }
         }

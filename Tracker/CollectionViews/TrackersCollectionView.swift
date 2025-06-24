@@ -110,18 +110,16 @@ extension TrackersCollectionView: UICollectionViewDelegateFlowLayout {
     private func makeContextMenu(for indexPath: IndexPath) -> UIMenu {
         let tracker = viewModel.trackers[indexPath.section].trackers[indexPath.row]
         
-        // Действие для закрепления/открепления
+  
         let pinTitle = tracker.isPinned ? "unpin.title".localized : "pin.title".localized
         let pinAction = UIAction(title: pinTitle) { [weak self] _ in
             self?.deleteDelegate?.didRequestPinTracker(tracker.id, isPinned: !tracker.isPinned)
         }
-        
-        // Действие для редактирования
+
         let editAction = UIAction(title: "edit.title".localized) { [weak self] _ in
             self?.editItem(at: indexPath)
         }
         
-        // Действие для удаления
         let deleteAction = UIAction(title: "delete.title".localized, attributes: .destructive) { [weak self] _ in
             self?.deleteItem(at: indexPath)
         }

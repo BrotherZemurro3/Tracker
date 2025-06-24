@@ -22,7 +22,7 @@ final class AnalyticsService {
         if let item = item {
             params["item"] = item
         }
-
+        
         YMMYandexMetrica.reportEvent("AnalyticsEvent", parameters: params, onFailure: { error in
             print("REPORT ERROR: \(error.localizedDescription)")
         })

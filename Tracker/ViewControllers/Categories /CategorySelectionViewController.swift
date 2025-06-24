@@ -48,6 +48,7 @@ final class CategorySelectionViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupBindings()
+        setupHideKeyboardOnTap()
         viewModel.loadCategories()
     }
     

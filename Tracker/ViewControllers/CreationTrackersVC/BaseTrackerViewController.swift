@@ -4,10 +4,10 @@ class BaseTrackerViewController: UIViewController, TrackerCreationDelegate {
     weak var delegate: TrackerCreationDelegate?
     private let categoryViewModel = CategorySelectionViewModel()
     let scrollView = UIScrollView()
-    var isEditingMode: Bool { return false } // По умолчанию создание
-    var trackerToEdit: Tracker? // Для хранения редактируемого трекера
-    var oldCategoryTitle: String? // Для хранения старой категории
-    var completedDays: Int = 0 // Для хранения количества выполненных дней
+    var isEditingMode: Bool { return false } 
+    var trackerToEdit: Tracker?
+    var oldCategoryTitle: String?
+    var completedDays: Int = 0
     let contentView = UIView()
     let tableView = UITableView()
     let textField = UITextField()
