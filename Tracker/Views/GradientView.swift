@@ -1,4 +1,3 @@
-// GradientView.swift
 import UIKit
 
 class GradientView: UIView {

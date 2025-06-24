@@ -38,31 +38,31 @@ final class TabBarController: UITabBarController {
         view.backgroundColor = .lightGray
     }
     override func viewDidAppear(_ animated: Bool) {
-          super.viewDidAppear(animated)
-          AnalyticsService.shared.report(event: "opened", screen: "Main")
-      }
-
-      override func viewWillDisappear(_ animated: Bool) {
-          super.viewWillDisappear(animated)
-          AnalyticsService.shared.report(event: "closed", screen: "Main")
-      }
+        super.viewDidAppear(animated)
+        AnalyticsService.shared.report(event: "opened", screen: "Main")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        AnalyticsService.shared.report(event: "closed", screen: "Main")
+    }
     
     private func setupTabBar() {
         var controllers: [UIViewController] = []
         
         tabBar.shadowImage = UIImage() // Убираем стандартную тень 
-           tabBar.backgroundImage = UIImage() // Убираем фоновое изображение
-           
-           // Создаем изображение для разделителя (1px высотой)
-           let separator = UIView(frame: CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 0.5))
-           separator.backgroundColor = UIColor.lightGray // Цвет разделителя
-           separator.isUserInteractionEnabled = false
-           
-           // Добавляем разделитель
-           tabBar.addSubview(separator)
-           
-           // Обновляем цвета элементов
-           updateTabBarItemColors(selectedIndex: selectedIndex)
+        tabBar.backgroundImage = UIImage() // Убираем фоновое изображение
+        
+        // Создаем изображение для разделителя (1px высотой)
+        let separator = UIView(frame: CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 0.5))
+        separator.backgroundColor = UIColor.lightGray // Цвет разделителя
+        separator.isUserInteractionEnabled = false
+        
+        // Добавляем разделитель
+        tabBar.addSubview(separator)
+        
+        // Обновляем цвета элементов
+        updateTabBarItemColors(selectedIndex: selectedIndex)
         
         
         for item in [TabBarItem.trackers, TabBarItem.statistic] {

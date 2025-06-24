@@ -2,26 +2,26 @@ import UIKit
 
 final class EditTrackerViewController: BaseTrackerViewController {
     private let tracker: Tracker
-        private let headerLabel = UILabel()
-        private let daysLabel = UILabel()
+    private let headerLabel = UILabel()
+    private let daysLabel = UILabel()
     
     override var isEditingMode: Bool { return true }
     
     init(tracker: Tracker, categoryTitle: String, completedDays: Int) {
-            self.tracker = tracker
-            super.init(nibName: nil, bundle: nil)
+        self.tracker = tracker
+        super.init(nibName: nil, bundle: nil)
         self.completedDays = completedDays
-            self.trackerToEdit = tracker
-            self.oldCategoryTitle = categoryTitle
-            self.selectedEmoji = tracker.emoji
-            self.selectedColor = tracker.color
-            self.selectedCategory = categoryTitle
-            self.selectedDays = tracker.schedule ?? []
-        }
-
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
+        self.trackerToEdit = tracker
+        self.oldCategoryTitle = categoryTitle
+        self.selectedEmoji = tracker.emoji
+        self.selectedColor = tracker.color
+        self.selectedCategory = categoryTitle
+        self.selectedDays = tracker.schedule ?? []
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     
     override func viewDidLoad() {
@@ -29,7 +29,7 @@ final class EditTrackerViewController: BaseTrackerViewController {
         setupDaysLabel()
         textField.text = tracker.title
         updateCreateButtonState()
-      
+        
     }
     // Вызывал selectInitialEmojiAndColor после появления view, когда коллекции точно загружены
     override func viewDidAppear(_ animated: Bool) {
@@ -40,12 +40,12 @@ final class EditTrackerViewController: BaseTrackerViewController {
     override var isRegular: Bool {
         return tracker.isRegular
     }
-
-     func setupNavigationBar() {
+    
+    func setupNavigationBar() {
         title = "editTracker.title".localized
         navigationController?.navigationBar.titleTextAttributes = [.font: UIFont.systemFont(ofSize: 16)]
     }
-
+    
     private func setupDaysLabel() {
         let dayString = String.localizedStringWithFormat(
             NSLocalizedString("days_count", comment: "Number of days"),
@@ -57,21 +57,21 @@ final class EditTrackerViewController: BaseTrackerViewController {
         daysLabel.textAlignment = .center
         daysLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(daysLabel)
-
+        
         // Adjust textField top constraint to account for daysLabel
         NSLayoutConstraint.deactivate(contentView.constraints.filter { $0.firstItem === textField && $0.firstAttribute == .top })
         NSLayoutConstraint.activate([
             daysLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
             daysLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             daysLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-
+            
             textField.topAnchor.constraint(equalTo: daysLabel.bottomAnchor, constant: 24),
             textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             textField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             textField.heightAnchor.constraint(equalToConstant: 75)
         ])
     }
-
+    
     private func selectInitialEmojiAndColor() {
         if let emojiIndex = emojis.firstIndex(of: tracker.emoji) {
             let indexPath = IndexPath(item: emojiIndex, section: 0)
@@ -81,7 +81,7 @@ final class EditTrackerViewController: BaseTrackerViewController {
                 cell.contentView.layer.cornerRadius = 8
             }
         }
-
+        
         if let colorIndex = colorOptions.firstIndex(where: { $0 == tracker.color }) {
             let indexPath = IndexPath(item: colorIndex, section: 0)
             colorCollectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])

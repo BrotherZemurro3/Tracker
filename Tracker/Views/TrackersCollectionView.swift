@@ -10,7 +10,7 @@ final class TrackersCollectionView: UICollectionView {
     private var viewModel: TrackersViewModel
     private var currentDate: Date = Date()
     weak var deleteDelegate: TrackersCollectionViewDelegate?
-
+    
     init(viewModel: TrackersViewModel = TrackersViewModel(trackersService: TrackersService.shared)) {
         self.viewModel = viewModel
         let layout = UICollectionViewFlowLayout()

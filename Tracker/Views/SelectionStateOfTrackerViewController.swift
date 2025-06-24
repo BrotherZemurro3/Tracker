@@ -1,10 +1,10 @@
 import UIKit
 
 class SelectionStateOfTrackerViewController: UIViewController {
-     weak var delegate: TrackerCreationDelegate?
+    weak var delegate: TrackerCreationDelegate?
     private let habitButton = UIButton()
     private let irregularHabitButton = UIButton()
-   private  let createTrackerLabel = UILabel()
+    private  let createTrackerLabel = UILabel()
     private let colors = UIColors.shared
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -86,11 +86,13 @@ final class TrackersViewModel {
     
     func didUpdateTracker(_ tracker: Tracker, in categoryTitle: String, oldCategoryTitle: String?) {
          print("Updating tracker:", tracker.title)
+        AnalyticsService.shared.report(event: "click", screen: "Main", item: "edit")
          trackersService.updateTracker(tracker, in: categoryTitle, oldCategoryTitle: oldCategoryTitle)
          loadTrackers(for: currentDate)
      }
     
     func pinTracker(id: UUID) {
+        AnalyticsService.shared.report(event: "click", screen: "Main", item: "pin")
         print("Закрепляем трекер с ID: \(id)")
         trackersService.pinTracker(id)
         loadTrackers(for: currentDate)
@@ -124,6 +126,7 @@ final class TrackersViewModel {
         }
         
         trackersService.completeTracker(id: id, date: today)
+        AnalyticsService.shared.report(event: "click", screen: "Main", item: "track_complete")
         print("Трекер \(id) выполнен на дату \(today)")
         loadTrackers(for: currentDate)
     }
@@ -133,6 +136,7 @@ final class TrackersViewModel {
         let today = Calendar.current.startOfDay(for: date)
         print("Отменяем выполнение трекера \(id) на дату \(today)")
         
+        AnalyticsService.shared.report(event: "click", screen: "Main", item: "track_uncomplete")
         trackersService.uncompleteTracker(id: id, date: today)
         loadTrackers(for: currentDate)
     }

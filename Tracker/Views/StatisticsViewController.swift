@@ -18,8 +18,8 @@ final class StatisticsViewController: UIViewController, StatisticsUpdater{
         self.statisticsService = statisticsService
         super.init(nibName: nil, bundle: nil)
         if let trackersService = trackersService as? TrackersService {
-                    trackersService.statisticsUpdater = self
-                }
+            trackersService.statisticsUpdater = self
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -49,22 +49,22 @@ final class StatisticsViewController: UIViewController, StatisticsUpdater{
     }
     
     func updateStatistics() {
-            let allTrackers = trackersService.categories.flatMap { $0.trackers }
-            let completedTrackers = trackersService.completedTrackers
-            print("Updating statistics at \(Date()): allTrackers count: \(allTrackers.count), completedTrackers count: \(completedTrackers.count)")
-            
-            let statistics = statisticsService.calculateStatistics(
-                completedTrackers: completedTrackers,
-                allTrackers: allTrackers
-            )
-            print("Statistics: bestPeriod: \(statistics.bestPeriod), perfectDays: \(statistics.perfectDays), trackersCompleted: \(statistics.trackersCompleted), averageValue: \(statistics.averageValue)")
-            
-            statisticsItems = [
-                StatisticsItem(title: "bestPeriod.title".localized, value: statistics.bestPeriod),
-                StatisticsItem(title: "bestStreak.title".localized, value: statistics.perfectDays),
-                StatisticsItem(title: "trackesDone.title".localized, value: statistics.trackersCompleted),
-                StatisticsItem(title: "averageAmount.title".localized, value: Int(statistics.averageValue.rounded()))
-            ]
+        let allTrackers = trackersService.categories.flatMap { $0.trackers }
+        let completedTrackers = trackersService.completedTrackers
+        print("Updating statistics at \(Date()): allTrackers count: \(allTrackers.count), completedTrackers count: \(completedTrackers.count)")
+        
+        let statistics = statisticsService.calculateStatistics(
+            completedTrackers: completedTrackers,
+            allTrackers: allTrackers
+        )
+        print("Statistics: bestPeriod: \(statistics.bestPeriod), perfectDays: \(statistics.perfectDays), trackersCompleted: \(statistics.trackersCompleted), averageValue: \(statistics.averageValue)")
+        
+        statisticsItems = [
+            StatisticsItem(title: "bestPeriod.title".localized, value: statistics.bestPeriod),
+            StatisticsItem(title: "bestStreak.title".localized, value: statistics.perfectDays),
+            StatisticsItem(title: "trackesDone.title".localized, value: statistics.trackersCompleted),
+            StatisticsItem(title: "averageAmount.title".localized, value: Int(statistics.averageValue.rounded()))
+        ]
         
         DispatchQueue.main.async { [weak self] in
             print("Reloading tableView with \(self?.statisticsItems.count ?? 0) items")

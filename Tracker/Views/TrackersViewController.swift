@@ -128,7 +128,7 @@ class TrackersViewController: UIViewController {
         filtersButton.setTitle("filters.title".localized, for: .normal)
         filtersButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         filtersButton.setTitleColor(.white, for: .normal)
-        filtersButton.backgroundColor = .blue
+        filtersButton.backgroundColor = .ypBlue
         filtersButton.layer.cornerRadius = 16
         filtersButton.isHidden = true
         filtersButton.addTarget(self, action: #selector(filtersButtonTapped), for: .touchUpInside)
