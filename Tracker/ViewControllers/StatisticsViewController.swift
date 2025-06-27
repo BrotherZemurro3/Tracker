@@ -1,0 +1,160 @@
+import UIKit
+
+final class StatisticsViewController: UIViewController, StatisticsUpdater{
+    private let trackersService: TrackersServiceProtocol
+    private let statisticsService: StatisticsServiceProtocol
+    
+    private let placeholderView = StatisticsPlaceholderView()
+    private let tableView = UITableView()
+    private let titleLabel = UILabel()
+    
+    private var statisticsItems: [StatisticsItem] = []
+    
+    init(
+        trackersService: TrackersServiceProtocol = TrackersService.shared,
+        statisticsService: StatisticsServiceProtocol = StatisticsService()
+    ) {
+        self.trackersService = trackersService
+        self.statisticsService = statisticsService
+        super.init(nibName: nil, bundle: nil)
+        if let trackersService = trackersService as? TrackersService {
+            trackersService.statisticsUpdater = self
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
+        updateStatistics()
+        
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleTrackerCompleted),
+            name: NSNotification.Name("TrackerCompletedNotification"),
+            object: nil
+        )
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("TrackerCompletedNotification"), object: nil)
+    }
+    
+    @objc private func handleTrackerCompleted() {
+        print("Received TrackerCompletedNotification, updating statistics")
+        updateStatistics()
+    }
+    
+    func updateStatistics() {
+        let allTrackers = trackersService.categories.flatMap { $0.trackers }
+        let completedTrackers = trackersService.completedTrackers
+        print("Updating statistics at \(Date()): allTrackers count: \(allTrackers.count), completedTrackers count: \(completedTrackers.count)")
+        
+        let statistics = statisticsService.calculateStatistics(
+            completedTrackers: completedTrackers,
+            allTrackers: allTrackers
+        )
+        print("Statistics: bestPeriod: \(statistics.bestPeriod), perfectDays: \(statistics.perfectDays), trackersCompleted: \(statistics.trackersCompleted), averageValue: \(statistics.averageValue)")
+        
+        statisticsItems = [
+            StatisticsItem(title: "bestPeriod.title".localized, value: statistics.bestPeriod),
+            StatisticsItem(title: "bestStreak.title".localized, value: statistics.perfectDays),
+            StatisticsItem(title: "trackesDone.title".localized, value: statistics.trackersCompleted),
+            StatisticsItem(title: "averageAmount.title".localized, value: Int(statistics.averageValue.rounded()))
+        ]
+        
+        DispatchQueue.main.async { [weak self] in
+            print("Reloading tableView with \(self?.statisticsItems.count ?? 0) items")
+            self?.tableView.reloadData()
+            self?.updatePlaceholderVisibility()
+        }
+    }
+    
+    private func updatePlaceholderVisibility() {
+        let isEmpty = statisticsItems.allSatisfy { $0.value == 0 }
+        placeholderView.isHidden = !isEmpty
+        tableView.isHidden = isEmpty
+    }
+    
+    private func setupUI() {
+        view.backgroundColor = UIColors.shared.viewBackgroundColor
+        
+        // Настройка placeholder
+        placeholderView.configure(
+            image: UIImage(named: "nothingToAnalize"),
+            text: "nothingToAnalize.title".localized
+        )
+        
+        // Настройка таблицы
+        tableView.register(StatisticsCell.self, forCellReuseIdentifier: StatisticsCell.reuseIdentifier)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = UIColors.shared.viewBackgroundColor
+        tableView.isScrollEnabled = false
+        
+        // Настройка titleLabel
+        titleLabel.text = "statistic.title".localized
+        titleLabel.font = .boldSystemFont(ofSize: 34)
+        titleLabel.textColor = .label // Используем цвет из вашей системы
+        titleLabel.textAlignment = .left
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false // Добавлено
+        titleLabel.numberOfLines = 1 // Добавлено
+        
+        // Добавление на view
+        view.addSubview(titleLabel)
+        view.addSubview(placeholderView)
+        view.addSubview(tableView)
+        
+        // Констрейнты
+        placeholderView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            // Title Label constraints
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            titleLabel.heightAnchor.constraint(equalToConstant: 41),
+            
+            // Placeholder constraints
+            placeholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            placeholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            placeholderView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            placeholderView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            // Table View constraints
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 77),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: 121)
+        ])
+        
+        updatePlaceholderVisibility()
+    }}
+
+extension StatisticsViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return statisticsItems.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: StatisticsCell.reuseIdentifier,
+            for: indexPath
+        ) as? StatisticsCell else {
+            return UITableViewCell()
+        }
+        
+        cell.configure(with: statisticsItems[indexPath.row])
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 90
+    }
+}
+

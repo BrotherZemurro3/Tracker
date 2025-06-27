@@ -1,0 +1,88 @@
+// Common UI
+"whatGoingToTrackLabel.title" = "Was möchten wir verfolgen?";
+"delete.title" = "Löschen";
+"delete.confirmation" = "Möchten Sie den Tracker wirklich löschen?";
+"cancel.title" = "Abbrechen";
+"create.title" = "Erstellen";
+"doneButton.title" = "Fertig";
+
+// Tabs
+"trackers.title" = "Tracker";
+"statistic.title" = "Statistik";
+"trackers.tab.title" = "Tracker";
+"statistic.tab.title" = "Statistik";
+
+// Search & Filters
+"search.placeholder" = "Suche";
+"filters.title" = "Filter";
+"notSelected.subtitle" = "Nicht ausgewählt";
+
+// Filters
+"allTrackers.title" = "Alle Tracker";
+"todayTrakers.title" = "Heutige Tracker";
+"completedTrackers.title" = "Abgeschlossen";
+"notCompletedTrackers.title" = "Nicht abgeschlossen";
+
+
+// Edit
+"edit.title" = "Bearbeiten";
+"editCategory.title" = "Kategorie bearbeiten";
+"editRegular.title" = "Gewohnheit bearbeiten";
+"editIrregular.title" = "Unregelmäßiges Ereignis bearbeiten";
+
+// Pin-Unpin
+"pin.title" = "Anheften";
+"unpin.title" = "Lösen";
+
+// Tracker Types
+"createTracker.title" = "Tracker erstellen";
+"habit.title" = "Gewohnheit";
+"irregularEvent.title" = "Unregelmäßiges Ereignis";
+"newHabit.title" = "Neue Gewohnheit";
+"newIrregularEvent.title" = "Neues unregelmäßiges Ereignis";
+
+// Inputs
+"textField.placeholder" = "Tracker-Namen eingeben";
+"newCategory.placeholder" = "Kategorienamen eingeben";
+"errorLabel.title" = "Limit von 38 Zeichen";
+
+// Categories
+"categories.title" = "Kategorien";
+"category.title" = "Kategorie";
+"categoryLable.title" = "Gewohnheiten und Ereignisse können nach Bedeutung gruppiert werden";
+"addCategoryButton.title" = "Kategorie hinzufügen";
+"newCategory.title" = "Neue Kategorie";
+"notSelected.title" = "Nicht ausgewählt";
+"thisCategoryIsUnneeded.title" = "Sind Sie sicher, dass Sie diese Kategorie nicht brauchen?";
+
+// Schedule
+"schedule.title" = "Zeitplan";
+"monday.title" = "Montag";
+"tuesday.title" = "Dienstag";
+"wednesday.title" = "Mittwoch";
+"thursday.title" = "Donnerstag";
+"friday.title" = "Freitag";
+"saturday.title" = "Samstag";
+"sunday.title" = "Sonntag";
+"mondayShort.title" = "Mo";
+"tuesdayShort.title" = "Di";
+"wednesdayShort.title" = "Mi";
+"thursdayShort.title" = "Do";
+"fridayShort.title" = "Fr";
+"saturdayShort.title" = "Sa";
+"sundayShort.title" = "So";
+
+// Design
+"colorLabel.title" = "Farbe";
+
+// Statistics
+"nothingToAnalize.title" = "Noch nichts zu analysieren";
+"bestPeriod.title" = "Beste Periode";
+"bestStreak.title" = "Perfekte Tage";
+"trackesDone.title" = "Tracker abgeschlossen";
+"averageAmount.title" = "Durchschnittswert";
+
+// Onboarding
+"button.onboard.title" = "Das sind Technologien!";
+"redOnboardingLabel.title" = "Auch wenn es nicht Liter Wasser und Yoga sind";
+"blueOnboardinglabel.title" = "Verfolgen Sie nur, was Sie wollen";

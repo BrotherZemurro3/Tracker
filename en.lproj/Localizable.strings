@@ -1,0 +1,87 @@
+// Common UI
+"whatGoingToTrackLabel.title" = "What are we going to track?";
+"delete.title" = "Delete";
+"delete.confirmation" = "Are you sure you want to delete the tracker?";
+"cancel.title" = "Cancel";
+"create.title" = "Create";
+"doneButton.title" = "Done";
+
+// Tabs
+"trackers.title" = "Trackers";
+"statistic.title" = "Statistics";
+"trackers.tab.title" = "Trackers";
+"statistic.tab.title" = "Statistics";
+
+// Search & Filters
+"search.placeholder" = "Search";
+"filters.title" = "Filters";
+"notSelected.subtitle" = "Not selected";
+
+// Filters
+"allTrackers.title" = "All trackers";
+"todayTrakers.title" = "Today's trackers";
+"completedTrackers.title" = "Completed";
+"notCompletedTrackers.title" = "Uncompleted";
+
+// Edit
+"edit.title" = "Edit";
+"editCategory.title" = "Edit category";
+"editRegular.title" = "Edit habit";
+"editIrregular.title" = "Edit irregular event";
+
+// Pin-Unpin
+"pin.title" = "Pin";
+"unpin.title" = "Unpin";
+
+// Tracker Types
+"createTracker.title" = "Create tracker";
+"habit.title" = "Habit";
+"irregularEvent.title" = "Irregular event";
+"newHabit.title" = "New habit";
+"newIrregularEvent.title" = "New irregular event";
+
+// Inputs
+"textField.placeholder" = "Enter tracker name";
+"newCategory.placeholder" = "Enter category name";
+"errorLabel.title" = "38 character limit";
+
+// Categories
+"categories.title" = "Categories";
+"category.title" = "Category";
+"categoryLable.title" = "Habits and events can be grouped by meaning";
+"addCategoryButton.title" = "Add category";
+"newCategory.title" = "New category";
+"notSelected.title" = "Not selected";
+"thisCategoryIsUnneeded.title" = "Are you sure you don't need this category?";
+
+// Schedule
+"schedule.title" = "Schedule";
+"monday.title" = "Monday";
+"tuesday.title" = "Tuesday";
+"wednesday.title" = "Wednesday";
+"thursday.title" = "Thursday";
+"friday.title" = "Friday";
+"saturday.title" = "Saturday";
+"sunday.title" = "Sunday";
+"mondayShort.title" = "Mon";
+"tuesdayShort.title" = "Tue";
+"wednesdayShort.title" = "Wed";
+"thursdayShort.title" = "Thu";
+"fridayShort.title" = "Fri";
+"saturdayShort.title" = "Sat";
+"sundayShort.title" = "Sun";
+
+// Design
+"colorLabel.title" = "Color";
+
+// Statistics
+"nothingToAnalize.title" = "Nothing to analyze yet";
+"bestPeriod.title" = "Best period";
+"bestStreak.title" = "Perfect days";
+"trackesDone.title" = "Trackers completed";
+"averageAmount.title" = "Average value";
+
+// Onboarding
+"button.onboard.title" = "That's technology!";
+"redOnboardingLabel.title" = "Even if it's not liters of water and yoga";
+"blueOnboardinglabel.title" = "Track only what you want";

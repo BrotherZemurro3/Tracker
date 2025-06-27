@@ -1,0 +1,88 @@
+// Common UI
+"whatGoingToTrackLabel.title" = "Что будем отслеживать?";
+"delete.title" = "Удалить";
+"delete.confirmation" = "Вы уверены, что хотите удалить трекер?";
+"cancel.title" = "Отменить";
+"create.title" = "Создать";
+"doneButton.title" = "Готово";
+
+// Tabs
+"trackers.title" = "Трекеры";
+"statistic.title" = "Статистика";
+"trackers.tab.title" = "Трекеры";
+"statistic.tab.title" = "Статистика";
+
+// Search & Filters
+"search.placeholder" = "Поиск";
+"filters.title" = "Фильтры";
+"notSelected.subtitle" = "Не выбрано";
+
+// Filters
+"allTrackers.title" = "Все трекеры";
+"todayTrakers.title" = "Трекеры на сегодня";
+"completedTrackers.title" = "Завершенные";
+"notCompletedTrackers.title" = "Незавершённые";
+
+// Edit
+"edit.title" = "Редактировать";
+"editCategory.tile" = "Редактирование категории";
+"editRegular.title" = "Редактирование привычки";
+"editIrregular.title" = "Редактирование нерегулярного события";
+
+// Pin-Unpin
+"pin.title" = "Закрепить";
+"unpin.title" = "Открепить";
+
+
+// Tracker Types
+"createTracker.title" = "Создание трекера";
+"habit.title" = "Привычка";
+"irregularEvent.title" = "Нерегулярное событие";
+"newHabit.title" = "Новая привычка";
+"newIrregularEvent.title" = "Новое нерегулярное событие";
+
+// Inputs
+"textField.placeholder" = "Введите название трекера";
+"newCategory.placeholder" = "Введите название категории";
+"errorLabel.title" = "Ограничение 38 символов";
+
+// Categories
+"categories.title" = "Категории";
+"category.title" = "Категория";
+"categoryLable.title" = "Привычки и события можно объединить по смыслу";
+"addCategoryButton.title" = "Добавить категорию";
+"newCategory.title" = "Новая категория";
+"notSelected.title" = "Не выбрано";
+"thisCategoryIsUnneeded.title?" = "Эта категория точно не нужна?";
+
+// Schedule
+"schedule.title" = "Расписание";
+"monday.title" = "Понедельник";
+"tuesday.title" = "Вторник";
+"wednesday.title" = "Среда";
+"thursday.title" = "Четверг";
+"friday.title" = "Пятница";
+"saturday.title" = "Суббота";
+"sunday.title" = "Воскресенье";
+"mondayShort.title" = "Пн";
+"tuesdayShort.title" = "Вт";
+"wednesdayShort.title" = "Ср";
+"thursdayShort.title" = "Чт";
+"fridayShort.title" = "Пт";
+"saturdayShort.title" = "Сб";
+"sundayShort.title" = "Вс";
+
+// Design
+"colorLabel.title" = "Цвет";
+
+// Статистика
+"nothingToAnalize.title" = "Анализировать пока нечего";
+"bestPeriod.title" = "Лучший период";
+"bestStreak.title" = "Идеальные дни";
+"trackesDone.title" = "Трекеров завершено";
+"averageAmount.title" = "Среднее значение";
+
+// Онбординг
+"button.onboard.title" = "Вот это технологии!";
+"redOnboardingLabel.title" = "Даже если это не литры воды и йога";
+"blueOnboardinglabel.title" = "Отслеживайте только то, что хотите";

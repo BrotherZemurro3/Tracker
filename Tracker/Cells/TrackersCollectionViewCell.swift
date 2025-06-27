@@ -3,17 +3,21 @@ import UIKit
 class TrackersCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "TrackerCell"
     var onActionButtonTapped: ((UUID, Bool) -> Void)?
+    var onPinTapped: ((UUID) -> Void)?
     private let coloredBackgroundView = UIView()
     private let titleLabel = UILabel()
     private let emojiLabel = UILabel()
     private let emojiBackgroundView = UIView()
+    private let pinImageView = UIImageView()
     private let actionButton = UIButton(type: .system)
     private let daysCountLabel = UILabel()
     private let padding: CGFloat = 12
     private var trackerId: UUID?
     private var isCompletedToday: Bool = false
+    private var isPinned: Bool = false
     private var completedDays: Int = 0
     var currentDate = Date()
+    private var colors = UIColors.shared
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -31,7 +35,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         coloredBackgroundView.layer.masksToBounds = true
         
         // Настройка белого фона для нижней части (дни + кнопка)
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = UIColors.shared.viewBackgroundColor
         contentView.layer.cornerRadius = 10
         contentView.layer.masksToBounds = true
         
@@ -54,13 +58,20 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         emojiLabel.textAlignment = .center
         coloredBackgroundView.addSubview(emojiLabel)
         
-        titleLabel.textAlignment = .left
+        // Настройка иконки булавки
+        pinImageView.translatesAutoresizingMaskIntoConstraints = false
+        pinImageView.image = UIImage(systemName: "pin.fill")
+        pinImageView.tintColor = .white
+        pinImageView.isHidden = true // Скрыта по умолчанию
+        coloredBackgroundView.addSubview(pinImageView)
+        
+        titleLabel.textAlignment = .natural
         titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
         titleLabel.numberOfLines = 2
         titleLabel.textColor = .white
         titleLabel.font = .systemFont(ofSize: 12)
         daysCountLabel.font = .systemFont(ofSize: 14)
-        daysCountLabel.textColor = .black
+        daysCountLabel.textColor = UIColors.shared.labelColor
         daysCountLabel.font = .systemFont(ofSize: 12)
         
         actionButton.layer.cornerRadius = 17
@@ -86,6 +97,12 @@ class TrackersCollectionViewCell: UICollectionViewCell {
             emojiLabel.widthAnchor.constraint(equalToConstant: 24),
             emojiLabel.heightAnchor.constraint(equalToConstant: 24),
             
+            // Иконка булавки
+            pinImageView.topAnchor.constraint(equalTo: coloredBackgroundView.topAnchor, constant: padding),
+            pinImageView.trailingAnchor.constraint(equalTo: coloredBackgroundView.trailingAnchor, constant: -padding),
+            pinImageView.widthAnchor.constraint(equalToConstant: 14),
+            pinImageView.heightAnchor.constraint(equalToConstant: 14),
+            
             // Название трекера
             titleLabel.leadingAnchor.constraint(equalTo: coloredBackgroundView.leadingAnchor, constant: padding),
             titleLabel.trailingAnchor.constraint(equalTo: coloredBackgroundView.trailingAnchor, constant: -padding),
@@ -108,6 +125,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         self.completedDays = completedDays
         self.isCompletedToday = isCompletedToday
         self.currentDate = currentDate
+        self.isPinned = tracker.isPinned
         
         // Проверяем, является ли выбранная дата будущей
         let today = Calendar.current.startOfDay(for: Date())
@@ -118,6 +136,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         coloredBackgroundView.backgroundColor = tracker.color
         titleLabel.text = tracker.title
         emojiLabel.text = tracker.emoji
+        pinImageView.isHidden = !tracker.isPinned
         
         updateDaysCountText()
         updateButtonAppearance()
@@ -125,24 +144,14 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         // Блокирую кнопку только если:
         // 1. Дата в будущем ИЛИ
         // 2. Трекер уже выполнен на эту дату
-        actionButton.isEnabled = !isFutureDate 
+        actionButton.isEnabled = !isFutureDate
     }
     private func updateDaysCountText() {
-        let dayString = formatDaysCount(completedDays)
+        let dayString = String.localizedStringWithFormat(
+            NSLocalizedString("days_count", comment: "Number of days"),
+            completedDays
+        )
         daysCountLabel.text = "\(completedDays) \(dayString)"
-    }
-    
-    private func formatDaysCount(_ count: Int) -> String {
-        let remainder10 = count % 10
-        let remainder100 = count % 100
-        
-        if remainder10 == 1 && remainder100 != 11 {
-            return "день"
-        } else if remainder10 >= 2 && remainder10 <= 4 && (remainder100 < 10 || remainder100 >= 20) {
-            return "дня"
-        } else {
-            return "дней"
-        }
     }
     
     private func updateButtonAppearance(animated: Bool = true) {
@@ -178,6 +187,7 @@ class TrackersCollectionViewCell: UICollectionViewCell {
         
         guard !isFutureDate else {
             print("Нельзя отмечать трекеры на будущие даты")
+            AnalyticsService.shared.report(event: "click", screen: "tackerCell", item: "track")
             return
         }
         
@@ -193,16 +203,30 @@ class TrackersCollectionViewCell: UICollectionViewCell {
                     self.completedDays = max(0, self.completedDays - 1)
                     self.isCompletedToday = false
                     self.onActionButtonTapped?(trackerId, false)
+                    AnalyticsService.shared.report(
+                        event: "click",
+                        screen: "Main",
+                        item: "untrack"
+                    )
                 } else {
                     // Если не выполнено - отмечаю
                     self.completedDays += 1
                     self.isCompletedToday = true
                     self.onActionButtonTapped?(trackerId, true)
+                    AnalyticsService.shared.report(
+                        event: "click",
+                        screen: "Main",
+                        item: "track"
+                    )
                 }
                 
                 self.updateDaysCountText()
                 self.updateButtonAppearance()
             }
         }
+    }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        pinImageView.isHidden = true
     }
 }

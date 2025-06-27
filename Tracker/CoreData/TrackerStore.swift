@@ -5,6 +5,9 @@ import UIKit
 protocol TrackerStorable {
     func createTracker(_ tracker: Tracker, categoryTitle: String) throws
     func fetchAllTrackers() throws -> [Tracker]
+    func updateTracker(_ tracker: Tracker, categoryTitle: String) throws
+    func deleteTracker(_ trackerId: UUID) throws
+    
 }
 
 final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate, TrackerStorable {
@@ -37,9 +40,36 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate, TrackerS
         entity.schedule = tracker.schedule?.map { String($0.rawValue) }.joined(separator: ",")
         entity.isRegular = tracker.isRegular
         entity.creationDate = tracker.creationDate
+        entity.isPinned = tracker.isPinned
         entity.category = categoryCoreData
         print("Saving tracker: \(tracker.title) to category: \(categoryTitle)")
         try context.save()
+    }
+    
+    func updateTracker(_ tracker: Tracker, categoryTitle: String) throws {
+        print("Updating tracker: \(tracker.title), ID: \(tracker.id) in category: \(categoryTitle)")
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        
+        guard let trackerCoreData = try context.fetch(request).first else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Tracker not found"])
+        }
+        
+        guard let categoryCoreData = try (categoryStore as? TrackerCategoryStore)?.coreDataCategory(withTitle: categoryTitle) else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Category not found"])
+        }
+        
+        trackerCoreData.title = tracker.title
+        trackerCoreData.colorHex = tracker.color.hexString
+        trackerCoreData.emoji = tracker.emoji
+        trackerCoreData.schedule = tracker.schedule?.map { String($0.rawValue) }.joined(separator: ",")
+        trackerCoreData.isRegular = tracker.isRegular
+        trackerCoreData.creationDate = tracker.creationDate
+        trackerCoreData.isPinned = tracker.isPinned
+        trackerCoreData.category = categoryCoreData
+        
+        try context.save()
+        print("Updated tracker: \(tracker.title) in category: \(categoryTitle)")
     }
     
     func fetchAllTrackers() throws -> [Tracker] {
@@ -56,9 +86,33 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate, TrackerS
                     .compactMap { Weekday(rawValue: $0) },
                 isCompleted: false,
                 isRegular: trackerCoreData.isRegular,
-                creationDate: trackerCoreData.creationDate ?? Date()
+                creationDate: trackerCoreData.creationDate ?? Date(),
+                isPinned: trackerCoreData.isPinned
             )
         }
+    }
+    
+    func updateTrackerPinnedState(_ trackerId: UUID, isPinned: Bool) throws {
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", trackerId as CVarArg)
+        
+        guard let tracker = try context.fetch(request).first else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Tracker not found"])
+        }
+        tracker.isPinned = isPinned
+        try context.save()
+        print("Updated pinned state for tracker: \(trackerId) to \(isPinned)")
+    }
+    
+    
+    func deleteTracker(_ trackerId: UUID) throws {
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", trackerId as CVarArg)
+        
+        let trackers = try context.fetch(request)
+        trackers.forEach { context.delete($0) }
+        try context.save()
+        print("Удалён трекер: \(trackerId)")
     }
     
     private func setupFetchedResultsController() {
@@ -83,4 +137,5 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate, TrackerS
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         onChange?()
     }
+    
 }
